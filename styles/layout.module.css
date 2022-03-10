@@ -1,0 +1,6 @@
+.layout{
+    overflow-x:hidden;
+    width:100vw; 
+    position:relative;
+    min-height:120vh;
+}

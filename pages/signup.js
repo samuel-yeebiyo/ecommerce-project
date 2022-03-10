@@ -4,7 +4,6 @@ import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
-  
   return (
     <div>
       <Head>
@@ -14,7 +13,7 @@ export default function Home() {
       </Head>
 
       <main>
-        This is the home
+        sign up
       </main>
         
     </div>
