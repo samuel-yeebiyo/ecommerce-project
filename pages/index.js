@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 
-export default function Home() {
+export default function Home({increment}) {
   
   return (
     <div>
@@ -14,7 +14,8 @@ export default function Home() {
       </Head>
 
       <main>
-        This is the home
+        <p>This is the home</p>
+        <button onClick={()=>{increment()}}>Increase counter</button>
       </main>
         
     </div>
