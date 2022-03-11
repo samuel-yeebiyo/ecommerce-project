@@ -1,9 +1,45 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/signup.module.css'
+import { useFormik } from 'formik'
 
-export default function Home() {
+import {useState} from 'react'
+
+
+export default function SignUp() {
+
+  const [user, setUser] = useState({})
+
+  const formik = useFormik({
+    initialValues:{
+      user:'',
+      password:'',
+    },
+    validate: values =>{
+      const errors={}
+      if(!values.user){
+        errors.user="Required"
+      }
+      if(!values.password){
+        errors.password="Required"
+      }
+      return errors
+    },
+    onSubmit: values=>{
+      console.log(values)
+      fetch('http://localhost:8000/login', {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        mode:'cors',
+        body:JSON.stringify(values)
+      })
+    }
+  }) 
+
   return (
     <div>
       <Head>
@@ -13,7 +49,23 @@ export default function Home() {
       </Head>
 
       <main>
-        sign in
+        <div className="user-auth">
+          <div>
+            <form onSubmit={formik.handleSubmit} className={styles.su_form}>
+              
+              <label htmlFor='user'>Username/Email Address</label>
+              <input id='user' name='user' type='text' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.user}/>
+              {formik.touched.user && formik.errors.user ? <div>{formik.errors.user}</div> : null}
+              
+              
+              <label htmlFor='password'>Password</label>
+              <input id='password' name='password' type='password' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.password}/>
+              {formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null}
+                      
+              <button type="submit">Submit</button>
+            </form>
+          </div>
+        </div>
       </main>
         
     </div>

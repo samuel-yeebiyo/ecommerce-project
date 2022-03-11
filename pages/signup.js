@@ -1,9 +1,54 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/signup.module.css'
+import { useFormik } from 'formik'
 
-export default function Home() {
+import {useState} from 'react'
+
+
+export default function SignUp() {
+
+  const [user, setUser] = useState({})
+
+  const formik = useFormik({
+    initialValues:{
+      username:'',
+      email:'',
+      password:'',
+      confirmation:''
+
+    },
+    validate: values =>{
+      const errors={}
+      if(!values.username){
+        errors.username="Required"
+      }
+      if(!values.email){
+        errors.email="Required"
+      }
+      if(!values.password){
+        errors.password="Required"
+      }
+      if(!values.confirmation){
+        errors.confirmation="Required"
+      }
+      return errors
+    },
+    onSubmit: values=>{
+      console.log(values)
+      fetch('http://localhost:8000/register', {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        mode:'cors',
+        body:JSON.stringify(values)
+      })
+    }
+  }) 
+
   return (
     <div>
       <Head>
@@ -13,7 +58,25 @@ export default function Home() {
       </Head>
 
       <main>
-        sign up
+        <div className="user-auth">
+          <div>
+            <form onSubmit={formik.handleSubmit} className={styles.su_form}>
+              <label htmlFor='username'>Username</label>
+              <input id='username' name='username' type='text' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.username}/>
+              {formik.touched.username && formik.errors.username ? <div>{formik.errors.username}</div> : null}
+              <label htmlFor='email'>Email address</label>
+              <input id='email' name='email' type='email' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.email}/>
+              {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
+              <label htmlFor='password'>Password</label>
+              <input id='password' name='password' type='password' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.password}/>
+              {formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null}
+              <label htmlFor='confirmation'>Confirm Password</label>
+              <input id='confirmation' name='confirmation' type='password' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.confirmation}/>
+              {formik.touched.confirmation && formik.errors.confirmation ? <div>{formik.errors.confirmation}</div> : null}
+              <button type="submit">Submit</button>
+            </form>
+          </div>
+        </div>
       </main>
         
     </div>
