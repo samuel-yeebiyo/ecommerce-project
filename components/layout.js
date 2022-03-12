@@ -4,7 +4,7 @@ import styles from '../styles/layout.module.css'
 
 import {useState} from 'react'
 
-export default function Layout({children, counter}) {
+export default function Layout({children, counter, update}) {
 
     const [cartState, setCartState] = useState(false)
 
@@ -14,7 +14,7 @@ export default function Layout({children, counter}) {
 
   return (
       <div className={styles.layout}>
-        <Navbar toggle={toggleCart}/>
+        <Navbar toggle={toggleCart} update={update}/>
         <Cart state={cartState} toggle={toggleCart} counter={counter}/>
         <main>{children}</main>
       </div>

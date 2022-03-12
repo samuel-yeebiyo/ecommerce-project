@@ -6,6 +6,8 @@ import { useFormik } from 'formik'
 
 import {useState} from 'react'
 
+import GuestRoute from '../components/guestRoute'
+
 
 export default function SignUp() {
 
@@ -32,6 +34,8 @@ export default function SignUp() {
       }
       if(!values.confirmation){
         errors.confirmation="Required"
+      }else if(values.confirmation != values.password){
+        errors.confirmation="Must match password"
       }
       return errors
     },
@@ -50,6 +54,7 @@ export default function SignUp() {
   }) 
 
   return (
+    <GuestRoute>
     <div>
       <Head>
         <title>Create Next App</title>
@@ -80,5 +85,6 @@ export default function SignUp() {
       </main>
         
     </div>
+    </GuestRoute>
   )
 }

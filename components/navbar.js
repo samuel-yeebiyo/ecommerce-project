@@ -1,9 +1,20 @@
 import styles from '../styles/navbar.module.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-export default function Navbar({toggle}) {
+import Cookie from 'cookie-cutter'
 
+export default function Navbar({toggle, update}) {
+
+    const [user, setUser] = useState(false)
+
+   useEffect(()=>{
+    const value = Cookie.get('userID');
+    if(value){
+        setUser(true)
+    }
+    console.log("rendered")
+   },[update])
 
   return (
     <div className={styles.container}>
@@ -14,21 +25,23 @@ export default function Navbar({toggle}) {
                 Home
                 </Link>
             </li>
-            <li>
-                <Link href="/signup">
-                Sign up
-                </Link>
-            </li>
-            <li>
-                <Link href="/signin">
-                Sign in
-                </Link>
-            </li>
-            <li>
-                <Link href="/profile">
-                Profile
-                </Link>
-            </li>
+            {!user ? <>
+                <li>
+                    <Link href="/signup">
+                    Sign up
+                    </Link>
+                </li>
+                <li>
+                    <Link href="/signin">
+                    Sign in
+                    </Link>
+                </li> </> :
+                <li>
+                    <Link href="/profile">
+                    Profile
+                    </Link>
+                </li>
+            }
             <button onClick={()=>{
                 toggle()
             }}>Cart</button>
