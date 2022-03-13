@@ -1,55 +1,7 @@
-.container {
-  overflow-x: hidden;
-  background:rgb(255, 255, 255);
-  height:100vh;
-  width:100vw;
-  position: relative;
-}
 
-.navigation{
-  background:black;
-  color:white;
-  width:100vw;
-}
 
-.navigation ul{
-  display:flex;
-  list-style: none;
-  width:100%;
-  justify-content: space-around;
-}
 
-.cart{
-  position:absolute;
-  height:100vh;
-  width:100vw;
-  display: flex;
-  right:0;
-  transition: right ease-in-out 0.2s;
-  overflow:hidden;
-}
 
-.cartContent{
-  background:white;
-  border:2px solid red;
-  height:100vh;
-  width:auto;
-  position:absolute;
-  right:0;
-  width:35vw
-}
-
-.empty{
-  position:absolute;
-  height:100%;
-  width:100%;
-  background:rgba(0, 0, 0, 0.555);
-}
-
-.closed{
-  right:-100vw;
-  transition: right 0.2s ease-in-out;
-}
 
 @media (max-width: 600px) {
   .grid {

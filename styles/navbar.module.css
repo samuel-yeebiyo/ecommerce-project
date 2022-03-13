@@ -1,9 +1,7 @@
 .container {
-  overflow-x: hidden;
   background:rgb(255, 255, 255);
   width:100vw;
   position: relative;
-  border:1px solid red;
 }
 
 .navigation{
@@ -18,5 +16,5 @@
   width:100%;
   height:100px;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }

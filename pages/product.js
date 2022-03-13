@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/product.module.css'
 
-export default function Product({increment}) {
+export default function Product({increment, addToCart}) {
   
   return (
     <div>
@@ -15,7 +15,36 @@ export default function Product({increment}) {
 
       <main>
         <p>This is the product</p>
-        <button onClick={()=>{increment()}}>Increase counter</button>
+        <div className={styles.product}>
+          <div className={styles.image}></div>
+          <button className={styles.add} onClick={()=>{
+            addToCart({
+              productId:1234,
+              name:"Sample Product",
+              price:20
+            })
+          }}>Add to cart</button>
+        </div>
+        <div className={styles.product}>
+          <div className={styles.image}></div>
+          <button className={styles.add} onClick={()=>{
+            addToCart({
+              productId:5678,
+              name:"Sample Product",
+              price:10
+            })
+          }}>Add to cart</button>
+        </div>
+        <div className={styles.product}>
+          <div className={styles.image}></div>
+          <button className={styles.add} onClick={()=>{
+            addToCart({
+              productId:9101,
+              name:"Sample Product",
+              price:5
+            })
+          }}>Add to cart</button>
+        </div>
       </main>
         
     </div>

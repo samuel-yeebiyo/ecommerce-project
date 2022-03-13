@@ -1,12 +1,14 @@
 import styles from '../styles/navbar.module.css'
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import Cookie from 'cookie-cutter'
 
 export default function Navbar({toggle, update}) {
 
     const [user, setUser] = useState(false)
+    const router = useRouter();
 
    useEffect(()=>{
     const value = Cookie.get('userID');
@@ -35,12 +37,21 @@ export default function Navbar({toggle, update}) {
                     <Link href="/signin">
                     Sign in
                     </Link>
-                </li> </> :
+                </li> </> : <>
                 <li>
                     <Link href="/profile">
                     Profile
                     </Link>
                 </li>
+                <button onClick={()=>{
+                   Cookie.set('userID', '', {expires: new Date(0)} )
+                   router.reload()
+                   router.replace('/')
+                   
+                }}>
+                    Sign Out
+                </button>
+                </>
             }
             <button onClick={()=>{
                 toggle()

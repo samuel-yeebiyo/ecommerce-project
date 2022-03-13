@@ -11,7 +11,6 @@
   
   .cartContent{
     background:white;
-    border:2px solid red;
     height:100vh;
     width:auto;
     position:absolute;
@@ -25,8 +24,16 @@
     width:100%;
     background:rgba(0, 0, 0, 0.555);
   }
-  
   .closed{
     right:-100vw;
     transition: right 0.2s ease-in-out;
+  }
+
+  .item{
+    margin-bottom:20px;
+    padding:5px
+  }
+  .total{
+    font-size:18px;
+    font-weight: bold;
   }
