@@ -18,6 +18,7 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(()=>{
     
+    //updating the cart when an item is added or removed
     const updateOrder = async ()=>{
       if(user != 0){
         console.log("Trying to update user cart")
@@ -53,9 +54,11 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(()=>{
     
+    //check if a cookie already exists
     const uValue = Cookie.get('userID')
     const gValue = Cookie.get('guestID')
 
+    //fetch cart based on the cookie found
     const fetchGuestCart = async() =>{
       await fetch(`http://localhost:8000/guest/${gValue}/cart/`)
       .then(async res => await res.json()).then(data =>{
@@ -71,8 +74,7 @@ function MyApp({ Component, pageProps }) {
       })
     }
 
-
-
+    //if cookie is for user
     if(uValue){
       console.log("User cookie found")
       setUser(uValue);
@@ -84,7 +86,7 @@ function MyApp({ Component, pageProps }) {
       setUser(0)
     }
 
-    
+    //if cookie is for guest    
     if(gValue){
       console.log("Guest cookie found")
       setGuest(gValue)
@@ -102,11 +104,11 @@ function MyApp({ Component, pageProps }) {
 
 
   //This should be the method to put items in the cart
-  //Should also save it online to the user's cart
   const addToCart = (product)=>{
 
+    //if no cookie is found, adding to cart causes an identifier to be given to the guest
     if(user == 0 && guest == 0){
-      let gID = 123456789
+      let gID = 1234567891
       Cookie.set("guestID", gID)
       setGuest(gID)
     }
@@ -123,7 +125,7 @@ function MyApp({ Component, pageProps }) {
         price: product.price
       })
       tempOrder.subtotal += product.price
-      setOrder(tempOrder)
+      setOrder(tempOrder) //triggers order update and useEffect to send current cart to server
     
     }//if it is not empty, check if item exists
     else{
@@ -131,16 +133,18 @@ function MyApp({ Component, pageProps }) {
       let index = order.items.findIndex(element => element.itemId == product.productId)
       console.log(index)
       
+      //if item already exists, add quantity and price
       if(index != -1){
         
         console.log("Found")
         let tempOrder = {...order}
         tempOrder.items[index].quantity+=1
         tempOrder.subtotal += product.price
-        setOrder(tempOrder)
+        setOrder(tempOrder) //triggers order update and useEffect to send current cart to server
       
       }else{
-      
+        
+        //if item is new, add entry with the quantity as 1
         let tempOrder = {...order}
         tempOrder.items.push({
           itemId: product.productId,
@@ -149,13 +153,14 @@ function MyApp({ Component, pageProps }) {
           price: product.price
         })
         tempOrder.subtotal += product.price
-        setOrder(tempOrder)
+        setOrder(tempOrder) //triggers order update and useEffect to send current cart to server
       }
     }
   }
 
 
 
+  //update the nav bar when a user signs in, hides authentication options and adds profile link
   const toggleNav = ()=>{
     setUpdate(prev => !prev)
   }
