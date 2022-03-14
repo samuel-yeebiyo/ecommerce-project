@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 
-export default function Home({increment}) {
+export default function Home({increment, addToCart}) {
   
   return (
     <div>
@@ -15,9 +15,41 @@ export default function Home({increment}) {
 
       <main>
         <p>This is the home</p>
-        <Link href="/product">
+        <Link href="/shop/product">
           <a>Go to products</a>
         </Link>
+
+        <div className={styles.product}>
+          <div className={styles.image}></div>
+          <button className={styles.add} onClick={()=>{
+            addToCart({
+              productId:1234,
+              name:"Sample Product",
+              price:20
+            })
+          }}>Add to cart</button>
+        </div>
+        <div className={styles.product}>
+          <div className={styles.image}></div>
+          <button className={styles.add} onClick={()=>{
+            addToCart({
+              productId:5678,
+              name:"Sample Product",
+              price:10
+            })
+          }}>Add to cart</button>
+        </div>
+        <div className={styles.product}>
+          <div className={styles.image}></div>
+          <button className={styles.add} onClick={()=>{
+            addToCart({
+              productId:9101,
+              name:"Sample Product",
+              price:5
+            })
+          }}>Add to cart</button>
+        </div>
+
       </main>
         
     </div>
