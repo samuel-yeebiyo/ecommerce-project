@@ -6,7 +6,9 @@ export default function Cart({state, toggle, order}) {
 
     const cartClass = state ? [styles.cart, styles.open].join(" ") : [styles.cart, styles.closed].join(" ")  
     useEffect(()=>{
+      
       console.log(order)
+
     },[order])
 
   return (
@@ -14,8 +16,8 @@ export default function Cart({state, toggle, order}) {
         <div onClick={()=>{toggle()}} className={styles.empty}/>
         <div className={styles.cartContent}>
             {order && order.items.length != 0 ? <>
-              {order.items.map((item)=>(
-                <div className={styles.item}>
+              {order.items.map((item, idx)=>(
+                <div className={styles.item} key={idx}>
                   <p>Name: {item.name}</p>
                   <p>ID: {item.itemId}</p>
                   <p>Quantity: {item.quantity}</p>

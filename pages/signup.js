@@ -3,15 +3,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../styles/signup.module.css'
 import { useFormik } from 'formik'
+import { useRouter } from 'next/router'
 
 import {useState} from 'react'
-
+import Cookie from 'cookie-cutter'
 import GuestRoute from '../components/guestRoute'
 
 
-export default function SignUp() {
+export default function SignUp({toggleNav}) {
 
   const [user, setUser] = useState({})
+  const router = useRouter()
 
   const formik = useFormik({
     initialValues:{
@@ -49,6 +51,11 @@ export default function SignUp() {
         },
         mode:'cors',
         body:JSON.stringify(values)
+      }).then(async res => await res.json()).then(data =>{
+        Cookie.set('userID', data.id);        
+        console.log("created cookie")
+        router.replace('/')
+        toggleNav()
       })
     }
   }) 

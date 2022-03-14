@@ -11,6 +11,8 @@ import {useState} from 'react'
 import GuestRoute from '../components/guestRoute'
 
 import Cookie from 'cookie-cutter'
+
+
 export default function SignIn({toggleNav}) {
 
   const [user, setUser] = useState({})
@@ -45,6 +47,7 @@ export default function SignIn({toggleNav}) {
         Cookie.set('userID', data.id);        
         console.log("created cookie")
         router.replace('/')
+        router.reload()
         toggleNav()
       })
     }
