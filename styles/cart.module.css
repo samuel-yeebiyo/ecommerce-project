@@ -15,7 +15,8 @@
     width:auto;
     position:absolute;
     right:0;
-    width:35vw
+    width:35vw;
+    padding:15px;
   }
   
   .empty{
@@ -30,8 +31,21 @@
   }
 
   .item{
-    margin-bottom:20px;
-    padding:5px
+    margin-bottom:30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .quantity{
+    display: flex;
+  }
+  .quantity p{
+    margin:10px;
+    font-weight: bold;
+  }
+  .quantity button{
+    width:30px;
+    font-size:20px;
   }
   .total{
     font-size:18px;

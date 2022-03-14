@@ -113,7 +113,6 @@ function MyApp({ Component, pageProps }) {
       setGuest(gID)
     }
 
-
     //if it is empty
     if(order.items.length == 0){
 
@@ -159,6 +158,43 @@ function MyApp({ Component, pageProps }) {
   }
 
 
+  const addItem = (id) =>{
+        
+    console.log("Adding")
+    let tempOrder = {...order}
+
+    tempOrder.items.map((item)=>{
+      if(item.itemId == id){
+        item.quantity+=1;
+        tempOrder.subtotal+=item.price
+      }
+    })
+
+    setOrder(tempOrder) //triggers order update and useEffect to send current cart to server
+    
+  }
+
+  const removeItem = (id) =>{
+        
+    console.log("Removing")
+    let tempOrder = {...order}
+
+    tempOrder.items.map((item, idx)=>{
+      if(item.itemId == id){
+        item.quantity-=1;
+        tempOrder.subtotal-=item.price
+
+        if(item.quantity == 0){
+          tempOrder.items.splice(idx,1)
+        }
+
+        return
+      }
+    })
+
+    setOrder(tempOrder) //triggers order update and useEffect to send current cart to server
+    
+  }
 
   //update the nav bar when a user signs in, hides authentication options and adds profile link
   const toggleNav = ()=>{
@@ -166,7 +202,7 @@ function MyApp({ Component, pageProps }) {
   }
 
   return (
-    <Layout order={order} update={update}>
+    <Layout order={order} update={update} addItem={addItem} removeItem={removeItem}>
       <Component {...pageProps} toggleNav={toggleNav} addToCart={addToCart}/>
     </Layout>
   )

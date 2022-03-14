@@ -52,6 +52,23 @@ export default function SignUp({toggleNav}) {
         mode:'cors',
         body:JSON.stringify(values)
       }).then(async res => await res.json()).then(data =>{
+
+        //check if guestid exists
+        let fromGuest = Cookie.get('guestID')
+        if(fromGuest){
+
+          //let server transfer current cart to user
+          fetch(`http://localhost:8000/user/${data.id}/transfer/${fromGuest}`,{
+            method:'POST',
+            headers:{
+              'Content-Type':'application/json',
+              'Allow-Control-Allow-Origin':'*'
+            },
+            mode:'cors'
+          })
+          Cookie.set('guestID', '', {expires: new Date(0)} )
+        }
+
         Cookie.set('userID', data.id);        
         console.log("created cookie")
         router.replace('/')

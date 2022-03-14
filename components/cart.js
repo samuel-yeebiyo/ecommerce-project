@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 
 import styles from '../styles/cart.module.css'
 
-export default function Cart({state, toggle, order}) {
+export default function Cart({state, toggle, order, removeItem, addItem}) {
 
     const cartClass = state ? [styles.cart, styles.open].join(" ") : [styles.cart, styles.closed].join(" ")  
     useEffect(()=>{
@@ -18,10 +18,17 @@ export default function Cart({state, toggle, order}) {
             {order && order.items.length != 0 ? <>
               {order.items.map((item, idx)=>(
                 <div className={styles.item} key={idx}>
-                  <p>Name: {item.name}</p>
-                  <p>ID: {item.itemId}</p>
-                  <p>Quantity: {item.quantity}</p>
-                  <p>Price: {item.price}</p>
+                  <p>{item.name}</p>
+                  <div className={styles.quantity}>
+                    <button onClick={()=>{
+                      removeItem(item.itemId)
+                    }}>-</button>
+                    <p>{item.quantity}</p>
+                    <button onClick={()=>{
+                      addItem(item.itemId)
+                    }}>+</button>
+                  </div>
+                  <p>${item.price}</p>
                 </div>
               ))}
               <p className={styles.total}>Subtotal: {order.subtotal}</p>
