@@ -15,7 +15,7 @@ export default function Home({increment, addToCart}) {
 
       <main>
         <p>This is the home</p>
-        <Link href="/shop/product">
+        <Link href="/shop/">
           <a>Go to products</a>
         </Link>
 

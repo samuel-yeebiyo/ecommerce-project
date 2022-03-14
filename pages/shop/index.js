@@ -1,9 +1,18 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import {useEffect} from 'react'
+import { fetchProducts } from '../../lib/products'
 
-export default function Product({addToCart}) {
+import ProductCard from '../../components/productCard'
+
+export default function Product({addToCart, products}) {
   
+
+  useEffect(()=>{
+    console.log(products)
+  },[])
+
   return (
     <div>
       <Head>
@@ -13,9 +22,34 @@ export default function Product({addToCart}) {
       </Head>
 
       <main>
-        <p>This is the product</p>
+        <p>This is the shop</p>
+
+        {products.map((product, idx)=>(
+          <div key={idx}>
+            <Link href={`/shop/${product.pathname}`}>
+              <a><ProductCard product={product}/></a>
+            </Link>
+          </div>
+        ))
+
+        }
+
+
       </main>
         
     </div>
   )
+}
+
+export async function getStaticProps(context){
+
+  const products = await fetchProducts()
+
+  return{
+    props:{
+      products
+    }
+  }
+
+
 }
