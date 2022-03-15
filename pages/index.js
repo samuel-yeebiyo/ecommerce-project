@@ -13,11 +13,40 @@ export default function Home({increment, addToCart}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <p>This is the home</p>
-        <Link href="/shop/">
-          <a>Go to products</a>
-        </Link>
+      <main className={styles.home_container}>
+        <div className={styles.main1}>
+          <div className={styles.background}>
+            <div className={styles.left}></div>
+            <div className={styles.right}></div>
+          </div>
+          <div className={styles.description}>
+            <p className={styles.main1_header}>Explore The Fusion</p>
+            <p className={styles.descs}>Where culture meets fashion and diversity meets style.</p>
+            <p className={styles.descs}>Find what you like!</p>
+            <Link href="/shop/">
+              <a><button>Shop Now</button></a>
+            </Link>
+          </div>
+        </div>
+        <div className={styles.trending}>
+          <div className={styles.line}></div>
+          <p>Trending</p>
+          <div className={styles.line}></div>
+        </div>
+        <div className={styles.main2_wrapper}>
+          <div className={styles.main2}>
+            <div className={styles.main2_image}></div>
+            <div className={styles.main2_product}>
+              <div className={styles.product_desc}>
+                <p className={styles.product_name}>Sample Product</p>
+                <p className={styles.product_desc}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                <Link href="/shop/">
+                  <a><button>Shop Now</button></a>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
         
     </div>

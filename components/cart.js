@@ -15,6 +15,10 @@ export default function Cart({state, toggle, order, removeItem, addItem}) {
     <div className={cartClass}>
         <div onClick={()=>{toggle()}} className={styles.empty}/>
         <div className={styles.cartContent}>
+          <div className={styles.cart_top}>
+            <p>Your Cart</p>
+            <div className={styles.close_button} onClick={()=>{toggle()}}>X</div>
+          </div>
             {order && order.items.length != 0 ? <>
               {order.items.map((item, idx)=>(
                 <div className={styles.item} key={idx}>
@@ -31,7 +35,16 @@ export default function Cart({state, toggle, order, removeItem, addItem}) {
                   <p>${item.price}</p>
                 </div>
               ))}
-              <p className={styles.total}>Subtotal: {order.subtotal}</p>
+              <div className={styles.subtotal}>
+                <p>Subtotal</p>
+                <p className={styles.total}>${order.subtotal}</p>
+              </div>
+              <div className={styles.checkout}>
+                <button className={styles.checkout_button} onClick={()=>{
+                }}>Checkout
+                </button>
+                <p>Tax and shipping not included.</p>
+              </div>
               </>
             :
             <p>Cart is empty</p>

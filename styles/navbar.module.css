@@ -4,7 +4,6 @@
   background:black;
   display: flex;
   justify-content: center;
-  margin-bottom:60px;
 }
 
 .navigation{
@@ -20,6 +19,7 @@
   height:30px;
   width:30px;
   background:white;
+  border-radius:50%;
 }
 
 .navigation ul{

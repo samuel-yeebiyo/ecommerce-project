@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-// import styles from '../styles/product.module.css'
+import styles from '../../styles/product.module.css'
 
 import { fetchProductPaths, fetchProducts, fetchProduct } from '../../lib/products'
 
@@ -15,18 +15,28 @@ export default function Product({increment, addToCart, product}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <div>
-          <p>{product.name}</p>
-          <p>${product.price}</p>
-          <p>{product.desc}</p>
-          <button onClick={()=>{
-            addToCart({
-              productId:product._id,
-              name:product.name,
-              price:product.price
-            })
-          }}>Add to cart</button>
+      <main className={styles.product_wrapper}>
+        <div className={styles.product_container}>
+          <div className={styles.main_product}>
+            <div className={styles.product_image}>
+
+            </div>
+            <div className={styles.product_details}>
+              <p className={styles.product_name}>{product.name}</p>
+              <p className={styles.product_price}>${product.price}</p>
+              <button className={styles.add} onClick={()=>{
+                addToCart({
+                  productId:product._id,
+                  name:product.name,
+                  price:product.price
+                })
+              }}>Add to cart</button>
+              <div className={styles.product_description}>
+                <p className={styles.pd}>Product Description</p>
+                <p className={styles.desc}>{product.desc}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
         
