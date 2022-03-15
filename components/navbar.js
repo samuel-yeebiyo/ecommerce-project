@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import Cookie from 'cookie-cutter'
 
-export default function Navbar({toggle, update}) {
+export default function Navbar({toggle, toggleNav, update}) {
 
     const [user, setUser] = useState(false)
     const router = useRouter();
@@ -21,41 +21,43 @@ export default function Navbar({toggle, update}) {
   return (
     <div className={styles.container}>
         <nav className={styles.navigation}>
+            <Link href="/">
+                <a className={styles.logo}></a>
+            </Link>
             <ul>
-            <li>
-                <Link href="/">
-                Home
-                </Link>
-            </li>
-            {!user ? <>
                 <li>
-                    <Link href="/signup">
-                    Sign up
+                    <Link href="/">
+                    Home
                     </Link>
                 </li>
-                <li>
-                    <Link href="/signin">
-                    Sign in
-                    </Link>
-                </li> </> : <>
-                <li>
-                    <Link href="/profile">
-                    Profile
-                    </Link>
-                </li>
-                <button onClick={()=>{
-                   Cookie.set('userID', '', {expires: new Date(0)} )
-                   router.reload()
-                   router.replace('/')
-                   
-                }}>
-                    Sign Out
-                </button>
-                </>
-            }
-            <button onClick={()=>{
-                toggle()
-            }}>Cart</button>
+                {!user ? <>
+                    <li>
+                        <Link href="/signup">
+                        Sign up
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/signin">
+                        Sign in
+                        </Link>
+                    </li> </> : <>
+                    <li>
+                        <Link href="/profile">
+                        Profile
+                        </Link>
+                    </li>
+                    <li className={styles.signout} onClick={()=>{
+                    Cookie.set('userID', '', {expires: new Date(0)} )
+                    router.reload()
+                    // router.replace('/')                 
+                    }}>
+                        Sign Out
+                    </li>
+                    </>
+                }
+                <li className={styles.cart} onClick={()=>{
+                    toggle()
+                }}><img src="/shoppingcart.svg"></img></li>
             </ul>
         </nav>
     </div>

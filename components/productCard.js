@@ -1,17 +1,18 @@
+import Link from 'next/link'
+
 import styles from '../styles/productcard.module.css'
 
 
 export default function ProductCard({product}) {
   return (
-    <div className={styles.product}>
-    <div className={styles.image}></div>
-    <button className={styles.add} onClick={()=>{
-    //   addToCart({
-    //     productId:product._id,
-    //     name:product.name,
-    //     price:product.price
-    //   })
-    }}>Add to cart</button>
-  </div>
+    <Link href={`/shop/${product.pathname}`}>
+      <a className={styles.product}>
+        <div className={styles.image}></div>
+        <div className={styles.detail}>
+          <p>{product.name}</p>
+          <p>{product.price}</p>
+        </div>
+      </a>
+    </Link>
   )
 }

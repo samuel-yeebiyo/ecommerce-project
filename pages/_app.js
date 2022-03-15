@@ -59,18 +59,24 @@ function MyApp({ Component, pageProps }) {
     const gValue = Cookie.get('guestID')
 
     //fetch cart based on the cookie found
-    const fetchGuestCart = async() =>{
-      await fetch(`http://localhost:8000/guest/${gValue}/cart/`)
+    const fetchGuestCart = async(id) =>{
+      await fetch(`http://localhost:8000/guest/${id}/cart/`)
       .then(async res => await res.json()).then(data =>{
         console.log("Cart found!")
         setOrder(data)
       })
     }
 
-    const fetchUserCart = async () =>{
-      await fetch(`http://localhost:8000/user/${uValue}/cart/`).then(async res => await res.json()).then(data =>{
-        console.log("Cart found!")
-        setOrder(data)
+    const fetchUserCart = async (id) =>{
+      await fetch(`http://localhost:8000/user/${id}/cart/`)
+      .then(async res => await res.json()).then(data =>{
+        if(data.message != "No cart"){
+          console.log("Cart found!")
+          setOrder(data)
+        }else{
+          console.log("No cart")
+        }
+        
       })
     }
 
@@ -81,7 +87,7 @@ function MyApp({ Component, pageProps }) {
 
       //load cart from database
       console.log("Loading cart")
-      fetchUserCart()
+      fetchUserCart(uValue)
     }else{
       setUser(0)
     }
@@ -93,7 +99,7 @@ function MyApp({ Component, pageProps }) {
 
       //load cart from database
       console.log("Loading cart")
-      fetchGuestCart()
+      fetchGuestCart(gValue)
     }else{
       setGuest(0)
     }
@@ -202,7 +208,7 @@ function MyApp({ Component, pageProps }) {
   }
 
   return (
-    <Layout order={order} update={update} addItem={addItem} removeItem={removeItem}>
+    <Layout toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem}>
       <Component {...pageProps} toggleNav={toggleNav} addToCart={addToCart}/>
     </Layout>
   )

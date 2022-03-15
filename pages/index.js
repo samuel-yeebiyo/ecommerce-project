@@ -18,38 +18,6 @@ export default function Home({increment, addToCart}) {
         <Link href="/shop/">
           <a>Go to products</a>
         </Link>
-
-        <div className={styles.product}>
-          <div className={styles.image}></div>
-          <button className={styles.add} onClick={()=>{
-            addToCart({
-              productId:1234,
-              name:"Sample Product",
-              price:20
-            })
-          }}>Add to cart</button>
-        </div>
-        <div className={styles.product}>
-          <div className={styles.image}></div>
-          <button className={styles.add} onClick={()=>{
-            addToCart({
-              productId:5678,
-              name:"Sample Product",
-              price:10
-            })
-          }}>Add to cart</button>
-        </div>
-        <div className={styles.product}>
-          <div className={styles.image}></div>
-          <button className={styles.add} onClick={()=>{
-            addToCart({
-              productId:9101,
-              name:"Sample Product",
-              price:5
-            })
-          }}>Add to cart</button>
-        </div>
-
       </main>
         
     </div>

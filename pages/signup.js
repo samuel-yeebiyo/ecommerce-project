@@ -21,7 +21,6 @@ export default function SignUp({toggleNav}) {
       email:'',
       password:'',
       confirmation:''
-
     },
     validate: values =>{
       const errors={}
@@ -51,28 +50,33 @@ export default function SignUp({toggleNav}) {
         },
         mode:'cors',
         body:JSON.stringify(values)
-      }).then(async res => await res.json()).then(data =>{
+      }).then(async res => await res.json()).then(async data =>{
 
         //check if guestid exists
         let fromGuest = Cookie.get('guestID')
         if(fromGuest){
 
           //let server transfer current cart to user
-          fetch(`http://localhost:8000/user/${data.id}/transfer/${fromGuest}`,{
+          await fetch(`http://localhost:8000/user/${data.id}/transfer/${fromGuest}`,{
             method:'POST',
             headers:{
               'Content-Type':'application/json',
-              'Allow-Control-Allow-Origin':'*'
+              'Access-Control-Allow-Origin':'*'
             },
             mode:'cors'
+          }).then(async res => await res.json()).then(message => {
+            console.log("Transfer complete")
+            console.log(message)
+            Cookie.set('guestID', '', {expires: new Date(0)} )
+            Cookie.set('userID', data.id);
+            console.log("created cookie")
+            router.reload()
           })
-          Cookie.set('guestID', '', {expires: new Date(0)} )
+        }else{
+          Cookie.set('userID', data.id);        
+          console.log("created cookie")
+          router.reload()
         }
-
-        Cookie.set('userID', data.id);        
-        console.log("created cookie")
-        router.replace('/')
-        toggleNav()
       })
     }
   }) 
@@ -86,24 +90,32 @@ export default function SignUp({toggleNav}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <div className="user-auth">
-          <div>
+      <main className={styles.signup_container}>
+        <div className={styles.signup}>
+          <div className={styles.form_section}>
             <form onSubmit={formik.handleSubmit} className={styles.su_form}>
-              <label htmlFor='username'>Username</label>
-              <input id='username' name='username' type='text' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.username}/>
-              {formik.touched.username && formik.errors.username ? <div>{formik.errors.username}</div> : null}
-              <label htmlFor='email'>Email address</label>
-              <input id='email' name='email' type='email' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.email}/>
-              {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
-              <label htmlFor='password'>Password</label>
-              <input id='password' name='password' type='password' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.password}/>
-              {formik.touched.password && formik.errors.password ? <div>{formik.errors.password}</div> : null}
-              <label htmlFor='confirmation'>Confirm Password</label>
-              <input id='confirmation' name='confirmation' type='password' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.confirmation}/>
-              {formik.touched.confirmation && formik.errors.confirmation ? <div>{formik.errors.confirmation}</div> : null}
+              <p>Sign Up</p>
+              <div className={styles.input_req}>
+                <input placeholder='Username' id='username' name='username' type='text' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.username}/>
+                {formik.touched.username && formik.errors.username ? <div className={styles.err}>{formik.errors.username}</div> : null}
+              </div>
+              <div className={styles.input_req}>
+                <input placeholder='Email address' id='email' name='email' type='email' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.email}/>
+                {formik.touched.email && formik.errors.email ? <div className={styles.err}>{formik.errors.email}</div> : null}
+              </div>
+              <div className={styles.input_req}>
+                <input placeholder='Password'id='password' name='password' type='password' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.password}/>
+                {formik.touched.password && formik.errors.password ? <div className={styles.err}>{formik.errors.password}</div> : null}
+              </div>
+              <div className={styles.input_req}>
+                <input placeholder='Confirm Password' id='confirmation' name='confirmation' type='password' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.confirmation}/>
+                {formik.touched.confirmation && formik.errors.confirmation ? <div className={styles.err}>{formik.errors.confirmation}</div> : null}
+              </div>
               <button type="submit">Submit</button>
             </form>
+          </div>
+          <div className={styles.welcome_image}>
+
           </div>
         </div>
       </main>

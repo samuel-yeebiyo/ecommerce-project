@@ -6,12 +6,9 @@ import { fetchProducts } from '../../lib/products'
 
 import ProductCard from '../../components/productCard'
 
-export default function Product({addToCart, products}) {
-  
+import styles from '../../styles/shop.module.css'
 
-  useEffect(()=>{
-    console.log(products)
-  },[])
+export default function Product({addToCart, products}) {
 
   return (
     <div>
@@ -24,15 +21,12 @@ export default function Product({addToCart, products}) {
       <main>
         <p>This is the shop</p>
 
+        <div className={styles.products}>
         {products.map((product, idx)=>(
-          <div key={idx}>
-            <Link href={`/shop/${product.pathname}`}>
-              <a><ProductCard product={product}/></a>
-            </Link>
-          </div>
+            <ProductCard key={idx} product={product}/>
         ))
-
         }
+        </div>
 
 
       </main>
