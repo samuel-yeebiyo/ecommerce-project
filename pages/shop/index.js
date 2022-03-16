@@ -18,9 +18,7 @@ export default function Product({addToCart, products}) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <p>This is the shop</p>
-
+      <main className={styles.products_container}>
         <div className={styles.products}>
         {products.map((product, idx)=>(
             <ProductCard key={idx} product={product}/>

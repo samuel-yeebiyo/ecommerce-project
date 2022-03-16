@@ -1,7 +1,9 @@
 .product{
-    width:200px;
     display: flex;
     flex-direction:column;
+}
+.image:hover{
+  box-shadow: 5px 5px 10px;
 }
 .image{
   height:200px;
@@ -11,4 +13,8 @@
 .detail{
   display:flex;
   justify-content: space-between;
+  padding:0 5px 5px 5px;
+}
+.detail p:nth-child(2){
+  font-weight: bold;
 }
