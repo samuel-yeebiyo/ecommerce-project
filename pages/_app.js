@@ -15,6 +15,8 @@ function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState(0)
   const [guest, setGuest] = useState(0)
 
+  const [blocking, setBlocking] = useState(false)
+
 
   useEffect(()=>{
     
@@ -43,6 +45,9 @@ function MyApp({ Component, pageProps }) {
           },
           mode:'cors',
           body:JSON.stringify(order)
+        }).then(async res => await res.json()).then(data=>{
+          //allow other operations once done
+          setBlocking(false)
         })
       }
     }
@@ -52,6 +57,7 @@ function MyApp({ Component, pageProps }) {
   }, [order])
 
 
+  //fetching crespective carts on arrival
   useEffect(()=>{
     
     //check if a cookie already exists
@@ -112,9 +118,13 @@ function MyApp({ Component, pageProps }) {
   //This should be the method to put items in the cart
   const addToCart = (product)=>{
 
+    //block other operations
+    setBlocking(true)
+
+
     //if no cookie is found, adding to cart causes an identifier to be given to the guest
     if(user == 0 && guest == 0){
-      let gID = 1234567891
+      let gID = 1234567891 //change to random uuid
       Cookie.set("guestID", gID)
       setGuest(gID)
     }
@@ -165,6 +175,9 @@ function MyApp({ Component, pageProps }) {
 
 
   const addItem = (id) =>{
+
+    //block other operations
+    setBlocking(true)
         
     console.log("Adding")
     let tempOrder = {...order}
@@ -181,6 +194,9 @@ function MyApp({ Component, pageProps }) {
   }
 
   const removeItem = (id) =>{
+
+    //block other operations
+    setBlocking(true)
         
     console.log("Removing")
     let tempOrder = {...order}
@@ -208,8 +224,8 @@ function MyApp({ Component, pageProps }) {
   }
 
   return (
-    <Layout toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem}>
-      <Component {...pageProps} toggleNav={toggleNav} addToCart={addToCart}/>
+    <Layout toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking}>
+      <Component {...pageProps} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking}/>
     </Layout>
   )
 }

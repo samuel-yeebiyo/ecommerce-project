@@ -38,6 +38,19 @@
     color:white;
     cursor:pointer;
 }
+.add:hover{
+    background:white; 
+    color:black;
+    border:5px solid black;
+}
+.blocking{
+    content:"Adding...";
+    background:white; 
+    color:black;
+    border:5px solid black;
+    width:250px;
+    height:40px;
+}
 .product_description{
     margin-top:20px;
 }

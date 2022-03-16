@@ -30,6 +30,7 @@
 }
 .navigation li{
   margin-left:90px;
+  font-weight:bold;
 }
 .signout{
   color:black;

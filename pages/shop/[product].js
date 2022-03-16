@@ -5,7 +5,9 @@ import styles from '../../styles/product.module.css'
 
 import { fetchProductPaths, fetchProducts, fetchProduct } from '../../lib/products'
 
-export default function Product({increment, addToCart, product}) {
+export default function Product({increment, addToCart, product, blocking}) {
+
+
   
   return (
     <div>
@@ -24,13 +26,18 @@ export default function Product({increment, addToCart, product}) {
             <div className={styles.product_details}>
               <p className={styles.product_name}>{product.name}</p>
               <p className={styles.product_price}>${product.price}</p>
-              <button className={styles.add} onClick={()=>{
-                addToCart({
-                  productId:product._id,
-                  name:product.name,
-                  price:product.price
-                })
-              }}>Add to cart</button>
+              <button className={blocking ? styles.blocking : styles.add} onClick={()=>{
+                
+                //adding to cart
+                if(!blocking){
+                  addToCart({
+                    productId:product._id,
+                    name:product.name,
+                    price:product.price
+                  })
+                }
+              
+              }}>{blocking ? "Adding.." :"Add to cart"}</button>
               <div className={styles.product_description}>
                 <p className={styles.pd}>Product Description</p>
                 <p className={styles.desc}>{product.desc}</p>
