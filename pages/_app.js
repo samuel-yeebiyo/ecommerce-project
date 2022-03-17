@@ -33,6 +33,9 @@ function MyApp({ Component, pageProps }) {
           },
           mode:'cors',
           body:JSON.stringify(order)
+        }).then(async res => await res.json()).then(data=>{
+          //allow other operations once done
+          setBlocking(false)
         })
       }else if(guest != 0){
         console.log("Trying to update guest cart")
@@ -225,7 +228,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <Layout toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking}>
-      <Component {...pageProps} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking}/>
+      <Component {...pageProps} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking} order={order}/>
     </Layout>
   )
 }

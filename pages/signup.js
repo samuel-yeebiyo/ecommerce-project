@@ -75,7 +75,7 @@ export default function SignUp({toggleNav}) {
         }else{
           Cookie.set('userID', data.id);        
           console.log("created cookie")
-          router.reload()
+          window.location.replace("/")
         }
       })
     }

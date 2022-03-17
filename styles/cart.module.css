@@ -109,8 +109,13 @@
     flex-direction: column;
     align-items: center;
   }
-  .checkout_button{
+  .checkout_link{
     width:90%;
+    display: flex;
+    justify-content: center;
+  }
+  .checkout_button{
+    width:100%;
     height:50px;
     margin-bottom:8px;
     border:none;
@@ -118,6 +123,11 @@
     color:white;
     font-size:18px;
     cursor: pointer;
+  }
+  .checkout_button:hover{
+    background:white;
+    color:black;
+    border:5px solid black;
   }
 
   .empty_state{
