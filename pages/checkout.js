@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../styles/checkout.module.css'
+import ConnectToPhantom from '../components/connectPhantom'
 
 export default function Checkout({order}) {
   return (
@@ -54,10 +55,7 @@ export default function Checkout({order}) {
                                 </div>
                             </div>
                             <div className={styles.billing}>
-                                <div className={styles.wallet}>
-                                    <p>Connect your Phantom Wallet to complete your purchase.</p>
-                                </div>
-                                <button className={styles.connect}>Connect Wallet</button>
+                                <ConnectToPhantom/>
                             </div>
                         </div>
 
