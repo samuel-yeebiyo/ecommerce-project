@@ -228,7 +228,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <Layout toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking}>
-      <Component {...pageProps} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking} order={order}/>
+      <Component {...pageProps} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking} order={order} user={user} guest={guest}/>
     </Layout>
   )
 }

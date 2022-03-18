@@ -2,9 +2,53 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../styles/checkout.module.css'
+import { useState } from 'react'
+
+import { useFormik } from 'formik'
+
 import ConnectToPhantom from '../components/connectPhantom'
 
-export default function Checkout({order}) {
+export default function Checkout({order, user, guest}) {
+
+    const [deliveryExpand, setDeliveryExpand] = useState(false)
+    const [billingExpand, setBillingExpand] = useState(false)
+    const [emailExpand, setEmailExpand] = useState(true)
+    
+    const [email, setEmail] = useState(false)
+    const [delivery, setDelivery] = useState(false)
+
+    const emailF = useFormik({
+        initialValues:{
+            email:''
+        },
+        // validate: values =>{
+        //     const errors={}
+        //     if(!values.email){
+        //         errors.email="Required"
+        //     }
+        //     return errors
+        // },
+        onSubmit: values =>{
+            setEmail(true)
+            setDeliveryExpand(true)
+            setEmailExpand(false)
+        }
+    })
+
+    const deliveryF = useFormik({
+        initialValues:{
+            country:'',
+            city:'',
+            po_box:'',
+        },
+        onSubmit: values =>{
+            setDelivery(true)
+            setBillingExpand(true)
+            setDeliveryExpand(false)
+        }
+    })
+
+
   return (
     <div>
         <Head>
@@ -24,28 +68,42 @@ export default function Checkout({order}) {
                                 <div className={styles.nums}>
                                     <p>1</p>
                                 </div>
+                                {(user || email) ?
+                                    <img src="/check.png"/> : <></>
+                                }
                             </div>
-                            <p>Sign in or continue as guest</p>
-                            <form className={styles.continue}>
-                                <input type="email" id='email' placeholder='Email address'/>
-                                <button>Continue</button>
-                            </form>
+                            {!user && !email && emailExpand && <>                                
+                                <p>Sign in or continue as guest</p>
+                                <form onSubmit={emailF.handleSubmit} className={styles.continue}>
+                                    <input type='email' id='email' placeholder='Email address' value={emailF.values.email} onChange={emailF.handleChange}/>
+                                    <button type="submit">Continue</button>
+                                </form>
+                                </>
+                            }
                         </div>
-                        <div className={styles.section}>
+                        <div className={`${styles.section} ${delivery ? styles.expand: ""}`}>
                             <div className={styles.title}>
                                 <p>Delivery</p>
                                 <div className={styles.nums}>
                                     <p>2</p>
                                 </div>
+                                {delivery ?
+                                    <img src="/check.png"/> : <></>
+                                }
                             </div>
-                            <form className={styles.form_container}>
-                                <div className={styles.location}>
-                                    <input placeholder='Country'/>
-                                    <input placeholder='City'/>
-                                </div>
-                                <input placeholder='P.O. Box'/>
-                                <input placeholder='Phone Number'/>
-                            </form>
+                            { (user || deliveryExpand) &&
+                                <form onSubmit={deliveryF.handleSubmit} className={styles.form_container}>
+                                    <div className={styles.location}>
+                                        <input placeholder='Country'/>
+                                        <input placeholder='City'/>
+                                    </div>
+                                    <input placeholder='P.O. Box'/>
+                                    <input placeholder='Phone Number'/>
+                                    <button type="submit">Continue</button>
+                                </form>
+
+                            }
+                            
                         </div>
                         <div className={styles.section}>
                             <div className={styles.title}>
@@ -55,7 +113,9 @@ export default function Checkout({order}) {
                                 </div>
                             </div>
                             <div className={styles.billing}>
-                                <ConnectToPhantom/>
+                                {billingExpand &&
+                                    <ConnectToPhantom user={user} email={emailF.values.email} total={order.subtotal}/>
+                                }
                             </div>
                         </div>
 

@@ -60,7 +60,11 @@ export default function SignIn({toggleNav}) {
           }).then(async res => await res.json()).then(message => {
             console.log("Transfer complete")
             console.log(message)
+            
+            //delete guest cookie
             Cookie.set('guestID', '', {expires: new Date(0)} )
+            
+            //create user cookie
             Cookie.set('userID', data.id);
             console.log("created cookie")
             router.reload()
