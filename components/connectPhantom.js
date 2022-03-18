@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import styles from '../styles/connect.module.css'
+import Transaction from "./transaction";
 
-const ConnectToPhantom = () => {
+const ConnectToPhantom = ({total, user, email}) => {
 
     const [phantom, setPhantom] = useState(null);
     const [connected, setConnected] = useState(false);
@@ -38,7 +39,10 @@ const ConnectToPhantom = () => {
             </div>
             {phantom ?
                 connected ?
-                    <button className={styles.connect} onClick={disconnectHandler}>Disconnect Phantom</button> :
+                    <>
+                        <button className={styles.connect} onClick={disconnectHandler}>Disconnect Phantom</button>
+                        <Transaction user={user} email={email} total={total}/>
+                    </> :
                     <button className={styles.connect} onClick={connectHandler}>Connect Phantom</button>
                 :
                 <a href="https://phantom.app/" target="_blank" className={styles.connect}>Get Phantom</a>
