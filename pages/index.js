@@ -17,7 +17,9 @@ export default function Home({increment, addToCart}) {
         <div className={styles.main1}>
           <div className={styles.background}>
             <div className={styles.left}></div>
-            <div className={styles.right}></div>
+            <div className={styles.right}>
+              <img src="/whitewatch.jpg"/>
+            </div>
           </div>
           <div className={styles.description}>
             <p className={styles.main1_header}>Explore The Fusion</p>
@@ -35,7 +37,9 @@ export default function Home({increment, addToCart}) {
         </div>
         <div className={styles.main2_wrapper}>
           <div className={styles.main2}>
-            <div className={styles.main2_image}></div>
+            <div className={styles.main2_image}>
+              <img src="/redwatch.jpg"/>
+            </div>
             <div className={styles.main2_product}>
               <div className={styles.product_desc}>
                 <p className={styles.product_name}>Sample Product</p>

@@ -21,7 +21,7 @@ export default function Product({increment, addToCart, product, blocking}) {
         <div className={styles.product_container}>
           <div className={styles.main_product}>
             <div className={styles.product_image}>
-
+              <img src="/squarewatch.jpg"/>
             </div>
             <div className={styles.product_details}>
               <p className={styles.product_name}>{product.name}</p>

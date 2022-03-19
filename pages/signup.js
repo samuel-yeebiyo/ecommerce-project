@@ -115,7 +115,7 @@ export default function SignUp({toggleNav}) {
             </form>
           </div>
           <div className={styles.welcome_image}>
-
+            <img src="/pointleft.jpg"/>
           </div>
         </div>
       </main>

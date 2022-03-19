@@ -31,7 +31,7 @@
     height:50px;
     display:flex;
     align-items: center;
-    background:black;
+    background:#373F51;
     color:white;
     padding:10px 15px;
     justify-content: space-between;
@@ -44,8 +44,8 @@
     left:-45px;
 }
 .nums{
-    background:black;
-    color:white;
+    background:#A9BCD0;
+    color:black;
     width:30px;
     height:30px;
     display: flex;
@@ -61,8 +61,8 @@
 }
 .continue button{
     height:40px;
-    background: black;
-    color:white;
+    background: #58A4B0;
+    color:black;
     width:95px;
     border:none;
     cursor: pointer;
@@ -84,8 +84,8 @@
 }
 .form_container button{
     height:40px;
-    background: black;
-    color:white;
+    background: #58A4B0;
+    color:black;
     border:none;
     cursor: pointer;
 }
@@ -115,7 +115,7 @@
 .connect{
     width:50%;
     height:40px;
-    background: black;
+    background: #58A4B0;
     color:white;
     border:none;
     cursor: pointer;
@@ -146,8 +146,9 @@
     width:100%;
     justify-content:space-between;
     padding:20px 20px;
-    background:rgb(241, 241, 241);
+    background:#D8DBE2;
     margin-bottom:15px;
+    color:black;
 }
 .quantity{
     display: flex;

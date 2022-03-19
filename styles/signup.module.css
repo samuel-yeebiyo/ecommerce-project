@@ -52,7 +52,13 @@
 
 
 .welcome_image{
-    background:black;
     width:50%;
     height:650px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.welcome_image img{
+    height:100%;
 }

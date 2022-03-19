@@ -16,6 +16,13 @@
 .product_image{
     width:55%;
     background:rgb(201, 201, 201);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.product_image img{
+    width:100%;
 }
 .product_details{
     width:35%;

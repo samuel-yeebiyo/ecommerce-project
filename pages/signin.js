@@ -90,7 +90,7 @@ export default function SignIn({toggleNav}) {
         <main className={styles.signup_container}>
           <div className={styles.signup}>
             <div className={styles.welcome_image}>
-
+              <img src="/pointright.jpg"/>
             </div>
             <div className={styles.form_section}>
               <form onSubmit={formik.handleSubmit} className={styles.su_form}>

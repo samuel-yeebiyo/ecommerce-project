@@ -11,7 +11,7 @@
   }
   
   .cartContent{
-    background:white;
+    background:#373F51;
     height:100%;
     width:auto;
     position:absolute;
@@ -41,7 +41,7 @@
     font-weight:bold;
     margin-bottom:30px;
     padding-bottom:15px;
-    border-bottom:1px solid black;
+    border-bottom:1px solid white;
   }
   .close_button{
     cursor:pointer;
@@ -59,6 +59,7 @@
     background:rgb(235, 235, 235);
     border-radius: 7px;
     padding:15px;
+    color:black;
   }
   .quantity{
     display: flex;

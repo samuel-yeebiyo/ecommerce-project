@@ -19,14 +19,13 @@ export default function Product({addToCart, products}) {
       </Head>
 
       <main className={styles.products_container}>
+        <p>Latest Products</p>
         <div className={styles.products}>
         {products.map((product, idx)=>(
             <ProductCard key={idx} product={product}/>
         ))
         }
         </div>
-
-
       </main>
         
     </div>

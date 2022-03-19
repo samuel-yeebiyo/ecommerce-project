@@ -7,7 +7,9 @@ export default function ProductCard({product}) {
   return (
     <Link href={`/shop/${product.pathname}`}>
       <a className={styles.product}>
-        <div className={styles.image}></div>
+        <div className={styles.image}>
+          <img src="/squarewatch.jpg"/>
+        </div>
         <div className={styles.detail}>
           <p>{product.name}</p>
           <p>${product.price}</p>

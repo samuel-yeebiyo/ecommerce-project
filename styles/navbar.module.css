@@ -1,7 +1,7 @@
 .container {
   width:100vw;
   position: relative;
-  background:black;
+  background:#373F51;
   display: flex;
   justify-content: center;
 }
@@ -26,7 +26,6 @@
   display:flex;
   list-style: none;
   align-items: center;
-  justify-content: space-;
 }
 .navigation li{
   margin-left:80px;

@@ -1,8 +1,14 @@
 .products_container{
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
-
+.products_container > p{
+    width:85%;
+    margin-bottom:30px;
+    font-weight: bold;
+    font-size:28px;
+}
 .products{
     display:grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
