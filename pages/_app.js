@@ -60,7 +60,7 @@ function MyApp({ Component, pageProps }) {
   }, [order])
 
 
-  //fetching crespective carts on arrival
+  //fetching respective carts on arrival
   useEffect(()=>{
     
     //check if a cookie already exists
@@ -71,8 +71,12 @@ function MyApp({ Component, pageProps }) {
     const fetchGuestCart = async(id) =>{
       await fetch(`http://localhost:8000/guest/${id}/cart/`)
       .then(async res => await res.json()).then(data =>{
-        console.log("Cart found!")
-        setOrder(data)
+        if(data.message != "No cart"){
+          console.log("Cart found!")
+          setOrder(data)
+        }else{
+          console.log("No cart")
+        }
       })
     }
 
@@ -221,6 +225,13 @@ function MyApp({ Component, pageProps }) {
     
   }
 
+  const clearCart = ()=>{
+    setOrder({
+      items:[],
+      subtotal:0
+    })
+  }
+
   //update the nav bar when a user signs in, hides authentication options and adds profile link
   const toggleNav = ()=>{
     setUpdate(prev => !prev)
@@ -228,7 +239,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <Layout toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking}>
-      <Component {...pageProps} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking} order={order} user={user} guest={guest}/>
+      <Component {...pageProps} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking} order={order} user={user} guest={guest} clear={clearCart}/>
     </Layout>
   )
 }

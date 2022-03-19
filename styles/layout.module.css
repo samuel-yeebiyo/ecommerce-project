@@ -1,5 +1,13 @@
 .layout{
     overflow-x:hidden;
-    position:relative;
-    min-height:170vh;
+}
+.confirmation{
+    position:absolute;
+    width:100vw;
+    height:100vh;
+    background:rgba(0,0,0,0.5);
+    z-index: 20;
+    top:0;
+    left:0;
+    overflow: hidden;
 }

@@ -7,7 +7,7 @@ import styles from '../styles/connect.module.css'
 import Cookie from 'cookie-cutter'
 
 
-export default function Transaction({total, user, email}){
+export default function Transaction({total, user, email, confirm, clear}){
 
     async function transfer(tokenMintAddress, wallet, to, connection, amount){
 
@@ -86,8 +86,28 @@ export default function Transaction({total, user, email}){
                         email: email,
                         confirmation:signature
                     })
-                }).then(async res => await res.json()).then(message => {
-                    console.log("Sent")
+                }).then(async res => await res.json()).then(reciept => {
+                    //get back reciept
+                    //show receipt confirmation
+                    confirm(reciept)
+                    clear()
+                })
+            }else if(user){
+                await fetch(`http://localhost:8000/user/${user}/pay`,{
+                    method:'POST',
+                    headers:{
+                    'Content-Type':'application/json',
+                    'Access-Control-Allow-Origin':'*'
+                    },
+                    mode:'cors',
+                    body:JSON.stringify({
+                        confirmation:signature
+                    })
+                }).then(async res => await res.json()).then(reciept => {
+                    //get back reciept
+                    //show receipt confirmation
+                    confirm(reciept)
+                    clear()
                 })
             }
 
@@ -106,7 +126,10 @@ export default function Transaction({total, user, email}){
             )
             const phantom = window["solana"]
             const amount = total*1000000000
-            transfer(NEXT_PUBLIC_TOKEN, phantom, NEXT_PUBLIC_RECIEVER , connection, amount)
+
+            console.log(process.env.NEXT_PUBLIC_TOKEN)
+
+            transfer(process.env.NEXT_PUBLIC_TOKEN, phantom, process.env.NEXT_PUBLIC_RECIEVER , connection, amount)
 
 
         }}>Pay Now</button>
