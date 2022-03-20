@@ -17,7 +17,7 @@ export default function Layout({children, toggleNav, order, update, addItem, rem
       <div className={styles.layout}>
         <Navbar order={order} toggleNav={toggleNav} toggle={toggleCart} update={update}/>
         <Cart state={cartState} toggle={toggleCart} order={order} removeItem={removeItem} addItem={addItem} blocking={blocking}/>
-        <main>{children}</main>
+        <main className={styles.master_container}>{children}</main>
       </div>
       <Footer/>
       </>

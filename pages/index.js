@@ -15,33 +15,68 @@ export default function Home({increment, addToCart}) {
 
       <main className={styles.home_container}>
         <div className={styles.main1}>
-          <div className={styles.background}>
-            <div className={styles.left}></div>
+          <div className={styles.main1_container}>
+            <div className={styles.description}>
+              <p className={styles.main1_header}>Explore The Fusion</p>
+              <p className={styles.descs}>Where culture meets fashion and diversity meets style.</p>
+              <p className={styles.descs}>Find what you like!</p>
+              <Link href="/shop/">
+                <a><button>Shop Now</button></a>
+              </Link>
+            </div>
             <div className={styles.right}>
-              <img src="/whitewatch.jpg"/>
+              <img src="/main_home.png"/>
             </div>
           </div>
-          <div className={styles.description}>
-            <p className={styles.main1_header}>Explore The Fusion</p>
-            <p className={styles.descs}>Where culture meets fashion and diversity meets style.</p>
-            <p className={styles.descs}>Find what you like!</p>
-            <Link href="/shop/">
-              <a><button>Shop Now</button></a>
-            </Link>
-          </div>
         </div>
-        <div className={styles.trending}>
-          <div className={styles.line}></div>
-          <p>Trending</p>
-          <div className={styles.line}></div>
-        </div>
+        
         <div className={styles.main2_wrapper}>
           <div className={styles.main2}>
             <div className={styles.main2_image}>
-              <img src="/redwatch.jpg"/>
+              <img src="/watch_pic.jpg"/>
             </div>
             <div className={styles.main2_product}>
               <div className={styles.product_desc}>
+                <p className={styles.product_name}>Sample Product</p>
+                <p className={styles.product_desc}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                <Link href="/shop/">
+                  <a><button>Shop Now</button></a>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.watch_info_container}>
+          <div className={styles.watch_info}>
+            <div className={styles.info}>
+              <div className={styles.info_img}>
+                <img src="quality.png"/>
+              </div>
+              <p>This is a short description of something a customer should know about the watches being sold here</p>
+            </div>
+            <div className={styles.info}>
+              <div className={styles.info_img}>
+                <img src="trust.png"/>
+              </div>
+              <p>This is a short description of something a customer should know about the watches being sold here</p>
+            </div>
+            <div className={styles.info}>
+              <div className={styles.info_img}>
+                <img src="durable.png"/>
+              </div>
+              <p>This is a short description of something a customer should know about the watches being sold here</p>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.main3_wrapper}>
+          <div className={styles.main3}>
+            <div className={styles.main3_image}>
+              <img src="/second_home.png"/>
+            </div>
+            <div className={styles.main3_product}>
+              <div className={styles.product_desc3}>
                 <p className={styles.product_name}>Sample Product</p>
                 <p className={styles.product_desc}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
                 <Link href="/shop/">

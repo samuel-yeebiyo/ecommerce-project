@@ -1,27 +1,33 @@
 .product{
     display: flex;
     flex-direction:column;
-}
-.image:hover{
-  transform:scale(1.1)
+    padding:15px;
+    background:#F2EFE9;
+    color:black;
+    border-radius: 10px;
 }
 .image{
   height:200px;
-  background:rgb(128, 128, 128);
+  background:rgb(228, 228, 228);
+  border-radius: 10px;
   margin-bottom:10px;
-  transition: transform 0.5s ease-in-out;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
 .image img{
-  width:100%;
+  height:100%;
+  transition: transform 0.5s ease-in-out;
+}
+.image img:hover{
+  transform:scale(1.2)
 }
 .detail{
   display:flex;
   justify-content: space-between;
-  padding:0 5px 5px 5px;
+  padding:0 5px;
+  font-family: 'Oswald';
+  font-size:18px;
 }
 .detail p:nth-child(2){
   font-weight: bold;

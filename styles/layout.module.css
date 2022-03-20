@@ -1,14 +1,7 @@
 .layout{
     overflow-x:hidden;
-    min-height: calc(100vh - 100px);
+    min-height: calc(100vh - 200px);
 }
-.confirmation{
-    position:absolute;
-    width:100vw;
-    height:100vh;
-    background:rgba(0,0,0,0.5);
-    z-index: 20;
-    top:0;
-    left:0;
-    overflow: hidden;
+.master_container{
+    height:100%;
 }

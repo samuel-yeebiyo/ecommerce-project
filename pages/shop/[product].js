@@ -19,12 +19,17 @@ export default function Product({increment, addToCart, product, blocking}) {
 
       <main className={styles.product_wrapper}>
         <div className={styles.product_container}>
+
           <div className={styles.main_product}>
-            <div className={styles.product_image}>
-              <img src="/squarewatch.jpg"/>
-            </div>
             <div className={styles.product_details}>
               <p className={styles.product_name}>{product.name}</p>
+              <div className={styles.product_description}>
+                {/* <p className={styles.desc}>{product.desc}</p> */}
+                <p className={styles.desc}>Lorem ipsum dit do lod sdfsdf sdfsdf sdf sdf sdf sdsd fsd fsdf sdfsf sdf sdf fsdf sdfsdf sdf sdf sdf sdsdf sd fsdf sdfsf sdf sdf fsdf sdfsdf sdf sdf sdf sdsdf sdfsdf sdfsf sdf sdf fsdf sdfsdf sdf sdf sdf sdsdf sdfsdf sdfsf sdf sdf </p>
+              </div>
+              <p className={styles.desc1}>Material: </p>
+              <p className={styles.desc1}>Diameter: </p>
+              <p className={styles.desc2}>Size: </p>
               <p className={styles.product_price}>${product.price}</p>
               <button className={blocking ? styles.blocking : styles.add} onClick={()=>{
                 
@@ -38,12 +43,12 @@ export default function Product({increment, addToCart, product, blocking}) {
                 }
               
               }}>{blocking ? "Adding.." :"Add to cart"}</button>
-              <div className={styles.product_description}>
-                <p className={styles.pd}>Product Description</p>
-                <p className={styles.desc}>{product.desc}</p>
-              </div>
+            </div>
+            <div className={styles.product_image}>
+              <img src="/main_home.png"/>
             </div>
           </div>
+
         </div>
       </main>
         
