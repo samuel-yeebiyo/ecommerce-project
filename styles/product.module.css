@@ -31,6 +31,9 @@
     justify-content: center;
     font-size:15px;
 }
+.product_details span{
+    font-weight:bold;
+}
 .product_name{
     font-size:70px;
     font-weight:bold;

@@ -24,13 +24,12 @@ export default function Product({increment, addToCart, product, blocking}) {
             <div className={styles.product_details}>
               <p className={styles.product_name}>{product.name}</p>
               <div className={styles.product_description}>
-                {/* <p className={styles.desc}>{product.desc}</p> */}
-                <p className={styles.desc}>Lorem ipsum dit do lod sdfsdf sdfsdf sdf sdf sdf sdsd fsd fsdf sdfsf sdf sdf fsdf sdfsdf sdf sdf sdf sdsdf sd fsdf sdfsf sdf sdf fsdf sdfsdf sdf sdf sdf sdsdf sdfsdf sdfsf sdf sdf fsdf sdfsdf sdf sdf sdf sdsdf sdfsdf sdfsf sdf sdf </p>
+                <p className={styles.desc}>{product.desc}</p>
               </div>
-              <p className={styles.desc1}>Material: </p>
-              <p className={styles.desc1}>Diameter: </p>
-              <p className={styles.desc2}>Size: </p>
-              <p className={styles.product_price}>${product.price}</p>
+              <p className={styles.desc1}><span>Material:</span> {product.material}</p>
+              <p className={styles.desc1}><span>Diameter:</span> {product.diameter} </p>
+              <p className={styles.desc2}><span>Size:</span> {product.size}</p>
+              <p className={styles.product_price}>{product.price} SAMO</p>
               <button className={blocking ? styles.blocking : styles.add} onClick={()=>{
                 
                 //adding to cart

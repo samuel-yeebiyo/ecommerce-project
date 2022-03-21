@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import Layout from '../components/layout'
 import {useState, useEffect} from 'react'
+import {v4 as uuidv4} from 'uuid'
 
 import Cookie from 'cookie-cutter'
 
@@ -131,7 +132,7 @@ function MyApp({ Component, pageProps }) {
 
     //if no cookie is found, adding to cart causes an identifier to be given to the guest
     if(user == 0 && guest == 0){
-      let gID = 1234567891 //change to random uuid
+      let gID = uuidv4() //change to random uuid
       Cookie.set("guestID", gID)
       setGuest(gID)
     }

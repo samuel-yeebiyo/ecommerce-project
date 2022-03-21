@@ -12,7 +12,7 @@ export default function ProductCard({product}) {
         </div>
         <div className={styles.detail}>
           <p>{product.name}</p>
-          <p>${product.price}</p>
+          <p>{product.price} SAMO</p>
         </div>
       </a>
     </Link>
