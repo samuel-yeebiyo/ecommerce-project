@@ -1,0 +1,28 @@
+.wrapper{
+    width:100%;
+    display: flex;
+    justify-content: center;
+}
+.container{
+    width:65%;
+    display: flex;
+}
+.side_choice{
+    width:20%;
+    height:100px;
+}
+.side_choice div{
+    height:50px;
+    display: flex;
+    align-items: center;
+    background:white;
+    color:black;
+    margin-bottom:15px;
+    padding:10px;
+}
+.main_board{
+    width:80%;
+    height:600px;
+    border:1px solid red;
+    padding:20px;
+}

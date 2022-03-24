@@ -1,6 +1,6 @@
-import Navbar from "./navbar"
-import Cart from "./cart"
-import Footer from "./footer"
+import Navbar from "../components/navbar"
+import Cart from "../components/cart"
+import Footer from "../components/footer"
 import styles from '../styles/layout.module.css'
 
 import {useState} from 'react'

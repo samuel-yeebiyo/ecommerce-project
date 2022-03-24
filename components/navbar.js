@@ -51,6 +51,13 @@ export default function Navbar({toggle, order, toggleNav, update}) {
                         Profile
                         </Link>
                     </li>
+                    {router.asPath != '/sell/onboarding' &&
+                    <li>
+                        <Link href="/sell/onboarding">
+                            Sell
+                        </Link>
+                    </li>
+                    }
                     <li className={styles.signout} onClick={()=>{
                         Cookie.set('userID', '', {expires: new Date(0)} )
                         window.location.replace("/")
