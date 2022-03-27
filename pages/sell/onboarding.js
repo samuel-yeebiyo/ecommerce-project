@@ -7,6 +7,8 @@ import Payment from '../../components/onboarding/payment'
 import styles from '../../styles/onboarding.module.css'
 import CreateListing from '../../components/createlisting'
 
+import Cookie from 'cookie-cutter'
+
 export default function onboarding(){
 
     const [progress, setProgress] = useState({
@@ -39,6 +41,29 @@ export default function onboarding(){
             setProgress(prev => ({...prev, pubKey:true}))
         }
         setCurrent('listing')
+    }
+
+    const createShop = async ()=>{
+        let user = Cookie.get('userID')
+        let shop
+        await fetch('http://localhost:8000/register/seller', {
+            method:'POST',
+            headers:{
+            'Content-Type':'application/json',
+            'Access-Control-Allow-Origin': '*'
+            },
+            mode:'cors',
+            body:JSON.stringify({
+                id:user,
+                name:name,
+                pubkey:pubKey
+            })
+        }).then(async res => await res.json()).then(async data =>{
+            shop = data.id
+        })
+
+        console.log({shop})
+        return shop
     }
 
     useEffect(()=>{
@@ -82,7 +107,7 @@ export default function onboarding(){
                         <Payment confirm={confirmPubKey} confirmedKey={pubKey}/>
                     }
                     {current == 'listing' &&
-                        <CreateListing/>
+                        <CreateListing shop={createShop}/>
                     }
                 </div>
             </div>

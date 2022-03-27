@@ -1,6 +1,44 @@
+.listing_wrapper{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+}
+
+.name{
+    margin-bottom:30px;
+}
+.name p{
+    margin-bottom:5px;
+}
+.name input{
+    height:35px;
+    width:300px;
+    border:none;
+    padding:5px;
+}
+.file_upload{
+    margin:5px 0 30px 0;
+    display: block;
+    border:1px dashed white;
+    height:50px;
+    width:50px;
+    cursor:pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    border-radius: 5px;
+}
 .choose{
     display: none;
 }
 .preview{
     width:200px;
+}
+.name textarea{
+    padding:5px;
+    width:300px;
+    max-width:400px;
+    height:150px;
+    max-height:200px;
 }

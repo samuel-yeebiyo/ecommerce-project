@@ -22,7 +22,8 @@
 }
 .main_board{
     width:80%;
-    height:600px;
-    border:1px solid red;
+    min-height:600px;
     padding:20px;
+    background:black;
+    border-radius:0 10px 10px 10px
 }
