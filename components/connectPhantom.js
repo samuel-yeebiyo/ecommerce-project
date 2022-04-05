@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styles from '../styles/connect.module.css'
+import styles from 'styles/component/connect.module.css'
 import Transaction from "./transaction";
 
 const ConnectToPhantom = ({total, user, email, confirm, clear}) => {

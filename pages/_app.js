@@ -1,6 +1,6 @@
-import '../styles/globals.css'
-import Layout from '../layouts/layout'
-import {useState, useEffect} from 'react'
+import 'styles/globals.css'
+import Layout from '@/layouts/layout'
+import {useState, useEffect, useRef} from 'react'
 import {v4 as uuidv4} from 'uuid'
 
 import Cookie from 'cookie-cutter'
@@ -15,12 +15,14 @@ function MyApp({ Component, pageProps }) {
   const [update, setUpdate] = useState(false)
   const [user, setUser] = useState(0)
   const [guest, setGuest] = useState(0)
-
+  const [userShop, setUserShop] = useState(false)
+  const [shop, setShop] = useState('')
   const [blocking, setBlocking] = useState(false)
+  const [listings, setListings] =useState([])
 
+  const [loading,setLoading] = useState(false)
 
   useEffect(()=>{
-    
     //updating the cart when an item is added or removed
     const updateOrder = async ()=>{
       if(user != 0){
@@ -94,6 +96,39 @@ function MyApp({ Component, pageProps }) {
       })
     }
 
+    const fetchUserShop = async (id) =>{
+      await fetch(`http://localhost:8000/user/${id}/get/`)
+      .then(async res => await res.json()).then(async data =>{
+        setUserShop(data.hasShop)
+        if(data.hasShop){
+          setShop(data.shopID)
+          await fetch(`http://localhost:8000/shops/${data.shopID}/get-listings`, {
+            method:'GET',
+            headers:{
+              'Content-Type':'application/json',
+              'Access-Control-Allow-Origin':'*'
+            },
+            mode:'cors',
+          }).then(async res=>await res.json()).then(data=>{
+            setListings(data.listings)
+          })
+
+
+          //Clear sop listings
+          // await fetch(`http://localhost:8000/shops/${data.shopID}/clear`,{
+          //   method:'GET',
+          //   headers:{
+          //     'Content-Type':'application/json',
+          //     'Access-Control-Allow-Origin':'*'
+          //   },
+          //   mode:'cors',
+          // })
+        }
+      })
+
+      
+    }
+
     //if cookie is for user
     if(uValue){
       console.log("User cookie found")
@@ -102,6 +137,10 @@ function MyApp({ Component, pageProps }) {
       //load cart from database
       console.log("Loading cart")
       fetchUserCart(uValue)
+
+      //check if user has shop
+      fetchUserShop(uValue)
+
     }else{
       setUser(0)
     }
@@ -233,15 +272,23 @@ function MyApp({ Component, pageProps }) {
     })
   }
 
+  const toggleLoading = ()=>{
+    setLoading(!loading)
+  }
+
   //update the nav bar when a user signs in, hides authentication options and adds profile link
   const toggleNav = ()=>{
     setUpdate(prev => !prev)
   }
 
+  const layouts = ({children})=> <Layout userShop={userShop} toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking}>{children}</Layout>
+
+  const MainLayout = Component.Layout || layouts
+
   return (
-    <Layout toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking}>
-      <Component {...pageProps} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking} order={order} user={user} guest={guest} clear={clearCart}/>
-    </Layout>
+    <MainLayout userShop={userShop} toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking} loading={loading}>
+      <Component {...pageProps} toggleLoading={toggleLoading} shop={shop} listings={listings} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking} order={order} user={user} guest={guest} clear={clearCart}/>
+    </MainLayout>
   )
 }
 

@@ -1,13 +1,13 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from '../styles/checkout.module.css'
+import styles from 'styles/checkout.module.css'
 import { useState, useEffect } from 'react'
 
 import { useFormik } from 'formik'
 
-import ConnectToPhantom from '../components/connectPhantom'
-import Reciept from '../components/reciept'
+import ConnectToPhantom from '@/components/connectPhantom'
+import Reciept from '@/components/reciept'
 
 export default function Checkout({order, user, guest, clear}) {
 

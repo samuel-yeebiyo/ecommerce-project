@@ -3,7 +3,7 @@ import { web3, Wallet,  } from "@project-serum/anchor"
 import {Connection, clusterApiUrl} from "@solana/web3.js"
 import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes"
 
-import styles from '../styles/connect.module.css'
+import styles from 'styles/component/connect.module.css'
 import Cookie from 'cookie-cutter'
 
 

@@ -1,4 +1,4 @@
-import styles from '../styles/reciept.module.css'
+import styles from 'styles/component/reciept.module.css'
 
 const Reciept = ({reciept, clear})=>{
     return(

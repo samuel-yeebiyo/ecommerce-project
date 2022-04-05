@@ -3,17 +3,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import {useRouter} from 'next/router'
-import styles from '../styles/signup.module.css'
+import styles from 'styles/base/signup.module.css'
 import { useFormik } from 'formik'
 
 import {useState} from 'react'
 
-import GuestRoute from '../components/guestRoute'
+import GuestRoute from '@/components/guestRoute'
 
 import Cookie from 'cookie-cutter'
 
 
-export default function SignIn({toggleNav}) {
+export default function SignIn() {
 
   const [user, setUser] = useState({})
   const router = useRouter()
@@ -44,7 +44,7 @@ export default function SignIn({toggleNav}) {
         mode:'cors',
         body:JSON.stringify(values)
       }).then(async res => await res.json()).then(async data =>{
-        
+
         //check if guestid exists
         let fromGuest = Cookie.get('guestID')
         if(fromGuest){

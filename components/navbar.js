@@ -1,22 +1,22 @@
-import styles from '../styles/navbar.module.css'
+import styles from 'styles/component/navbar.module.css'
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import Cookie from 'cookie-cutter'
 
-export default function Navbar({toggle, order, toggleNav, update}) {
+export default function Navbar({toggle, order, toggleNav, update, userShop}) {
 
     const [user, setUser] = useState(false)
     const router = useRouter();
 
    useEffect(()=>{
-    const value = Cookie.get('userID');
-    if(value){
-        setUser(true)
-    }
-    console.log("rendered")
-   },[update])
+        const value = Cookie.get('userID');
+        if(value){
+            setUser(true)
+        }
+        console.log("rendered")
+    },[update])
 
   return (
     <div className={styles.container}>
@@ -31,8 +31,8 @@ export default function Navbar({toggle, order, toggleNav, update}) {
                     </Link>
                 </li>
                 <li>
-                    <Link href="/shop">
-                    Shop
+                    <Link href="/store">
+                    Store
                     </Link>
                 </li>
                 {!user ? <>
@@ -51,13 +51,21 @@ export default function Navbar({toggle, order, toggleNav, update}) {
                         Profile
                         </Link>
                     </li>
-                    {router.asPath != '/sell/onboarding' &&
+                    </>
+                }
+                { user && router.asPath != '/sell/onboarding' &&
                     <li>
-                        <Link href="/sell/onboarding">
-                            Sell
-                        </Link>
+                        {userShop ?
+                            <Link href="/myshop/overview">
+                                My Shop
+                            </Link>:
+                            <Link href="/sell/onboarding">
+                                Sell
+                            </Link>
+                        }
                     </li>
-                    }
+                }
+                {user && <>
                     <li className={styles.signout} onClick={()=>{
                         Cookie.set('userID', '', {expires: new Date(0)} )
                         window.location.replace("/")

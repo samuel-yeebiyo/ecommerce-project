@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import Link from 'next/link'
 
-import styles from '../styles/cart.module.css'
+import styles from 'styles/component/cart.module.css'
 
 export default function Cart({state, toggle, order, removeItem, addItem, blocking}) {
 

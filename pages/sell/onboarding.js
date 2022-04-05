@@ -1,15 +1,15 @@
 import {useState, useEffect} from 'react'
 import { useRouter } from 'next/router'
 
-import NameShop from '../../components/onboarding/nameshop'
-import Payment from '../../components/onboarding/payment'
+import NameShop from "@/components/onboarding/nameshop"
+import Payment from '@/components/onboarding/payment'
 
-import styles from '../../styles/onboarding.module.css'
-import CreateListing from '../../components/createlisting'
+import styles from 'styles/base/onboarding.module.css'
+import CreateListing from '@/components/createlisting'
 
 import Cookie from 'cookie-cutter'
 
-export default function onboarding(){
+export default function onboarding({toggleLoading}){
 
     const [progress, setProgress] = useState({
         name:false,
@@ -77,21 +77,21 @@ export default function onboarding(){
         <div className={styles.wrapper}>
             <div className={styles.container}>
                 <div className={styles.side_choice}>
-                    <div onClick={()=>{
+                    <div className={current == 'name'? [styles.name, styles.current].join(" ") : styles.name} onClick={()=>{
                         if(progress.name){
                             setCurrent('name')
                         }
                     }}>
                         <p>Name</p>
                     </div>
-                    <div onClick={()=>{
+                    <div className={current == 'pubkey' && styles.current} onClick={()=>{
                         if(progress.pubKey || progress.name){
                             setCurrent('pubkey')
                         }
                     }}>
                         <p>Billing</p>
                     </div>
-                    <div onClick={()=>{
+                    <div  className={current == 'listing'? [styles.listing, styles.current].join(" ") : styles.listing} onClick={()=>{
                         if(progress.pubKey){
                             setCurrent('listing')
                         }
@@ -107,7 +107,7 @@ export default function onboarding(){
                         <Payment confirm={confirmPubKey} confirmedKey={pubKey}/>
                     }
                     {current == 'listing' &&
-                        <CreateListing shop={createShop}/>
+                        <CreateListing shop={createShop} loading={toggleLoading}/>
                     }
                 </div>
             </div>

@@ -1,14 +1,14 @@
 import Link from 'next/link'
 
-import styles from '../styles/productcard.module.css'
+import styles from 'styles/component/productcard.module.css'
 
 
 export default function ProductCard({product}) {
   return (
-    <Link href={`/shop/${product.pathname}`}>
+    <Link href={`/store/${product.pathname}`}>
       <a className={styles.product}>
         <div className={styles.image}>
-          <img src="/product.png"/>
+          <img src={product.primary}/>
         </div>
         <div className={styles.detail}>
           <p>{product.name}</p>

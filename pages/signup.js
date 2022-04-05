@@ -1,13 +1,13 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from '../styles/signup.module.css'
+import styles from '/styles/base/signup.module.css'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 
 import {useState} from 'react'
 import Cookie from 'cookie-cutter'
-import GuestRoute from '../components/guestRoute'
+import GuestRoute from '@/components/guestRoute'
 
 
 export default function SignUp({toggleNav}) {

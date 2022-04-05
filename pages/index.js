@@ -1,9 +1,11 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from '../styles/Home.module.css'
+import styles from 'styles/base/Home.module.css'
+import { fetchProducts } from '@/lib/products'
+import ProductCard from '@/components/productCard'
 
-export default function Home({increment, addToCart}) {
+export default function Home({increment, addToCart, products}) {
   
   return (
     <div>
@@ -15,34 +17,35 @@ export default function Home({increment, addToCart}) {
 
       <main className={styles.home_container}>
         <div className={styles.main1}>
-          <div className={styles.main1_container}>
-            <div className={styles.description}>
-              <p className={styles.main1_header}>Explore The Fusion</p>
-              <p className={styles.descs}>Where culture meets fashion and diversity meets style.</p>
-              <p className={styles.descs}>Find what you like!</p>
-              <Link href="/shop/">
-                <a><button>Shop Now</button></a>
-              </Link>
-            </div>
-            <div className={styles.right}>
-              <img src="/main_home.png"/>
+          <div className={styles.search_container}>
+            <div className={styles.search}>
+              <input placeholder='Search' type="text"/>
+              <button>Search</button>
             </div>
           </div>
         </div>
         
-        <div className={styles.main2_wrapper}>
-          <div className={styles.main2}>
-            <div className={styles.main2_image}>
-              <img src="/watch_pic.jpg"/>
+        <div className={styles.new}>
+          <p className={styles.title}>New Products</p>
+          <div className={styles.new_products}>
+            {products.map((product, idx)=>(
+                <ProductCard key={idx} product={product}/>
+            ))
+            }
+            <div className={styles.product}>
+              
             </div>
-            <div className={styles.main2_product}>
-              <div className={styles.product_desc}>
-                <p className={styles.product_name}>Sample Product</p>
-                <p className={styles.product_desc}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
-                <Link href="/shop/">
-                  <a><button>Shop Now</button></a>
-                </Link>
-              </div>
+            <div className={styles.product}>
+              
+            </div>
+            <div className={styles.product}>
+              
+            </div>
+            <div className={styles.product}>
+              
+            </div>
+            <div className={styles.product}>
+              
             </div>
           </div>
         </div>
@@ -70,24 +73,71 @@ export default function Home({increment, addToCart}) {
           </div>
         </div>
 
-        <div className={styles.main3_wrapper}>
-          <div className={styles.main3}>
-            <div className={styles.main3_image}>
-              <img src="/second_home.png"/>
+        <div className={styles.new}>
+          <p className={styles.title}>Trending Products</p>
+          <div className={styles.new_products}>
+            {products.map((product, idx)=>(
+                <ProductCard key={idx} product={product}/>
+            ))
+            }
+            <div className={styles.product}>
+              
             </div>
-            <div className={styles.main3_product}>
-              <div className={styles.product_desc3}>
-                <p className={styles.product_name}>Sample Product</p>
-                <p className={styles.product_desc}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
-                <Link href="/shop/">
-                  <a><button>Shop Now</button></a>
-                </Link>
-              </div>
+            <div className={styles.product}>
+              
+            </div>
+            <div className={styles.product}>
+              
+            </div>
+            <div className={styles.product}>
+              
+            </div>
+            <div className={styles.product}>
+              
             </div>
           </div>
         </div>
+
+        <div className={styles.new}>
+          <p className={styles.title}>Recently Viewed</p>
+          <div className={styles.new_products}>
+            {products.map((product, idx)=>(
+                <ProductCard key={idx} product={product}/>
+            ))
+            }
+            <div className={styles.product}>
+              
+            </div>
+            <div className={styles.product}>
+              
+            </div>
+            <div className={styles.product}>
+              
+            </div>
+            <div className={styles.product}>
+              
+            </div>
+            <div className={styles.product}>
+              
+            </div>
+          </div>
+        </div>
+        
       </main>
         
     </div>
   )
+}
+
+export async function getStaticProps(context){
+
+  const products = await fetchProducts()
+
+  return{
+    props:{
+      products
+    }
+  }
+
+
 }
