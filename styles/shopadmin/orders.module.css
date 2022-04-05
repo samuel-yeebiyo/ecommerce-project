@@ -1,0 +1,23 @@
+.welcome{
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom:50px;
+}
+.boards{
+    display:flex;
+    margin-bottom:30px;
+}
+.board{
+    height:200px;
+    width:250px;
+    border:1px solid red;
+    margin-right:50px;
+}
+.orders{
+    margin-bottom:50px;
+}
+.title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:20px;
+}

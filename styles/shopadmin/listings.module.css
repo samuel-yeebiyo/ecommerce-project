@@ -1,0 +1,50 @@
+.overview_container{
+    position:relative;
+    display: flex;
+    transition:left 0.3s ease-in-out;
+    left:0;
+    /* overflow-x:hidden; */
+}
+.listings{
+    min-width:100%;
+}
+.title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:40px;
+}
+.catalog{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+    column-gap: 30px;
+    row-gap:30px;
+    margin-bottom:30px;
+    width:100%;
+}
+.prod{
+    width:200px;
+    height:200px;
+    background:rgb(116, 116, 116);
+    margin-right:30px;
+}
+
+.details{
+    position:relative;
+    left:50%;
+    height:auto;
+    min-width:100%;
+    transition:left 0.3s ease-in-out;
+    /* border:1px solid red; */
+    padding-bottom:40px;
+}
+.cancel{
+    width:100px;
+    height:40px;
+    border:none;
+    background:white;
+    cursor:pointer;
+}
+
+.show{
+    left:-150%;
+}

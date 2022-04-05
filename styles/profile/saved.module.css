@@ -1,0 +1,12 @@
+.list>p{
+    font-size:25px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+.products{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    margin-top:30px;
+    row-gap: 30px;
+    column-gap: 30px;
+}

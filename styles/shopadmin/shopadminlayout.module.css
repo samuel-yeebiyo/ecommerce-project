@@ -1,0 +1,61 @@
+.main{
+    display:flex;
+    position:relative;
+}
+.sidebar{
+    width:20%;
+    background:black;
+    display: flex;
+    flex-direction: column;
+    min-height:100vh;
+    height:auto;
+    align-items: center;
+}
+.brand_name{
+    margin:40px 0;
+    font-weight:bold;
+    cursor: pointer;
+    font-size:30px;
+}
+.shop_name{
+    margin:0 0 40px 0;
+    font-weight:bold;
+    font-size:20px;
+}
+.options{
+    width:100%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+.options p{
+    margin-bottom:30px;
+    cursor:pointer;
+    background:#2F2D2E;
+    display: block;
+    width:80%;
+    height:60px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+.current{
+    background: white !important;
+    color:black;
+}
+.admin_container{
+    width:80%;
+    border:1px solid red;
+    padding:30px 50px;
+    overflow-x:hidden;
+}
+.loading{
+    position:fixed;
+    width:100vw;
+    height:100vh;
+    background:rgba(0,0,0,0.4);
+    display: flex;
+    justify-content:center;
+    align-items:center;
+}

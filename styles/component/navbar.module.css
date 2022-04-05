@@ -1,9 +1,10 @@
 .container {
   width:100vw;
   position: relative;
-  /* background:#373F51; */
+  background:#373F51;
   display: flex;
   justify-content: center;
+  margin-bottom:50px;
 }
 
 .navigation{

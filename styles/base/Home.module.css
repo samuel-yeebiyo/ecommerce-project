@@ -1,0 +1,148 @@
+.main1{
+  display:flex;
+  position:relative;
+  /* height:650px; */
+  width:100%;
+  justify-content: center;
+  margin-bottom:70px;
+}
+.search_container{
+  height:500px;
+  /* background:#2F2D2E; */
+  background:url('../../public/watch_pic.jpg');
+  background-size: cover;
+  border-radius:20px;
+  overflow:hidden;
+  width:70%;
+  display: flex;;
+  justify-content: center;
+  align-items: center;
+  position:relative;
+}
+.search_container::before{
+  content:'';
+  position:absolute;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.5);
+}
+.search{
+  display: flex;
+  gap:20px;
+  z-index:2;
+}
+.search input{
+  width:500px;
+  height:40px;
+  padding:15px;
+}
+.search button{
+  cursor:pointer;
+  width:100px;
+  background:black;
+  border:none;
+  color:white;
+}
+.search button:hover{
+  background:white;
+  color:black;
+}
+.new{
+  width:70%;
+  margin:auto;
+}
+.title{
+  font-weight:bold;
+  font-size:25px;
+  margin-bottom:20px;
+}
+.new_products{
+  width:100%;
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  column-gap:30px;
+  row-gap: 30px;
+  margin-bottom:70px;
+}
+.product{
+  background:#F2EFE9;
+  color:black;
+  border-radius: 10px;
+  height:300px;
+}
+
+/* add mid section*/
+.watch_info_container{
+  width:100%;
+  background:#2F2D2E;
+  height:300px;
+  margin-bottom:100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.watch_info{
+  width:80%;
+  display: flex;
+  justify-content: space-between;
+}
+.info{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.info_img{
+  width:80px;
+  margin-bottom:20px;
+}
+.info_img img{
+  width:100%;
+}
+.info p{
+  text-align: center;
+  width:90%;
+}
+
+
+
+
+
+.main3_wrapper{
+  width:100%;
+  display: flex;
+  justify-content: center;
+}
+.main3{
+  width:80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom:50px;
+}
+.main3_image{
+  position:relative;
+  overflow: hidden;
+  height:500px;
+  margin-bottom:50px;
+  
+}
+.main3_image img{
+  height:100%;
+}
+.main3_product{
+  width:50%;
+}
+.product_desc3{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+@media (max-width: 600px) {
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+}

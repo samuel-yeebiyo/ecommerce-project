@@ -1,0 +1,46 @@
+.product{
+    display: flex;
+    margin-bottom:40px;
+}
+.image{
+    height:150px;
+    width:150px;
+    background:grey;
+    margin-right:10px;
+}
+.rating{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.rating>p{
+    font-weight:bold;
+}
+.stars{
+    height:20px;
+    width:200px;
+    background:white;
+}
+.review input{
+    border:none;
+    height:45px;
+    padding:10px;
+    width:300px;
+    margin-right:20px;
+    margin-bottom: 20px;
+}
+.review textarea{
+    width:620px;
+    min-height:300px;
+    padding:10px;
+    margin-bottom:20px;
+    display: block;
+    border:none;
+}
+.review button{
+    width:150px;
+    height:40px;
+    border:none;
+    color:white;
+    background:black;
+}

@@ -20,10 +20,20 @@
     margin-bottom:15px;
     padding:10px;
 }
+.current{
+    background:#2F2D2E !important;
+    color:white !important;
+}
+.name{
+    border-radius: 10px 0 0 0;
+}
+.listing{
+    border-radius: 0 0 0 10px;
+}
 .main_board{
     width:80%;
     min-height:600px;
     padding:20px;
-    background:black;
+    background:#2F2D2E;
     border-radius:0 10px 10px 10px
 }

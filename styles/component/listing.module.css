@@ -32,6 +32,24 @@
 .choose{
     display: none;
 }
+.secondary_grid{
+    display:grid;
+    /* grid-template-columns: 200px 200px; */
+}
+.preview_container{
+    position:relative;
+    width:200px;
+}
+.remove{
+    position:absolute;
+    height:25px;
+    width:25px;
+    right:10px;
+    top:10px;
+    background:red;
+    border-radius:50%;
+    cursor: pointer;
+}
 .preview{
     width:200px;
 }

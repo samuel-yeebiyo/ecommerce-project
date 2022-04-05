@@ -1,0 +1,33 @@
+.welcome{
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom:50px;
+}
+.boards{
+    display:flex;
+    margin-bottom:30px;
+}
+.board{
+    height:200px;
+    width:250px;
+    margin-right:50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background:#2F2D2E;
+
+}
+.board_title{
+    font-size:25px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+.value{
+    font-size:20px;
+}
+.title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
