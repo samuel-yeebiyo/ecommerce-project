@@ -13,13 +13,16 @@ function MyApp({ Component, pageProps }) {
     subtotal:0
   })
   const [update, setUpdate] = useState(false)
+
   const [user, setUser] = useState(0)
+  const [profile,setProfile] = useState({})
   const [guest, setGuest] = useState(0)
+  
   const [userShop, setUserShop] = useState(false)
   const [shop, setShop] = useState('')
-  const [blocking, setBlocking] = useState(false)
   const [listings, setListings] =useState([])
-
+  
+  const [blocking, setBlocking] = useState(false)
   const [loading,setLoading] = useState(false)
 
   useEffect(()=>{
@@ -100,6 +103,7 @@ function MyApp({ Component, pageProps }) {
       await fetch(`http://localhost:8000/user/${id}/get/`)
       .then(async res => await res.json()).then(async data =>{
         setUserShop(data.hasShop)
+        setProfile(data)
         if(data.hasShop){
           setShop(data.shopID)
           await fetch(`http://localhost:8000/shops/${data.shopID}/get-listings`, {
@@ -125,8 +129,6 @@ function MyApp({ Component, pageProps }) {
           // })
         }
       })
-
-      
     }
 
     //if cookie is for user
@@ -287,7 +289,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <MainLayout userShop={userShop} toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking} loading={loading}>
-      <Component {...pageProps} toggleLoading={toggleLoading} shop={shop} listings={listings} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking} order={order} user={user} guest={guest} clear={clearCart}/>
+      <Component {...pageProps} profile={profile} toggleLoading={toggleLoading} shop={shop} listings={listings} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking} order={order} user={user} guest={guest} clear={clearCart}/>
     </MainLayout>
   )
 }

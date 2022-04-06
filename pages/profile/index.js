@@ -3,8 +3,36 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from 'styles/profile/profile.module.css'
 import AuthenticatedRoute from '../../components/authenticatedRoute'
+import {useState, useEffect} from 'react'
 
-export default function Profile() {
+export default function Profile({profile, user}) {
+
+  const [orders, setOrders] = useState(0)
+  const [spent, setSpent] = useState(0)
+  const [products, setProducts] = useState(0)
+
+  useEffect(()=>{
+
+    const fetchStats = async ()=>{
+      await fetch(`http://localhost:8000/user/${user}/get-stats`, {
+        method:'GET',
+        headers:{
+          'Content-Type':'application/json',
+          'Access-Control-Allow-Origin':'cors'
+        },
+        mode:'cors'
+      }).then(async res=>await res.json()).then(data =>{
+        setOrders(data.orders)
+        setSpent(data.amount)
+        setProducts(data.products)
+      })
+    }
+
+    fetchStats()
+
+  },[])
+
+
   return (
     <AuthenticatedRoute>
       <div>
@@ -18,11 +46,11 @@ export default function Profile() {
             <p>Account Information</p>
             <div className={styles.info}>
                 <p className={styles.labels}>Username</p>
-                <p>sam</p>
+                <p>{profile.username}</p>
             </div>
             <div className={styles.info}>
                 <p className={styles.labels}>Email</p>
-                <p>sam@sam.com</p>
+                <p>{profile.email}</p>
             </div>
             <div className={styles.info}>
                 <p className={styles.labels}>Password</p>
@@ -32,9 +60,9 @@ export default function Profile() {
           <div className={styles.right}>
             <p>Overview</p>
             <div className={styles.overview}>
-              <p>Orders complete: <span>0</span></p>
-              <p>Amount spent: <span>0</span></p>
-              <p>Products acquired: <span>0</span></p>
+              <p>Orders complete: <span>{orders}</span></p>
+              <p>Amount spent: <span>{spent}</span></p>
+              <p>Products acquired: <span>{products}</span></p>
             </div>
           </div>
         </main>

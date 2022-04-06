@@ -1,6 +1,6 @@
 import styles from 'styles/profile/review.module.css'
 
-export default function Review ({toggle, order}){
+export default function Review ({toggle, item}){
     return(
         <div>
             <span onClick={()=>{
@@ -9,11 +9,11 @@ export default function Review ({toggle, order}){
             <h2>Review Product</h2>
             <div className={styles.container}>
                 <div className={styles.product}>
-                    <div class={styles.image}>
+                    <div className={styles.image}>
 
                     </div>
                     <div className={styles.rating}>
-                        <p>Product Name</p>
+                        <p>{item.name}</p>
                         <div className={styles.stars}>
 
                         </div>

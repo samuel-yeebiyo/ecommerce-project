@@ -7,14 +7,43 @@ import Order from '@/components/Order'
 
 import {useState, useEffect} from 'react'
 
-export default function Orders() {
+export default function Orders({user}) {
 
   const [show, setShow] = useState(false)
   const [current, setCurrent] = useState({})
 
-  const toggleElement = ()=>{
-    setShow(prev => !prev)
+
+  const [orders, setOrders] = useState([])
+
+  const showElement = (item)=>{
+    setShow(true)
+    setCurrent(item)
   }
+
+  const hideElement = () => {
+    setShow(false)
+    setCurrent({})
+  }
+
+  useEffect(()=>{
+
+    const fetchStats = async ()=>{
+      await fetch(`http://localhost:8000/user/${user}/get-orders`, {
+        method:'GET',
+        headers:{
+          'Content-Type':'application/json',
+          'Access-Control-Allow-Origin':'cors'
+        },
+        mode:'cors'
+      }).then(async res=>await res.json()).then(data =>{
+        setOrders(data)
+      })
+    }
+
+    fetchStats()
+
+  },[])
+
 
   return (
     <AuthenticatedRoute>
@@ -28,17 +57,21 @@ export default function Orders() {
           <div className={styles.list}>         
             <p>Orders</p>
             <span>All completed orders</span>
-            <div onClick={()=>{
-              toggleElement()
-            }} className={styles.order}>
-            </div>
-            <div onClick={()=>{
-              toggleElement()
-            }} className={styles.order}>
-            </div>
+            {orders.map((item)=>(
+              <div onClick={()=>{
+                showElement(item)
+              }} className={styles.order}>
+                {item._id}
+                {item.subtotal}
+              </div>
+            ))
+
+            }
           </div> 
           <div className={styles.details}>
-            <Order toggle={toggleElement} order={current}/>
+            {Object.keys(current).length > 0 &&
+              <Order toggle={hideElement} order={current}/>
+            }
           </div>
         </main>
       </div>

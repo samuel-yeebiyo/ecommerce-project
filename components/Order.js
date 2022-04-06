@@ -10,15 +10,20 @@ export default function Order ({toggle, order}){
             <div className={styles.container}>
                 <div className={styles.items}>
                     <p>Items</p>
-                    <div className={styles.item}>
-                    </div>
-                    <div className={styles.item}>
-                    </div>
+                    {order.items.map((item)=>(
+                        <div className={styles.item}>
+                            {item.name}
+                            {item.quantity}
+                            {item.price}
+                        </div>
+                    ))
+
+                    }
                 </div>
                 <div className={styles.overview}>
                     <p>Overview</p>
                     <div className={styles.detail}>
-                        <p>Items Total:</p>
+                        <p>Items Total: {order.subtotal}</p>
                         <p>Payment confirmation:</p>
                     </div>
                 </div>

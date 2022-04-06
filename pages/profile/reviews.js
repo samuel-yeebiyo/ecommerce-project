@@ -7,17 +7,65 @@ import Review from '@/components/Review'
 
 import {useState, useEffect} from 'react'
 
-export default function Orders() {
+export default function Reviews({user}) {
 
   const [show, setShow] = useState(false)
   const [current, setCurrent] = useState({})
+  const [items, setItems] = useState([])
 
-  const toggleElement = ()=>{
-    setShow(prev => !prev)
+  const showElement = (item)=>{
+    setShow(true)
+    setCurrent(item)
   }
 
+
+  const hideElement = ()=>{
+    setShow(false)
+    setCurrent({})
+  }
+
+  useEffect(()=>{
+
+    // let isMounted = true;
+
+    const fetchItems = async ()=>{
+      await fetch(`http://localhost:8000/user/${user}/get-orders`, {
+        method:'GET',
+        headers:{
+          'Content-Type':'application/json',
+          'Access-Control-Allow-Origin':'cors'
+        },
+        mode:'cors'
+      }).then(async res=>await res.json()).then(data =>{
+        console.log({data})
+        data.map((order)=>{
+          order.items.map((item)=>{
+            setItems(prev => {
+              let temp = []
+              temp.push(item)
+              return temp
+            })
+          })
+        })
+      })
+    }
+
+    fetchItems()
+
+    // return () => { isMounted = false}
+
+  },[])
+
+  useEffect(()=>{
+    console.log({items})
+  },[items])
+
+  useEffect(()=>{
+    console.log({current})
+  },[current])
+
   return (
-    <AuthenticatedRoute>
+    // <AuthenticatedRoute>
       <div>
         <Head>
           <title>Profile</title>
@@ -28,20 +76,21 @@ export default function Orders() {
           <div className={styles.list}>         
             <p>Reviews</p>
             <span>All pending reviews</span>
-            <div onClick={()=>{
-              toggleElement()
-            }} className={styles.product}>
-            </div>
-            <div onClick={()=>{
-              toggleElement()
-            }} className={styles.product}>
-            </div>
+            {items.map((item) => (
+              <div onClick={()=>{
+              showElement(item)
+              }} className={styles.product}>
+                {item.name}
+              </div>
+            ))
+
+            }
           </div> 
           <div className={styles.details}>
-            <Review toggle={toggleElement} order={current}/>
+            <Review toggle={hideElement} item={current}/>
           </div>
         </main>
       </div>
-    </AuthenticatedRoute>
+    // </AuthenticatedRoute>
   )
 }

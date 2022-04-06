@@ -1,7 +1,8 @@
 .reciept{
     width:600px;
     height:550px;
-    background:rgb(241, 241, 241);
+    background:#2F2D2E;
+    color:white;
     display:flex;
     flex-direction: column;
     justify-content: center;

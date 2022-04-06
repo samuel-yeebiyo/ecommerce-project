@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from 'styles/checkout.module.css'
+import styles from 'styles/base/checkout.module.css'
 import { useState, useEffect } from 'react'
 
 import { useFormik } from 'formik'
