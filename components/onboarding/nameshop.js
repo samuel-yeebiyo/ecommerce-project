@@ -1,50 +1,50 @@
-import { withRouter } from 'next/router'
+import styles from 'styles/component/nameshop.module.css'
 import {useState, useEffect} from 'react'
 
-export default function nameshop({confirm, confirmedName}) {
+export default function nameshop({confirm, confirmedName, confirmedImage}) {
 
     const [name, setName] = useState('')
+    const [image, setImage] = useState("")
 
     const handleChange=(e)=>{
         setName(e.target.value)
     }
 
-    useEffect(()=>{
-        setName(confirmedName)
-    },[])
-
-    const styles = {
-        main:{
-            display:'flex',
-            flexDirection:'column',
-            width:'100%',
-            height:'100%',
-            justifyContent:'center',
-            alignItems:'center',
-        },
-        title:{
-            marginBottom:'10px',
-            fontSize:'20px',
-        },
-        input:{
-            height:'30px',
-            width:'250px',
-            padding:"5px",
-            marginBottom:'30px',
-        },
-        button:{
-            border:'none',
-            width:'100px',
-            height:'30px'
-        }
+    const handleImage=(e)=>{
+        setImage(e.target.files[0])
     }
 
+    const deleteImage=()=>{
+        setImage("")
+    }
+
+    useEffect(()=>{
+        setName(confirmedName)
+        setImage(confirmedImage)
+    },[])
+
   return (
-    <div style={styles.main}>
-        <p style={styles.title}>Name Shop</p>
-        <input style={styles.input} onChange={handleChange} value={name} placeholder="Name" type="text"/>
-        <button style={styles.button} onClick={()=>{
-            confirm(name)
+    <div className={styles.main}>
+        <p className={styles.add_image}>Add a Shop Image</p>
+        <div className={styles.image_input}>
+            {image != "" ?
+                <div className={styles.preview}>
+                    <span className={styles.cancel} onClick={deleteImage}/>
+                    <img src={URL.createObjectURL(image)}/>
+                </div>
+                :
+                <label className={styles.input_img}>+
+                    <input onChange={handleImage} type="file"/>
+                </label>
+            }
+        </div>
+        <div className={styles.name}>
+            <p className={styles.title}>Name Shop</p>
+            <p>Pick a creative name for your shop. Don't worry you can always change it by going to your shop page and selecting the <strong>Manage</strong> tab</p>
+            <input className={styles.input} onChange={handleChange} value={name} placeholder="Name" type="text"/>
+        </div>
+        <button className={styles.button} onClick={()=>{
+            confirm(name, image)
         }}>Save</button>
     </div>
   )

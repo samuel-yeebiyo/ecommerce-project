@@ -3,27 +3,29 @@ import ShopAdmin from '@/layouts/shopadmin'
 import styles from 'styles/shopadmin/overview.module.css'
 import {useState, useEffect} from 'react'
 import Cookie from 'cookie-cutter'
+import nookies from 'nookies'
 
-export default function myshop({listings}){
+export default function myshop({cookies}){
 
-    // const [listings, setListings] = useState(0)
+    const [listings, setListings] = useState(0)
     const [sales, setSales] = useState(0)
     const [revenue, setRevenue] = useState(0)
 
     useEffect(()=>{
-        const user = Cookie.get('userID')
+        const accessToken = cookies.accessToken
 
-        const fetchShopInfo = () =>{
-            fetch(`http://localhost:8000/user/${user}/get-shop`, {
+        const fetchShopInfo = async () =>{
+            await fetch(`http://localhost:8000/user/get-shop`, {
                 method:'GET',
                 headers:{
                     'Content-Type':'appllication/json',
-                    'Access-Control-Allow-Origin':'*'
+                    'Access-Control-Allow-Origin':'*',
+                    'authorization':`Bearer ${accessToken}`
                 },
                 mode:'cors',
             }).then(async res=> await res.json()).then(data=>{
                 console.log(data)
-                // setListings(data.listings)
+                setListings(data.listings)
                 setSales(data.sales)
                 setRevenue(data.revenue)
             })
@@ -36,16 +38,16 @@ export default function myshop({listings}){
 
 
     return(
-        <div>
+        <section className={styles.overview_container}>
             <Head>
                 <title>My Shop</title>
             </Head>
-            <main className={styles.overview_container}>
+            <main >
                 <p className={styles.welcome}>Welcome Sam</p>
                 <div className={styles.boards}>
                     <div className={styles.board}>
                         <p className={styles.board_title}>Listings</p>
-                        <p className={styles.value}>{listings.length}</p>
+                        <p className={styles.value}>{listings}</p>
                     </div>
                     <div className={styles.board}>
                         <p className={styles.board_title}>Sales</p>
@@ -63,8 +65,30 @@ export default function myshop({listings}){
                     </div>
                 </div>
             </main>
-        </div>
+        </section>
     )
 }
 
 myshop.Layout = ShopAdmin
+
+export async function getServerSideProps(context){
+
+    const cookies = nookies.get(context)
+  
+    console.log({cookies})
+  
+    if(!cookies.accessToken) {
+      return {
+        redirect:{
+          permanent:false,
+          destination:'/signin'
+        }
+      }
+    }
+  
+    return{
+      props:{
+        cookies
+      }
+    }
+  }

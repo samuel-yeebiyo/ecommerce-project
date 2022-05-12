@@ -1,10 +1,11 @@
 import styles from 'styles/component/listing.module.css'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react'
 
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import { userContext } from '@/context/store'
 
-export default function CreateListing ({shop, loading, editing}) {
+export default function CreateListing ({shop, loading, editing, cookies}) {
 
     const [primary, setPrimary] = useState({
         image:"",
@@ -14,7 +15,11 @@ export default function CreateListing ({shop, loading, editing}) {
     const [name, setName] = useState('')
     const [category, setCategory] = useState('')
     const [description, setDescription] = useState('')
+    const [tags, setTags] = useState('')
     const [price, setPrice] = useState(0)
+
+    const {setLoading} = useContext(userContext)
+
 
 
     useEffect(()=>{
@@ -22,6 +27,8 @@ export default function CreateListing ({shop, loading, editing}) {
             setName(editing.name)
             setDescription(editing.desc)
             setPrice(editing.price)
+            setTags(editing.rawTags)
+            setCategory(editing.category)
             setPrimary(prev =>{
                 return {image:"", url:editing.primary}
             })
@@ -41,6 +48,8 @@ export default function CreateListing ({shop, loading, editing}) {
             setName('')
             setDescription('')
             setPrice(0)
+            setTags('')
+            setCategory('')
             setPrimary(prev =>{
                 return {image:"", url:""}
             })
@@ -137,16 +146,18 @@ export default function CreateListing ({shop, loading, editing}) {
     }
 
     const handleSubmit = async()=>{
-        loading()
-        let shopId = await shop()
+        setLoading(true)
+        let shopId = await shop()  //creates the shop and returns the id of the shop or just return id
         await uploadPrimary()
         await uploadSecondary()
 
+        const {accessToken} = cookies
         await fetch('http://localhost:8000/products/add/', {
             method:'POST',
             headers:{
             'Content-Type':'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'authorization': `Bearer ${accessToken}`
             },
             mode:'cors',
             body:JSON.stringify({
@@ -159,24 +170,28 @@ export default function CreateListing ({shop, loading, editing}) {
                 secondary:secondary.map((item)=>{
                     return item.url
                 }),
-                pathname:name.toLowerCase().replaceAll(" ","-")
+                pathname:name.toLowerCase().replaceAll(" ","-"),
+                tags:tags
             })
         }).then(res =>{
-            router.reload()
+            setLoading(false)
+            router.replace('/myshop')
         })
 
 
     }
     const handleSave = async()=>{
-        loading()
+        setLoading(true)
         await uploadPrimary()
         await uploadSecondary()
 
+        const {accessToken} = cookies
         await fetch(`http://localhost:8000/products/update/${editing._id}`, {
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
-                'Access-Control-Allow-Origin':'*'
+                'Access-Control-Allow-Origin':'*',
+                'authorization': `Bearer ${accessToken}`
             },
             mode:'cors',
             body:JSON.stringify({
@@ -188,9 +203,11 @@ export default function CreateListing ({shop, loading, editing}) {
                 secondary:secondary.map((item)=>{
                     return item.url
                 }),
-                pathname:name.toLowerCase().replaceAll(" ","-")
+                pathname:name.toLowerCase().replaceAll(" ","-"),
+                tags:tags
             })
         }).then(res =>{
+            setLoading(false)
             router.reload()
         })
     }
@@ -198,7 +215,9 @@ export default function CreateListing ({shop, loading, editing}) {
     
     return(
         <div className={styles.listing_wrapper}>
-            <div className={styles.left}>
+            
+            <div className={styles.right}>
+                 
                 {/* Add a product name */}
                 <div className={styles.name}>
                     <p>Product Name</p>
@@ -206,29 +225,14 @@ export default function CreateListing ({shop, loading, editing}) {
                         setName(e.target.value)
                     }} value={name} name="name" placeholder='Name'  type="text"/>
                 </div>
-                {/* Add product description */}
-                <div className={styles.name}>
-                    <p>Product Description</p>
-                    <textarea onChange={(e)=>{
-                        setDescription(e.target.value)
-                    }} value={description} placeholder='Description' type="text" name="description"/>
-                </div>
-                {/* Put in category */}
-                {/* add tags */}
-                <div className={styles.name}>
-                    <p>Tags</p>
-                    <input placeholder='Tags' type="text"/>
-                </div>
-            </div>
-            
-            <div className={styles.right}>
-                 
                  
                  {/* Add a product primary image */}
                 <p className={styles.title}>Choose Primary Image</p>
-                <label className={styles.file_upload}>+ 
-                    <input className={styles.choose} onChange={handlePrimary} type="file" name="images"></input>
-                </label>            
+                {(primary.image == "" && primary.url == "") &&
+                    <label className={styles.file_upload}>+ 
+                        <input className={styles.choose} onChange={handlePrimary} type="file" name="images"></input>
+                    </label>
+                }            
                 {primary.image != "" &&
                     <div className={styles.preview_container}>
                         <div className={styles.remove} onClick={()=>{
@@ -282,6 +286,31 @@ export default function CreateListing ({shop, loading, editing}) {
                 </div>
 
 
+            </div>
+
+            <div className={styles.left}>
+                {/* Add product description */}
+                <div className={styles.name}>
+                    <p>Product Description</p>
+                    <textarea onChange={(e)=>{
+                        setDescription(e.target.value)
+                    }} value={description} placeholder='Description' type="text" name="description"/>
+                </div>
+
+                {/* Add a category */}
+                <div className={styles.name}>
+                    <p>Choose Category</p>
+                     <select value={category} onChange={(e)=>setCategory(e.target.value)}>
+                        <option>-- Category</option>
+                        <option>Accessories</option>
+                        <option>Books</option>
+                        <option>Digital</option>
+                        <option>Home</option>
+                        <option>Kitchen</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
                 {/* Add pricing */}
                 <div className={styles.name}>
                     <p>Set Price</p>
@@ -289,11 +318,16 @@ export default function CreateListing ({shop, loading, editing}) {
                         setPrice(e.target.value)
                     }} value={price} placeholder='0 SAMO' type="text"/>
                 </div>
+                <div className={styles.name}>
+                    <p>Tags</p>
+                    <p>separate by commas and a space</p>
+                    <input placeholder='Tags' type="text" onChange={(e)=> setTags(e.target.value)} value={tags}/>
+                </div>
+            </div>
                 {editing && Object.keys(editing).length > 0 ?    
                     <button onClick={handleSave}>Save</button>:
                     <button onClick={handleSubmit}>Add Listing</button>
                 }
-            </div>
         </div>
     )
 }

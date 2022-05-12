@@ -5,11 +5,21 @@ import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes"
 
 import styles from 'styles/component/connect.module.css'
 import Cookie from 'cookie-cutter'
+import nookies from 'nookies'
+import { userContext } from "@/context/store"
+import { useContext } from "react"
+import { useUser } from "@/hooks/swrHooks"
 
 
 export default function Transaction({total, user, email, confirm, clear}){
 
+    const {user_p, error, isLoading} = useUser()
+    const {setLoading, clearCart} = useContext(userContext)
+
+
     async function transfer(tokenMintAddress, wallet, to, connection, amount){
+
+        setLoading(true)
 
         const mintPublicKey = new web3.PublicKey(tokenMintAddress)
         const {TOKEN_PROGRAM_ID} = splToken
@@ -40,7 +50,7 @@ export default function Transaction({total, user, email, confirm, clear}){
         // )
 
     
-        const recieverAccount = await connection.getAccountInfo(associatedDestinationTokenAddr.address)
+        // const recieverAccount = await connection.getAccountInfo(associatedDestinationTokenAddr.address)
     
         const instructions = []
     
@@ -55,18 +65,21 @@ export default function Transaction({total, user, email, confirm, clear}){
             )
         )
     
-        const transaction = new web3.Transaction().add(...instructions)
-        transaction.feePayer = wallet.publicKey;
-        transaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash
+        // const transaction = new web3.Transaction().add(...instructions)
+        // transaction.feePayer = wallet.publicKey;
+        // transaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash
 
-        const {signature} = await wallet.request({
-            method: "signAndSendTransaction",
-            params: {
-                message:bs58.encode(transaction.serializeMessage())
-            }
-        })
+        // const {signature} = await wallet.request({
+        //     method: "signAndSendTransaction",
+        //     params: {
+        //         message:bs58.encode(transaction.serializeMessage())
+        //     }
+        // })
     
-        const confirmation = await connection.confirmTransaction(signature)
+        //confirms the transaction and sends back the transaction id (hash/signature)
+        // const confirmation = await connection.confirmTransaction(signature)
+        const signature = 'sample'
+        const confirmation = {value:{error: false}}
         console.log(confirmation)
 
         //the signature variable holds the transaction
@@ -92,12 +105,15 @@ export default function Transaction({total, user, email, confirm, clear}){
                     confirm(reciept)
                     clear()
                 })
-            }else if(user){
-                await fetch(`http://localhost:8000/user/${user}/pay`,{
+            }else if(user_p.id){
+
+                const {accessToken} = nookies.get()
+                await fetch(`http://localhost:8000/user/pay`,{
                     method:'POST',
                     headers:{
-                    'Content-Type':'application/json',
-                    'Access-Control-Allow-Origin':'*'
+                        'Content-Type':'application/json',
+                        'Access-Control-Allow-Origin':'*',
+                        'authorization':`Bearer ${accessToken}`
                     },
                     mode:'cors',
                     body:JSON.stringify({
@@ -106,9 +122,14 @@ export default function Transaction({total, user, email, confirm, clear}){
                 }).then(async res => await res.json()).then(reciept => {
                     //get back reciept
                     //show receipt confirmation
+                    clearCart()
+                    setLoading(false)
                     confirm(reciept)
-                    clear()
+
                 })
+            }else{
+                setLoading(false)
+                console.log("Error encountered")
             }
 
 

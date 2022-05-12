@@ -1,3 +1,6 @@
+.title{
+    margin-bottom:20px;
+}
 .product{
     display: flex;
     margin-bottom:40px;
@@ -7,6 +10,15 @@
     width:150px;
     background:grey;
     margin-right:10px;
+    position:relative;
+    overflow:hidden;
+}
+.image img{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    max-height:100%;
 }
 .rating{
     display: flex;
@@ -18,8 +30,27 @@
 }
 .stars{
     height:20px;
-    width:200px;
-    background:white;
+    display: flex;
+    /* background:white; */
+}
+.star{
+    width:25px;
+    height:25px;
+    border:1px solid white;
+    border-radius:50%;
+    margin-right:10px;
+    display: block;
+}
+.filled_star{
+    width:25px;
+    height:25px;
+    background:gold;
+    border-radius:50%;
+    margin-right:10px;
+    display: block;
+}
+.clear{
+    cursor: pointer;
 }
 .review input{
     border:none;
@@ -43,4 +74,13 @@
     border:none;
     color:white;
     background:black;
+}
+
+@media (max-width:1250px){
+    .review input{
+        width:400px;
+    }
+    .review textarea{
+        width:400px;
+    }
 }

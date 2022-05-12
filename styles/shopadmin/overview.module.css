@@ -1,3 +1,7 @@
+.overview_container{
+    width:80%;
+    padding:20px 0;
+}
 .welcome{
     font-size: 32px;
     font-weight: bold;
@@ -6,11 +10,15 @@
 .boards{
     display:flex;
     margin-bottom:30px;
+    max-width: 900px;
+    gap:10px;
+    justify-content: space-around;
 }
 .board{
-    height:200px;
-    width:250px;
-    margin-right:50px;
+    /* height:200px; */
+    width:200px;
+    aspect-ratio: 4/3;
+    padding:10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -30,4 +38,10 @@
     font-size:20px;
     font-weight:bold;
     margin-bottom:20px;
+}
+
+@media (max-width:1180px){
+    .overview_container{
+        width:90%
+    }
 }

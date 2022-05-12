@@ -4,6 +4,10 @@
   display: flex;
   justify-content: center;
   margin-bottom:50px;
+  margin-top:15px;
+  transition: margin .6s ease-in-out;
+  padding-bottom:10px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.5);
 }
 
 .navigation{
@@ -22,14 +26,97 @@
   border-radius:50%;
 }
 
+.search{
+  width:500px;
+  height:40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.terms{
+  height:35px;
+  z-index: 999;
+}
+.search input{
+  height:35px;
+  width:420px;
+  border:none;
+  padding:15px;
+}
+.recommendations{
+  background:white;
+  color:black;
+  padding:6px;
+  z-index: 1000;
+  border-top: 1px solid black;
+  font-weight: normal;
+}
+.search button{
+  height:35px;
+  width:80px;
+  background:black;
+  color:white;
+  border:none;
+  padding:0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor:pointer;
+}
+
 .navigation ul{
   display:flex;
   list-style: none;
   align-items: center;
 }
 .navigation li{
-  margin-left:80px;
+  margin-left:40px;
   font-weight:bold;
+}
+.profile_menu{
+  position:relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.menu{
+  position:absolute;
+  top:80%;
+  z-index: 1000;
+  background-color: white;
+  color:black;
+  width:150px;
+  margin-top:20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.5);
+}
+.menu::before{
+  content: '';
+  position:absolute;
+  width:20px;
+  height:20px;
+  background:white;
+  top:-10px;
+  z-index: -20;
+  transform: rotateZ(45deg);
+}
+.menu p{
+  padding:10px;
+  width:100%;
+  text-align: center;
+  font-weight: normal;
+}
+.menu p:hover{
+  background:rgba(0,0,0,.2)
+}
+.icon{
+  padding:0;
+  fill:white;
+  cursor: pointer;
 }
 .signout{
   color:black;
@@ -54,4 +141,54 @@
   position:absolute;
   top:0;
   right:0;
+}
+
+@media (max-width:1180px){
+  .search{
+    width:300px;
+  }
+  .search input{
+    width:220px;
+  }
+}
+@media (max-width:900px){
+  .navigation{
+    position:relative;
+    height:auto;
+  }
+  .navigation li{
+    margin-left:30px;
+    font-weight:bold;
+  }
+  .search{
+    z-index: -300;
+    position:absolute;
+    left:0;
+    top:0;
+    opacity: 0;
+    width:100%;
+    margin-left: 0 !important;
+    transition:all .6s ease-in-out
+  }
+  .terms{
+    width:80%;
+  }
+  .search input{
+    height:35px;
+    width:100%;
+  }
+  .search button{
+    width:20%;
+  }
+
+  .appear{
+    opacity: 100%;
+    z-index: 1000;
+    top:115%;
+    transition:all .6s ease-in-out;
+  }
+  .extend{
+    margin-bottom:80px;
+    transition:margin .6s ease-in-out;
+  }
 }

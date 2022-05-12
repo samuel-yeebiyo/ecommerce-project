@@ -5,6 +5,9 @@ import styles from 'styles/profile/orders.module.css'
 import AuthenticatedRoute from '@/components/authenticatedRoute'
 import Order from '@/components/Order'
 
+import nookies from 'nookies'
+import Cookie from 'cookie-cutter'
+
 import {useState, useEffect} from 'react'
 
 export default function Orders({user}) {
@@ -27,12 +30,15 @@ export default function Orders({user}) {
 
   useEffect(()=>{
 
-    const fetchStats = async ()=>{
-      await fetch(`http://localhost:8000/user/${user}/get-orders`, {
+    const userAccess = Cookie.get('accessToken')
+
+    const fetchStats = async (token)=>{
+      await fetch(`http://localhost:8000/user/get-orders`, {
         method:'GET',
         headers:{
           'Content-Type':'application/json',
-          'Access-Control-Allow-Origin':'cors'
+          'Access-Control-Allow-Origin':'cors',
+          'authorization': `Bearer ${token}`
         },
         mode:'cors'
       }).then(async res=>await res.json()).then(data =>{
@@ -40,7 +46,7 @@ export default function Orders({user}) {
       })
     }
 
-    fetchStats()
+    fetchStats(userAccess)
 
   },[])
 
@@ -57,12 +63,21 @@ export default function Orders({user}) {
           <div className={styles.list}>         
             <p>Orders</p>
             <span>All completed orders</span>
-            {orders.map((item)=>(
-              <div onClick={()=>{
-                showElement(item)
-              }} className={styles.order}>
-                {item._id}
-                {item.subtotal}
+            {orders.map((order)=>(
+              <div className={styles.order} onClick={()=>{
+                showElement(order)
+              }}>
+                <div className={styles.order_images}>
+                  {order.items.map((item,idx)=>(
+                    <div className={styles.img_container} style={{left:idx==0 ? 0 : (100/order.items.length)*idx+'%' }}>
+                      <img src={item.image}/>
+                    </div>
+                  ))}
+                </div>
+                <div className={styles.order_details}>
+                  {order._id}
+                  {order.subtotal}
+                </div>
               </div>
             ))
 
@@ -77,4 +92,26 @@ export default function Orders({user}) {
       </div>
     </AuthenticatedRoute>
   )
+}
+
+export async function getServerSideProps(context){
+
+  const cookies = nookies.get(context)
+
+  console.log({cookies})
+
+  if(!cookies.accessToken) {
+    return {
+      redirect:{
+        permanent:false,
+        destination:'/signin'
+      }
+    }
+  }
+
+  return{
+    props:{
+      cookies
+    }
+  }
 }

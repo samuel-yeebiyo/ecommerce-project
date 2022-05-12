@@ -3,30 +3,34 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import {useRouter} from 'next/router'
-import styles from 'styles/base/signup.module.css'
+import styles from 'styles/base/signin.module.css'
 import { useFormik } from 'formik'
 
-import {useState} from 'react'
+import {useState, useContext} from 'react'
+import { useUser } from '@/hooks/swrHooks'
 
 import GuestRoute from '@/components/guestRoute'
-
+import { userContext } from '@/context/store'
 import Cookie from 'cookie-cutter'
+
+import { setCookie } from 'nookies'
 
 
 export default function SignIn() {
 
-  const [user, setUser] = useState({})
   const router = useRouter()
+
+  const {user_p, error, mutate, isLoading} = useUser()
 
   const formik = useFormik({
     initialValues:{
-      username:'',
+      email:'',
       password:'',
     },
     validate: values =>{
       const errors={}
-      if(!values.username){
-        errors.username="Required"
+      if(!values.email){
+        errors.email="Required"
       }
       if(!values.password){
         errors.password="Required"
@@ -34,7 +38,9 @@ export default function SignIn() {
       return errors
     },
     onSubmit: values=>{
+
       console.log("trying to login")
+
       fetch('http://localhost:8000/login', {
         method:'POST',
         headers:{
@@ -47,6 +53,7 @@ export default function SignIn() {
 
         //check if guestid exists
         let fromGuest = Cookie.get('guestID')
+        
         if(fromGuest){
           
           //let server transfer current cart to user
@@ -65,18 +72,36 @@ export default function SignIn() {
             Cookie.set('guestID', '', {expires: new Date(0)} )
             
             //create user cookie
-            Cookie.set('userID', data.id);
-            console.log("created cookie")
-            router.reload()
+            setUserCookies(data.id, data.accessToken, data.refreshToken)
+            mutate()
+            // setUser(data.id)
+            router.replace('/')
           })
         }else{
-          Cookie.set('userID', data.id);
-          console.log("created cookie")
-          window.location.replace("/")
+
+          //create user cookies
+          setUserCookies(data.id, data.accessToken, data.refreshToken)
+          mutate()
+          // setUser(data.id)
+          router.replace('/')
         }
       })
     }
   }) 
+  
+  const setUserCookies = (id, access, refresh)=>{
+
+    setCookie(null, 'accessToken', access, {
+      path:'/'
+    })
+    setCookie(null, 'refreshToken', refresh, {
+      path:'/'
+    })
+
+    console.log("created cookies")
+  }
+
+  const {user, setUser} = useContext(userContext)
 
   return (
     <GuestRoute>
@@ -89,16 +114,14 @@ export default function SignIn() {
 
         <main className={styles.signup_container}>
           <div className={styles.signup}>
-            <div className={styles.welcome_image}>
-              <img src="/pointright.jpg"/>
-            </div>
             <div className={styles.form_section}>
+              <img className={styles.image} src="shopping.png"/>
               <form onSubmit={formik.handleSubmit} className={styles.su_form}>
                 <p>Sign In</p>
 
                 <div className={styles.input_req}>
-                <input placeholder='Username' id='username' name='username' type='text' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.username}/>
-                {formik.touched.username && formik.errors.username ? <div className={styles.err}>{formik.errors.username}</div> : null}
+                <input placeholder='Email' id='email' name='email' type='text' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.email}/>
+                {formik.touched.email && formik.errors.email ? <div className={styles.err}>{formik.errors.email}</div> : null}
                 </div>
                 <div className={styles.input_req}>
                 <input placeholder='Password' id='password' name='password' type='password' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.password}/>

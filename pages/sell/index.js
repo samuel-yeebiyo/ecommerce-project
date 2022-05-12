@@ -27,3 +27,26 @@ export default function Seller({increment, addToCart}) {
     </div>
   )
 }
+
+export async function getServerSideProps(context){
+
+  const cookies = nookies.get(context)
+
+  console.log({cookies})
+
+  if(!cookies.accessToken) {
+    return {
+      redirect:{
+        permanent:false,
+        destination:'/signin'
+      }
+    }
+  }
+
+  return{
+    redirect:{
+      permanent:false,
+      destination:'/sell/onboarding'
+    }
+  }
+}

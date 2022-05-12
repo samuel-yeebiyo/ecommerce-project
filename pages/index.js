@@ -5,7 +5,11 @@ import styles from 'styles/base/Home.module.css'
 import { fetchProducts } from '@/lib/products'
 import ProductCard from '@/components/productCard'
 
+import {useProducts} from '@/hooks/swrHooks'
+
 export default function Home({increment, addToCart, products}) {
+
+  const { allProducts, error, isLoading} = useProducts(products)
   
   return (
     <div>
@@ -18,35 +22,21 @@ export default function Home({increment, addToCart, products}) {
       <main className={styles.home_container}>
         <div className={styles.main1}>
           <div className={styles.search_container}>
-            <div className={styles.search}>
-              <input placeholder='Search' type="text"/>
-              <button>Search</button>
-            </div>
+            
           </div>
         </div>
         
         <div className={styles.new}>
           <p className={styles.title}>New Products</p>
           <div className={styles.new_products}>
-            {products.map((product, idx)=>(
+            {allProducts?.map((product, idx)=>(
                 <ProductCard key={idx} product={product}/>
             ))
             }
-            <div className={styles.product}>
-              
-            </div>
-            <div className={styles.product}>
-              
-            </div>
-            <div className={styles.product}>
-              
-            </div>
-            <div className={styles.product}>
-              
-            </div>
-            <div className={styles.product}>
-              
-            </div>
+            <div className={styles.product}></div>
+            <div className={styles.product}></div>
+            <div className={styles.product}></div>
+            <div className={styles.product}></div>
           </div>
         </div>
 
@@ -80,21 +70,10 @@ export default function Home({increment, addToCart, products}) {
                 <ProductCard key={idx} product={product}/>
             ))
             }
-            <div className={styles.product}>
-              
-            </div>
-            <div className={styles.product}>
-              
-            </div>
-            <div className={styles.product}>
-              
-            </div>
-            <div className={styles.product}>
-              
-            </div>
-            <div className={styles.product}>
-              
-            </div>
+            <div className={styles.product}></div>
+            <div className={styles.product}></div>
+            <div className={styles.product}></div>
+            <div className={styles.product}></div>
           </div>
         </div>
 
@@ -105,21 +84,10 @@ export default function Home({increment, addToCart, products}) {
                 <ProductCard key={idx} product={product}/>
             ))
             }
-            <div className={styles.product}>
-              
-            </div>
-            <div className={styles.product}>
-              
-            </div>
-            <div className={styles.product}>
-              
-            </div>
-            <div className={styles.product}>
-              
-            </div>
-            <div className={styles.product}>
-              
-            </div>
+            <div className={styles.product}></div>
+            <div className={styles.product}></div>
+            <div className={styles.product}></div>
+            <div className={styles.product}></div>
           </div>
         </div>
         
@@ -129,7 +97,7 @@ export default function Home({increment, addToCart, products}) {
   )
 }
 
-export async function getStaticProps(context){
+export async function getServerSideProps(context){
 
   const products = await fetchProducts()
 
@@ -138,6 +106,4 @@ export async function getStaticProps(context){
       products
     }
   }
-
-
 }

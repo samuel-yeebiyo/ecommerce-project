@@ -5,36 +5,41 @@
 .signup{
     width:80%;
     display: flex;
+    justify-content: center;
 }
 
 .form_section{
-    width:50%;
-    height:650px;
+    width:80%;
+    height:auto;
     display: flex;
     justify-content: center;
     align-items: center;
     background:rgb(197, 197, 197);
+    padding:20px;
 }
 .su_form{
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding:40px;
+    border-radius: 5px;
 }
 .su_form p{
     font-size:23px;
     font-weight: bold;
-    margin-bottom:20px;
+    margin-bottom:40px;
 }
 .input_req{
     height:60px;
     width:350px;
-    margin-bottom:15px;
+    margin-bottom:25px;
 }
 .input_req input{
     height:45px;
     width:350px;
     padding:10px;
     border:none;
+    border-radius: 5px;
 }
 .err{
     height:10px;
@@ -50,15 +55,9 @@
     cursor:pointer;
 }
 
-
-.welcome_image{
-    width:50%;
-    height:650px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-.welcome_image img{
-    height:100%;
+@media (max-width:900px){
+    .form_section{
+        background:none;
+        width:90%;
+    }
 }

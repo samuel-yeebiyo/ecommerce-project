@@ -31,7 +31,7 @@
 .options p{
     margin-bottom:30px;
     cursor:pointer;
-    background:#2F2D2E;
+    /* background:#2F2D2E; */
     display: block;
     width:80%;
     height:60px;
@@ -41,14 +41,14 @@
     border-radius: 5px;
 }
 .current{
-    background: white !important;
+    background: white;
     color:black;
 }
 .admin_container{
     width:80%;
-    border:1px solid red;
-    padding:30px 50px;
     overflow-x:hidden;
+    display: flex;
+    justify-content: center;
 }
 .loading{
     position:fixed;
@@ -58,4 +58,13 @@
     display: flex;
     justify-content:center;
     align-items:center;
+}
+
+@media (max-width:900px){
+    .sidebar{
+        width:10%;
+    }
+    .admin_container{
+        width:90%;
+    }
 }

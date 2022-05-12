@@ -12,9 +12,14 @@ export default function Order ({toggle, order}){
                     <p>Items</p>
                     {order.items.map((item)=>(
                         <div className={styles.item}>
-                            {item.name}
-                            {item.quantity}
-                            {item.price}
+                            <div className={styles.image}>
+                                <img src={item.image}/>
+                            </div>
+                            <div>
+                                <p className={styles.name}>{item.name}</p>
+                                <p className={styles.quantity}>X{item.quantity}</p>
+                                <p className={styles.price}>{item.price} SAMO</p>
+                            </div>
                         </div>
                     ))
 

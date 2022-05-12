@@ -3,6 +3,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from 'styles/base/checkout.module.css'
 import { useState, useEffect } from 'react'
+import { useUser } from '@/hooks/swrHooks'
+import nookies from 'nookies'
+
+import Shipping from '@/components/modals/shipping'
 
 import { useFormik } from 'formik'
 
@@ -11,6 +15,9 @@ import Reciept from '@/components/reciept'
 
 export default function Checkout({order, user, guest, clear}) {
 
+    const {user_p, error, isLoading} = useUser()
+
+
     const [deliveryExpand, setDeliveryExpand] = useState(false)
     const [billingExpand, setBillingExpand] = useState(false)
     const [emailExpand, setEmailExpand] = useState(true)
@@ -18,9 +25,25 @@ export default function Checkout({order, user, guest, clear}) {
     const [email, setEmail] = useState(false)
     const [delivery, setDelivery] = useState(false)
 
+    const [shipping, setShipping] = useState([])
+    const [address, setAddress] = useState({})
+
     const[confirmed, setConfirmed] = useState(false)
     const[reciept, setReciept] = useState({})
 
+
+    const [modal, setModal] = useState(false)
+
+    const toggleModal = () =>{
+        setModal(prev => !prev)
+    }
+
+    const selectAddress = (address) =>{
+        setAddress(address)
+        setDelivery(true)
+        setBillingExpand(true)
+        setDeliveryExpand(false)
+    }
 
     const confirmTransaction = (data)=>{
         setReciept(prev => {
@@ -30,10 +53,36 @@ export default function Checkout({order, user, guest, clear}) {
         setConfirmed(true)
     }
 
-    useEffect(()=>{
-        user && setDeliveryExpand(true)
-    },[])
+    const fetchAddress = async ()=>{
+        const cookies = nookies.get()
+        
+        await fetch('http://localhost:8000/user/get/address', {
+            method:'GET',
+            headers:{
+            'Content-Type':'application/json',
+            'Access-Control-Allow-Origin':'cors',
+            'authorization': `Bearer ${cookies.accessToken}`
+            },
+            mode:'cors'
+        }).then(async res=>await res.json()).then(address =>{
+            console.log({address})
+            setShipping(address)
+        })
+    }
 
+
+    useEffect(()=>{
+        
+        email && setDeliveryExpand(true)
+        if(!isLoading && user_p.id){
+            setEmail(true)
+            setDeliveryExpand(true)
+        }
+
+        //fetch available shipping addresses
+        fetchAddress()
+
+    },[email]) 
 
     const emailF = useFormik({
         initialValues:{
@@ -53,20 +102,6 @@ export default function Checkout({order, user, guest, clear}) {
         }
     })
 
-    const deliveryF = useFormik({
-        initialValues:{
-            country:'',
-            city:'',
-            po_box:'',
-        },
-        onSubmit: values =>{
-            setDelivery(true)
-            setBillingExpand(true)
-            setDeliveryExpand(false)
-        }
-    })
-
-
   return (
     <div>
         <Head>
@@ -82,16 +117,16 @@ export default function Checkout({order, user, guest, clear}) {
                     <div className={styles.checkout_container}>
                         <div className={styles.checkout_details}>
                             <div className={styles.section}>
-                                <div className={styles.title}>
+                                <div className={styles.title} onClick={()=>setEmailExpand(true)}>
                                     <p>Customer</p>
                                     <div className={styles.nums}>
                                         <p>1</p>
                                     </div>
-                                    {(user || email) ?
+                                    {(!isLoading && user_p.id || email) ?
                                         <img src="/check.png"/> : <></>
                                     }
                                 </div>
-                                {!user && !email && emailExpand && <>                                
+                                {!isLoading && !user_p.id && !email && emailExpand && <>                                
                                     <p>Sign in or continue as guest</p>
                                     <form onSubmit={emailF.handleSubmit} className={styles.continue}>
                                         <input type='email' id='email' placeholder='Email address' value={emailF.values.email} onChange={emailF.handleChange}/>
@@ -101,7 +136,7 @@ export default function Checkout({order, user, guest, clear}) {
                                 }
                             </div>
                             <div className={`${styles.section} ${delivery ? styles.expand: ""}`}>
-                                <div className={styles.title}>
+                                <div className={styles.title} onClick={()=>setDeliveryExpand(true)}>
                                     <p>Delivery</p>
                                     <div className={styles.nums}>
                                         <p>2</p>
@@ -111,15 +146,30 @@ export default function Checkout({order, user, guest, clear}) {
                                     }
                                 </div>
                                 { deliveryExpand &&
-                                    <form onSubmit={deliveryF.handleSubmit} className={styles.form_container}>
-                                        <div className={styles.location}>
-                                            <input placeholder='Country'/>
-                                            <input placeholder='City'/>
-                                        </div>
-                                        <input placeholder='P.O. Box'/>
-                                        <input placeholder='Phone Number'/>
-                                        <button type="submit">Continue</button>
-                                    </form>
+                                    <div>
+                                        <p>Select shipping address</p>
+                                        {shipping.length > 0 ?
+                                            shipping.map((address)=>(
+                                            <div className={styles.address}>
+                                                <div className={styles.top}>
+                                                <p><strong>{address.first_name} {address.last_name}</strong></p>
+                                                <div className={styles.options}>
+                                                    <p onClick={()=>{
+                                                        selectAddress(address)
+                                                    }}>Select</p>
+                                                </div>
+                                                </div>
+                                                <p>{address.street}</p>
+                                                <p>{address.city}, {address.country}</p>
+                                                <p>{address.postal}</p>
+                                                <p>{address.phone_number}</p>
+                                            </div>
+                                            )) :
+                                                <h3 className={styles.no_address}>No shipping address</h3>
+                                        }
+                                        <button onClick={toggleModal}>Use Another Shipping Address</button>
+
+                                    </div>
 
                                 }
                                 
@@ -169,6 +219,9 @@ export default function Checkout({order, user, guest, clear}) {
                     </div>
                 </div> :
                 <Reciept clear={clear} reciept={reciept}/>
+            }
+            {modal &&
+                <Shipping toggle={toggleModal} save={selectAddress}/>
             }
         </main>
     </div>

@@ -2,10 +2,27 @@ import 'styles/globals.css'
 import Layout from '@/layouts/layout'
 import {useState, useEffect, useRef} from 'react'
 import {v4 as uuidv4} from 'uuid'
-
+import NProgress from 'nprogress'
 import Cookie from 'cookie-cutter'
+import Router from 'next/router'
+import Head from 'next/head'
+
+import { userContext } from '@/context/store'
+import { mutate } from 'swr'
+import {useUser} from '@/hooks/swrHooks'
+
+import PostListing from '@/components/modals/postListing'
+
+//Routing progress bar
+Router.events.on('routeChangeStart', ()=> NProgress.start())
+Router.events.on('routeChangeComplete', ()=> NProgress.done())
+Router.events.on('routeChangeError', ()=> NProgress.done())
 
 function MyApp({ Component, pageProps }) {
+
+  const token = useRef(null)
+  const {user_p, error, mutate, isLoading} = useUser()
+
 
   //This should be the cart state that should be saved
   const [order, setOrder] = useState({
@@ -14,9 +31,9 @@ function MyApp({ Component, pageProps }) {
   })
   const [update, setUpdate] = useState(false)
 
-  const [user, setUser] = useState(0)
+  const [user, setUser] = useState("")
   const [profile,setProfile] = useState({})
-  const [guest, setGuest] = useState(0)
+  const [guest, setGuest] = useState("")
   
   const [userShop, setUserShop] = useState(false)
   const [shop, setShop] = useState('')
@@ -25,17 +42,92 @@ function MyApp({ Component, pageProps }) {
   const [blocking, setBlocking] = useState(false)
   const [loading,setLoading] = useState(false)
 
+
+  //fetching respective carts on arrival
   useEffect(()=>{
+    
+    //check if a cookie already exists
+    const userAccess = Cookie.get('accessToken')
+
+    const guestAccess = Cookie.get('guestID')
+
+    //fetch cart based on the cookie found
+    const fetchGuestCart = async(id) =>{
+      await fetch(`http://localhost:8000/guest/${id}/cart/`)
+      .then(async res => await res.json()).then(data =>{
+        if(data.message != "No cart"){
+          console.log("Cart found!")
+          setOrder(data)
+        }else{
+          console.log("No cart")
+        }
+      })
+    }
+
+    const fetchUserCart = async (token) =>{
+      await fetch(`http://localhost:8000/user/cart/`, {
+        method:'GET',
+        headers:{
+          'Content-Type':'application/json',
+          'authorization': `Bearer ${token}`
+        }
+      }).then(async res => await res.json()).then(data =>{
+        if(data.message != "No cart"){
+          console.log("Cart found!")
+          setOrder(data)
+        }else{
+          console.log("No cart")
+        }
+        
+      })
+    }
+
+  
+    //if cookie is for user
+    if(userAccess){
+      console.log("User cookie found")
+      // setUser(uValue);
+
+      //load cart from database
+      console.log("Loading cart")
+      fetchUserCart(userAccess)
+
+    }else{
+      setUser("")
+    }
+
+    //if cookie is for guest    
+    if(guestAccess){
+      console.log("Guest cookie found")
+      setGuest(guestAccess)
+
+      //load cart from database
+      console.log("Loading cart")
+      fetchGuestCart(guestAccess)
+    }else{
+      setGuest("")
+    }
+
+  },[])
+  
+
+
+  useEffect(()=>{
+
+    const userAccess = Cookie.get('accessToken')
+    const guestAccess = Cookie.get('guestID')
+
     //updating the cart when an item is added or removed
-    const updateOrder = async ()=>{
-      if(user != 0){
+    const updateOrder = async (token)=>{
+      if(!isLoading && !error){
         console.log("Trying to update user cart")
 
-        await fetch(`http://localhost:8000/user/${user}/cart/update`, {
+        await fetch(`http://localhost:8000/user/cart/update`, {
           method:'POST',
           headers:{
             'Content-Type':'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'authorization':`Bearer ${token}`
           },
           mode:'cors',
           body:JSON.stringify(order)
@@ -61,106 +153,10 @@ function MyApp({ Component, pageProps }) {
       }
     }
 
-    updateOrder();
+
+    if(userAccess) updateOrder(userAccess);
 
   }, [order])
-
-
-  //fetching respective carts on arrival
-  useEffect(()=>{
-    
-    //check if a cookie already exists
-    const uValue = Cookie.get('userID')
-    const gValue = Cookie.get('guestID')
-
-    //fetch cart based on the cookie found
-    const fetchGuestCart = async(id) =>{
-      await fetch(`http://localhost:8000/guest/${id}/cart/`)
-      .then(async res => await res.json()).then(data =>{
-        if(data.message != "No cart"){
-          console.log("Cart found!")
-          setOrder(data)
-        }else{
-          console.log("No cart")
-        }
-      })
-    }
-
-    const fetchUserCart = async (id) =>{
-      await fetch(`http://localhost:8000/user/${id}/cart/`)
-      .then(async res => await res.json()).then(data =>{
-        if(data.message != "No cart"){
-          console.log("Cart found!")
-          setOrder(data)
-        }else{
-          console.log("No cart")
-        }
-        
-      })
-    }
-
-    const fetchUserShop = async (id) =>{
-      await fetch(`http://localhost:8000/user/${id}/get/`)
-      .then(async res => await res.json()).then(async data =>{
-        setUserShop(data.hasShop)
-        setProfile(data)
-        if(data.hasShop){
-          setShop(data.shopID)
-          await fetch(`http://localhost:8000/shops/${data.shopID}/get-listings`, {
-            method:'GET',
-            headers:{
-              'Content-Type':'application/json',
-              'Access-Control-Allow-Origin':'*'
-            },
-            mode:'cors',
-          }).then(async res=>await res.json()).then(data=>{
-            setListings(data.listings)
-          })
-
-
-          //Clear sop listings
-          // await fetch(`http://localhost:8000/shops/${data.shopID}/clear`,{
-          //   method:'GET',
-          //   headers:{
-          //     'Content-Type':'application/json',
-          //     'Access-Control-Allow-Origin':'*'
-          //   },
-          //   mode:'cors',
-          // })
-        }
-      })
-    }
-
-    //if cookie is for user
-    if(uValue){
-      console.log("User cookie found")
-      setUser(uValue);
-
-      //load cart from database
-      console.log("Loading cart")
-      fetchUserCart(uValue)
-
-      //check if user has shop
-      fetchUserShop(uValue)
-
-    }else{
-      setUser(0)
-    }
-
-    //if cookie is for guest    
-    if(gValue){
-      console.log("Guest cookie found")
-      setGuest(gValue)
-
-      //load cart from database
-      console.log("Loading cart")
-      fetchGuestCart(gValue)
-    }else{
-      setGuest(0)
-    }
-
-  },[])
-  
   
 
 
@@ -184,9 +180,11 @@ function MyApp({ Component, pageProps }) {
       let tempOrder = {...order}
       tempOrder.items.push({
         itemId: product.productId,
+        shopId:product.shopId,
         name: product.name,
         quantity: 1,
-        price: product.price
+        price: product.price,
+        image:product.image
       })
       tempOrder.subtotal += product.price
       setOrder(tempOrder) //triggers order update and useEffect to send current cart to server
@@ -212,9 +210,11 @@ function MyApp({ Component, pageProps }) {
         let tempOrder = {...order}
         tempOrder.items.push({
           itemId: product.productId,
+          shopId:product.shopId,
           name: product.name,
           quantity: 1,
-          price: product.price
+          price: product.price,
+          image:product.image
         })
         tempOrder.subtotal += product.price
         setOrder(tempOrder) //triggers order update and useEffect to send current cart to server
@@ -283,14 +283,17 @@ function MyApp({ Component, pageProps }) {
     setUpdate(prev => !prev)
   }
 
-  const layouts = ({children})=> <Layout userShop={userShop} toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking}>{children}</Layout>
+  // const layouts = ({children})=> <Layout userShop={userShop} toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking}>{children}</Layout>
 
-  const MainLayout = Component.Layout || layouts
+  const MainLayout = Component.Layout || Layout
 
   return (
-    <MainLayout userShop={userShop} toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking} loading={loading}>
-      <Component {...pageProps} profile={profile} toggleLoading={toggleLoading} shop={shop} listings={listings} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking} order={order} user={user} guest={guest} clear={clearCart}/>
-    </MainLayout>
+      <userContext.Provider value={{ loading, setLoading, clearCart}}>
+        {isLoading && <p>loading...</p>}
+        <MainLayout userShop={userShop} toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking} loading={loading}>
+          <Component {...pageProps} profile={profile} toggleLoading={toggleLoading} shop={shop} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking} order={order} user={user} guest={guest} clear={clearCart}/>
+        </MainLayout>
+      </userContext.Provider>
   )
 }
 

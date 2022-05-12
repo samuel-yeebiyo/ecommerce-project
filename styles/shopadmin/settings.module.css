@@ -1,3 +1,7 @@
+.overview_container{
+    width:80%;
+    padding:20px 0;
+}
 .title{
     font-size:20px;
     font-weight:bold;
@@ -21,6 +25,30 @@
     display: flex;
     flex-direction: column;
     width:350px;
+}
+.image{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:200px;
+    width:200px;
+    overflow: hidden;
+    position:relative;
+    margin-bottom:30px;
+}
+.image img{
+    max-height:100%;
+}
+.delete{
+    display: block;
+    position:absolute;
+    border-radius: 50%;
+    background:red;
+    width:20px;
+    height:20px;
+    top:10px;
+    right:10px;
+    cursor:pointer;
 }
 .setting_form input{
     margin-bottom:30px;

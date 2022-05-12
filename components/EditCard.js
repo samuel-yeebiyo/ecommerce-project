@@ -1,22 +1,30 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
+import ProductCard from './productCard'
 import styles from 'styles/component/editcard.module.css'
+import { userContext } from '@/context/store'
+import { useContext } from 'react'
 
-
-export default function EditCard({product, edit}) {
+export default function EditCard({product, edit, cookies}) {
 
   const router = useRouter()
+  const {setLoading} = useContext(userContext)
 
-  const remove = async(id, shop)=>{
-    await fetch(`http://localhost:8000/shops/${shop}/delete/${id}`,{
+  const remove = async(id)=>{
+    setLoading(true)
+
+    const {accessToken} = cookies
+
+    await fetch(`http://localhost:8000/shops/delete/${id}`,{
       method:'DELETE',
       headers:{
         'Content-Type':'application/json',
-        'Access-Control-Allow-Origin':'*'
+        'Access-Control-Allow-Origin':'*',
+        'authorization': `Bearer ${accessToken}`
       }
     }).then(async res=> await res.json()).then(data=>{
       console.log(data)
+      setLoading(false)
       router.reload()
     })
   }
@@ -24,20 +32,10 @@ export default function EditCard({product, edit}) {
 
   return (
       <div>
-        <div className={styles.product}>
-          <div className={styles.image}>
-            <img src={product.primary}/>
-          </div>
-          <div className={styles.detail}>
-            <p>{product.name}</p>
-            <p>{product.price} SAMO</p>
-          </div>
-        </div>
+        <ProductCard product={product}/>
         <div className={styles.editing}>
-          <div onClick={()=>{
-            edit(product)
-          }}>Edit</div>
-          <div onClick={()=>remove(product._id, product.shopId)}>Remove</div>
+          <div className={styles.edit}onClick={()=>{edit(product)}}>Edit</div>
+          <div className={styles.remove}onClick={()=>remove(product._id)}>Remove</div>
         </div>
       </div>
   )

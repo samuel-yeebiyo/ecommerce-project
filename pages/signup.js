@@ -4,28 +4,33 @@ import Link from 'next/link'
 import styles from '/styles/base/signup.module.css'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
-
-import {useState} from 'react'
+import { userContext } from '@/context/store'
+import {useState, useContext} from 'react'
 import Cookie from 'cookie-cutter'
 import GuestRoute from '@/components/guestRoute'
-
+import { useUser } from '@/hooks/swrHooks'
 
 export default function SignUp({toggleNav}) {
 
-  const [user, setUser] = useState({})
   const router = useRouter()
+  const {mutate} = useUser()
+
 
   const formik = useFormik({
     initialValues:{
-      username:'',
+      first_name:'',
+      last_name:'',
       email:'',
       password:'',
       confirmation:''
     },
     validate: values =>{
       const errors={}
-      if(!values.username){
-        errors.username="Required"
+      if(!values.first_name){
+        errors.first_name="Required"
+      }
+      if(!values.last_name){
+        errors.last_name="Required"
       }
       if(!values.email){
         errors.email="Required"
@@ -41,7 +46,9 @@ export default function SignUp({toggleNav}) {
       return errors
     },
     onSubmit: values=>{
+
       console.log(values)
+      
       fetch('http://localhost:8000/register', {
         method:'POST',
         headers:{
@@ -68,18 +75,34 @@ export default function SignUp({toggleNav}) {
             console.log("Transfer complete")
             console.log(message)
             Cookie.set('guestID', '', {expires: new Date(0)} )
-            Cookie.set('userID', data.id);
+
+            //creating user token
+            setUserCookies(data.id, data.accessToken, data.refreshToken)
+
             console.log("created cookie")
-            router.reload()
+            mutate()
+
+            // setUser(data.id)
+            router.replace('/')
           })
         }else{
-          Cookie.set('userID', data.id);        
+
+          //creating user token
+          setUserCookies(data.id, data.accessToken, data.refreshToken)
           console.log("created cookie")
-          window.location.replace("/")
+
+          mutate()
+          // setUser(data.id)
+          router.replace("/")
         }
       })
     }
   }) 
+
+  const setUserCookies = (id, access, refresh)=>{
+    Cookie.set('accessToken', access)
+    Cookie.set('refreshToken', refresh)
+  }
 
   return (
     <GuestRoute>
@@ -96,8 +119,12 @@ export default function SignUp({toggleNav}) {
             <form onSubmit={formik.handleSubmit} className={styles.su_form}>
               <p>Sign Up</p>
               <div className={styles.input_req}>
-                <input placeholder='Username' id='username' name='username' type='text' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.username}/>
-                {formik.touched.username && formik.errors.username ? <div className={styles.err}>{formik.errors.username}</div> : null}
+                <input placeholder='First Name' id='first_name' name='first_name' type='text' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.first_name}/>
+                {formik.touched.first_name && formik.errors.first_name ? <div className={styles.err}>{formik.errors.first_name}</div> : null}
+              </div>
+              <div className={styles.input_req}>
+                <input placeholder='Last Name' id='last_name' name='last_name' type='text' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.last_name}/>
+                {formik.touched.last_name && formik.errors.last_name ? <div className={styles.err}>{formik.errors.last_name}</div> : null}
               </div>
               <div className={styles.input_req}>
                 <input placeholder='Email address' id='email' name='email' type='email' onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.email}/>
@@ -113,9 +140,6 @@ export default function SignUp({toggleNav}) {
               </div>
               <button type="submit">Submit</button>
             </form>
-          </div>
-          <div className={styles.welcome_image}>
-            <img src="/pointleft.jpg"/>
           </div>
         </div>
       </main>

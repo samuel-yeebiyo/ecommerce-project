@@ -4,12 +4,38 @@ import Link from 'next/link'
 import styles from 'styles/base/product.module.css'
 
 import {useState, useEffect} from 'react'
+import { useUser } from '@/hooks/swrHooks'
 
-import { fetchProductPaths, fetchProducts, fetchProduct } from '../../lib/products'
+import { fetchProductPaths, fetchProduct } from '../../lib/products'
 
 export default function Product({increment, addToCart, product, blocking}) {
 
   const [primary, setPrimary]= useState(product.primary)
+  const [reviews, setReviews] = useState([])
+  const {user_p, isLoading} = useUser()
+
+
+  useEffect(()=>{
+
+
+    const fetchReviews = async () =>{
+
+      await fetch(`http://localhost:8000/products/${product._id}/get-reviews`, {
+        method:"GET",
+        headers:{
+          'Content-Type':'application/json',
+          'Access-Control-Allow-Origin':'*'
+        },
+        mode:'cors'
+      }).then(async res=>await res.json()).then(data =>{
+        setReviews(data)
+      })
+
+    }
+
+    fetchReviews()
+
+  },[])
 
   
   return (
@@ -43,66 +69,61 @@ export default function Product({increment, addToCart, product, blocking}) {
                 <img src={primary}/>
               </div>
             </div>
-            <div className={styles.reviews}>
-              <h2>Reviews (10)</h2>
-              <div className={styles.review}>
-                <h3>Title</h3>
-                <div className={styles.rating}>
-                  <div>Rating</div>
-                  <p>Name</p>
-                  <p>Date</p>
-                </div>
-                <p>Detailed content of the review, this is an attempt at using filler words.Detailed content of the review sdfsdf sdf sdf sdfsdf sdf , this is an attempt at using filler words.Detailed content of the review, this is an attemptsdfsdf sdf sd at using filler words.Detailed content of the review, this is an attempt at using filler words.</p>
-              </div>
-              <div className={styles.review}>
-                <h3>Title</h3>
-                <div className={styles.rating}>
-                  <div>Rating</div>
-                  <p>Name</p>
-                  <p>Date</p>
-                </div>
-                <p>Detailed content of the review, this is an attempt at using filler words.Detailed content ofdsfss sdfsd sdf sdf   the review, this is an attempt at using filler words.Detailed content of the review, this is an attempt at using filler words.Detailed content of the review, this is an attempt at using filler words.</p>
-              </div>
-              <div className={styles.review}>
-                <h3>Title</h3>
-                <div className={styles.rating}>
-                  <div>Rating</div>
-                  <p>Name</p>
-                  <p>Date</p>
-                </div>
-                <p>Detailed content of the review, this is an attempt at using filler words.Detailed content of the review, lorem sdfsdf this is an attempt at using filler words.Detailed content of the rsdfs dasdas eview, this is an attempt at using filler words.Detailed content of the review, this is an attempt at using filler words.</p>
-              </div>
-            </div>
-          </div>
-          <div className={styles.right}>
             <div className={styles.inner_container}>
               <div className={styles.title}>
                 <p>{product.name}</p>
                 <div>heart</div>
               </div>
-              <Link href="#">
-                <a className={styles.shop_link}>Link to shop</a>
+              <Link href={`/shop/${product.shopPath}`}>
+                <a className={styles.shop_link}>{product.shopName}</a>
               </Link>
               <div className={styles.product_rating}>
-                Rating (10)
+                Rating {reviews.length}/5
               </div>
               <p className={styles.price}>{product.price} SAMO</p>
-              <button className={blocking ? styles.blocking : styles.add} onClick={()=>{
-                //adding to cart
-                if(!blocking){
-                  addToCart({
-                    productId:product._id,
-                    name:product.name,
-                    price:product.price
-                  })
-                }              
-              }}>{blocking ? "Adding.." :"Add to cart"}</button>
+              {!isLoading && (!user_p || user_p.shopId !== product.shopId) &&
 
+                <button className={blocking ? styles.blocking : styles.add} onClick={()=>{
+                  //adding to cart
+                  if(!blocking){
+                    addToCart({
+                      productId:product._id,
+                      name:product.name,
+                      price:product.price,
+                      image:product.primary,
+                      shopId:product.shopId
+                    })
+                  }              
+                }}>{blocking ? "Adding.." :"Add to cart"}</button>
+
+              }
 
               <div>
                 <p className={styles.desc_title}>Product Description</p>
                 <p className={styles.description}>{product.desc}</p>
               </div>
+            </div>
+          </div>
+          <div className={styles.right}>
+          <div className={styles.reviews}>
+              <h2>Reviews ({reviews.length})</h2>
+              {reviews.map((review)=>(
+                  <div className={styles.review}>
+                    <h3>{review.title}</h3>
+                    <div className={styles.rating}>
+                      <div className={styles.stars}>
+                        {Array.apply(null, Array(5)).map((item, idx)=>(
+                          <span className={idx+1 <= review.rating ? styles.filled_star : styles.star}/>
+                        ))}
+                      </div>
+                      <p>{review.name}</p>
+                      <p>{review.date}</p>
+                    </div>
+                    <p>{review.description}</p>
+                  </div>
+              ))
+
+              }
             </div>
           </div>
         </div>
@@ -124,6 +145,10 @@ export async function getStaticPaths(){
 export async function getStaticProps({params}){
 
   let product = await fetchProduct(params.product)
+
+  //get the desired shop information here
+  console.log({product})
+
 
   return {
     props:{

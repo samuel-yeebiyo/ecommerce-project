@@ -4,15 +4,19 @@ import ShopAdmin from '@/layouts/shopadmin'
 import styles from '/styles/shopadmin/listings.module.css'
 import EditCard from '@/components/EditCard'
 import CreateListing from '@/components/createlisting'
+import nookies from 'nookies'
+import { useUser } from '@/hooks/swrHooks'
 
 
-export default function listings({listings, shop, toggleLoading}){
+export default function listings({shop, toggleLoading, cookies}){
 
     const [products, setProducts] = useState([])
     const [current, setCurrent] = useState({})
     const [show,setShow]= useState(false)
     // const editing = useRef({})
     const [editing, setEditing] = useState({})
+
+    const {user_p, error, isLoading} = useUser()
 
     const showElement = ()=>{
         setShow(true)
@@ -27,7 +31,7 @@ export default function listings({listings, shop, toggleLoading}){
     }
 
     const getShopId= async ()=>{
-        return shop
+        return user_p.shopId
     }
 
     const edit = (product)=>{
@@ -38,28 +42,31 @@ export default function listings({listings, shop, toggleLoading}){
 
     useEffect(()=>{
 
+        const accessToken = cookies.accessToken
+
         const fetchShopInfo = async() =>{
-            await fetch(`http://localhost:8000/products/get/multiple`, {
-                method:'POST',
+
+            console.log("Fetching multiple")
+
+            await fetch(`http://localhost:8000/products/get-multiple`, {
+                method:'GET',
                 headers:{
                     'Content-Type':'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                    'Access-Control-Allow-Origin': '*',
+                    'authorization':`Bearer ${accessToken}`
                 },
                 mode:'cors',
-                body:JSON.stringify({
-                    listings:listings
-                })
             }).then(async res=> await res.json()).then(data=>{
                 setProducts(data.products)
             })
         }
         
-        if(listings.length >0) fetchShopInfo()
+       fetchShopInfo()
 
-    },[listings])
+    },[])
 
     return(
-        <div>
+        <div className={styles.main_container}>
             <Head>
                 <title>My Shop</title>
             </Head>
@@ -69,7 +76,7 @@ export default function listings({listings, shop, toggleLoading}){
                     <div className={styles.catalog}>
                         {products.length >0 && 
                             products.map((item)=>(
-                                <EditCard product={item} edit={edit}/>
+                                <EditCard product={item} edit={edit} cookies={cookies}/>
                             ))
                         }
                     </div>
@@ -79,7 +86,7 @@ export default function listings({listings, shop, toggleLoading}){
                 </div>
                 <div className={styles.details}>
                         <button className={styles.cancel} onClick={()=>hideElement()}>Cancel</button>
-                        <CreateListing shop={getShopId} loading={toggleLoading} editing={editing}/>
+                        <CreateListing shop={getShopId} loading={toggleLoading} editing={editing} cookies={cookies}/>
                 </div>
             </main>
         </div>
@@ -87,3 +94,25 @@ export default function listings({listings, shop, toggleLoading}){
 }
 
 listings.Layout = ShopAdmin
+
+export async function getServerSideProps(context){
+
+    const cookies = nookies.get(context)
+  
+    console.log({cookies})
+  
+    if(!cookies.accessToken) {
+      return {
+        redirect:{
+          permanent:false,
+          destination:'/signin'
+        }
+      }
+    }
+  
+    return{
+      props:{
+        cookies
+      }
+    }
+  }

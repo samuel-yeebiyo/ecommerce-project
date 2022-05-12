@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react'
+import styles from '../../styles/component/payment.module.css'
 
 export default function Payment({confirm, confirmedKey}){
 
@@ -13,39 +14,16 @@ export default function Payment({confirm, confirmedKey}){
     },[])
 
 
-    const styles = {
-        main:{
-            display:'flex',
-            flexDirection:'column',
-            width:'100%',
-            height:'100%',
-            justifyContent:'center',
-            alignItems:'center',
-        },
-        title:{
-            marginBottom:'10px',
-            fontSize:'20px',
-        },
-        input:{
-            height:'30px',
-            width:'250px',
-            padding:"5px",
-            marginBottom:'30px',
-        },
-        button:{
-            border:'none',
-            width:'100px',
-            height:'30px'
-        }
-    }
 
     return(
-        <div style={styles.main}>
-            <p style={styles.title}> Enter your public key</p>
-            <input style={styles.input} onChange={handleChange} placeholder="Public Key" value={key} type='text'/>
-            <button style={styles.button} onClick={()=>{
+        <div className={styles.main}>
+            <p className={styles.title}> Enter your public key</p>
+            <p>Please enter the public address of your solana wallet. Make sure you enter the correct address since all sales revenue will be sent here</p>
+            <input className={styles.input} onChange={handleChange} placeholder="Public Key" value={key} type='text'/>
+            <input className={styles.input} onChange={handleChange} placeholder="Confirm public Key" value={key} type='text'/>
+            <button className={styles.button} onClick={()=>{
                 confirm(key)
-            }}>Save</button>
+            }}>Confirm and Create Shop</button>
         </div>
     )
 }

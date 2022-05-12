@@ -3,12 +3,12 @@
     justify-content:space-between
 }
 .left, .right{
-    width: 45%
+    width: 50%;
 }
 .left>p, .right>p{
     font-weight:bold;
     font-size:25px;
-    margin-bottom:30px;
+    margin-bottom:25px;
 }
 .info{
     margin-bottom: 25px;
@@ -18,9 +18,42 @@
     font-size:20px;
     margin-bottom:10px;
 }
-.overview>p{
+.address{
+    padding:10px;
+    background:grey;
     margin-bottom:25px;
 }
-.overview span{
-    font-weight:bold;
+.top{
+    display: flex;
+    justify-content: space-between;
+}
+.options{
+    display: flex;
+    gap:10px;
+}
+.options p{
+    cursor: pointer;
+}
+.no_address{
+    margin-bottom:25px;
+}
+.add_address, .change{
+    height:40px;
+    padding:10px 10px;
+    background:black;
+    color:white;
+    border:none;    
+    cursor:pointer
+}
+
+@media (max-width:1180px){
+    .container{
+        flex-direction: column;
+    }
+    .left{
+        margin-bottom:30px;
+    }
+    .left, .right{
+        width:90%;
+    }
 }

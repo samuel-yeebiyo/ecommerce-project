@@ -11,7 +11,7 @@
 }
 .list > span{
     display:block;
-    margin-bottom:30px;
+    margin-bottom:20px;
 }
 .list{
     min-width:100%;
@@ -22,6 +22,28 @@
     margin-bottom:40px;
     border-radius:10px;
     background:white;
+    color:black;
+    padding:10px;
+    display: flex;
+    cursor: pointer;
+}
+.img_container{
+    width:150px;
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin-right:10px;
+}
+.img_container img{
+    max-height:100%;
+}
+.empty{
+    height:200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .details{
     position:relative;

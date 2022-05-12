@@ -76,6 +76,25 @@
     height:auto;
 }
 
+
+.address{
+    padding:10px;
+    background:grey;
+    margin:25px 0;
+}
+.top{
+    display: flex;
+    justify-content: space-between;
+}
+.options{
+    display: flex;
+    gap:10px;
+}
+.options p{
+    cursor: pointer;
+}
+
+
 .form_container input{
     height:40px;
     padding:8px;
@@ -189,3 +208,21 @@
         max-height:2000px;
     }
 }
+
+
+@media (max-width:1000px){
+    .checkout_main{
+        width:80%
+    }
+}
+
+@media(max-width: 900px){
+    .checkout_container{
+        flex-direction: column-reverse;
+        gap:100px;
+    }
+    .checkout_details, .checkout_summary{
+        width:100%
+    }    
+}
+

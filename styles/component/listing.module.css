@@ -1,7 +1,26 @@
 .listing_wrapper{
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top:30px;
+}
+
+.listing_wrapper > button{
+    margin-top:30px;
+    padding:10px;
+    min-width:150px;
+    background:black;
+    color:white;
+    border:none;
+    cursor:pointer
+}
+
+.left{
+    width:50%;
+}
+.right{
+    width:50%;
 }
 
 .name{
@@ -9,6 +28,11 @@
 }
 .name p{
     margin-bottom:5px;
+}
+.name select{
+    width:300px;
+    height:35px;
+    padding:5px;
 }
 .name input{
     height:35px;
@@ -59,4 +83,10 @@
     max-width:400px;
     height:150px;
     max-height:200px;
+}
+
+@media (max-width:900px){
+    .listing_wrapper{
+        flex-direction: column;
+    }
 }

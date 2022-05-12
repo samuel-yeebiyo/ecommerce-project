@@ -3,32 +3,102 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from 'styles/profile/profile.module.css'
 import AuthenticatedRoute from '../../components/authenticatedRoute'
-import {useState, useEffect} from 'react'
+import ShippingModal from '../../components/modals/shipping'
 
-export default function Profile({profile, user}) {
+import {useState, useContext, useEffect} from 'react'
+import { userContext } from '@/context/store'
+import { useUser } from '@/hooks/swrHooks'
+import Cookie from 'cookie-cutter'
+
+import { parseCookies, destroyCookie, setCookie } from 'nookies'
+import nookies from 'nookies'
+import { useRouter } from 'next/router'
+
+export default function Profile({profile, cookies}) {
 
   const [orders, setOrders] = useState(0)
   const [spent, setSpent] = useState(0)
   const [products, setProducts] = useState(0)
 
+  const [modal, setModal] = useState(false)
+  const [edit, setEdit] = useState({})
+  const [shipping, setShipping] = useState([])
+
+  const {user_p, error, isLoading} = useUser()
+
+
+  const toggleModal = ()=>{
+    setModal(prev=>!prev)
+  }
+
+  const saveShippingAddress = async (address)=>{
+    
+    await fetch(`http://localhost:8000/user/add/address`, {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Access-Control-Allow-Origin':'cors',
+        'authorization': `Bearer ${cookies.accessToken}`
+      },
+      mode:'cors',
+      body:JSON.stringify(address)
+    }).then(async res=>await res.json()).then(dataAd =>{
+      console.log({dataAd})
+      fetchAddress()
+    })
+
+  }
+
+  const updateShippingAddress = async (address, id)=>{
+    await fetch(`http://localhost:8000/user/update/address/${id}`, {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Access-Control-Allow-Origin':'cors',
+        'authorization': `Bearer ${cookies.accessToken}`
+      },
+      mode:'cors',
+      body:JSON.stringify(address)
+    }).then(async res=>await res.json()).then(dataAd =>{
+      console.log({dataAd})
+      fetchAddress()
+    })
+  }
+
+  const deleteAddress = async (id) =>{
+    await fetch(`http://localhost:8000/user/remove/address/${id}`, {
+      method:'DELETE',
+      headers:{
+        'Content-Type':'application/json',
+        'Access-Control-Allow-Origin':'cors',
+        'authorization': `Bearer ${cookies.accessToken}`
+      },
+      mode:'cors',
+    }).then(async res=>await res.json()).then(dataAd =>{
+      fetchAddress()
+    })
+
+  }
+
+  const fetchAddress = async ()=>{
+    await fetch('http://localhost:8000/user/get/address', {
+      method:'GET',
+      headers:{
+        'Content-Type':'application/json',
+        'Access-Control-Allow-Origin':'cors',
+        'authorization': `Bearer ${cookies.accessToken}`
+      },
+      mode:'cors'
+    }).then(async res=>await res.json()).then(address =>{
+      console.log({address})
+      setShipping(address)
+    })
+  }
+
+
   useEffect(()=>{
 
-    const fetchStats = async ()=>{
-      await fetch(`http://localhost:8000/user/${user}/get-stats`, {
-        method:'GET',
-        headers:{
-          'Content-Type':'application/json',
-          'Access-Control-Allow-Origin':'cors'
-        },
-        mode:'cors'
-      }).then(async res=>await res.json()).then(data =>{
-        setOrders(data.orders)
-        setSpent(data.amount)
-        setProducts(data.products)
-      })
-    }
-
-    fetchStats()
+    fetchAddress()
 
   },[])
 
@@ -45,28 +115,89 @@ export default function Profile({profile, user}) {
           <div className={styles.left}>
             <p>Account Information</p>
             <div className={styles.info}>
-                <p className={styles.labels}>Username</p>
-                <p>{profile.username}</p>
+                <p className={styles.labels}>First Name</p>
+                {!isLoading && !error &&
+                  <p>{user_p.first_name}</p>
+                }
+            </div>
+            <div className={styles.info}>
+                <p className={styles.labels}>Last Name</p>
+                {!isLoading && !error &&
+                  <p>{user_p.last_name}</p>
+                }
             </div>
             <div className={styles.info}>
                 <p className={styles.labels}>Email</p>
-                <p>{profile.email}</p>
+                {!isLoading && !error &&
+                  <p>{user_p.email}</p>
+                }
             </div>
             <div className={styles.info}>
                 <p className={styles.labels}>Password</p>
-                <button>Change password</button>
+                <button className={styles.change}>Change password</button>
             </div>
           </div>
           <div className={styles.right}>
-            <p>Overview</p>
-            <div className={styles.overview}>
-              <p>Orders complete: <span>{orders}</span></p>
-              <p>Amount spent: <span>{spent}</span></p>
-              <p>Products acquired: <span>{products}</span></p>
+            <p>Shipping Address</p>
+            <div>
+              {shipping.length > 0 ?
+                shipping.map((address)=>(
+                  <div className={styles.address}>
+                    <div className={styles.top}>
+                      <p><strong>{address.first_name} {address.last_name}</strong></p>
+                      <div className={styles.options}>
+                        <p onClick={()=>{
+                          setEdit(address)
+                          toggleModal()
+                        }}>Edit</p>
+                        <p onClick={()=>{
+                          deleteAddress(address._id)
+                        }}>Delete</p>
+                      </div>
+                    </div>
+                    <p>{address.street}</p>
+                    <p>{address.city}, {address.country}</p>
+                    <p>{address.postal}</p>
+                    <p>{address.phone_number}</p>
+                  </div>
+                )) :
+                <h3 className={styles.no_address}>No shipping address</h3>
+              }
             </div>
+            <button className={styles.add_address} onClick={()=>{
+              setEdit({})
+              toggleModal()
+              }}>Add Shipping Address</button>
           </div>
         </main>
       </div>
+      
+      {modal &&
+        <ShippingModal toggle={toggleModal} save={saveShippingAddress} edit={edit} update={updateShippingAddress}/>
+      }
+
     </AuthenticatedRoute>
   )
+}
+
+export async function getServerSideProps(context){
+
+  const cookies = nookies.get(context)
+
+  console.log({cookies})
+
+  if(!cookies.accessToken) {
+    return {
+      redirect:{
+        permanent:false,
+        destination:'/signin'
+      }
+    }
+  }
+
+  return{
+    props:{
+      cookies
+    }
+  }
 }

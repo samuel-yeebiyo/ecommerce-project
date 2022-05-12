@@ -7,6 +7,8 @@ import ProductCard from '@/components/productCard'
 import {useState, useEffect} from 'react'
 import { fetchProducts } from 'lib/products'
 
+import nookies from 'nookies'
+
 export default function Orders({products}) {
 
   const [show, setShow] = useState(false)
@@ -32,15 +34,6 @@ export default function Orders({products}) {
                 {products.map((product, idx)=>(
                     <ProductCard key={idx} product={product}/>
                 ))}
-                {products.map((product, idx)=>(
-                    <ProductCard key={idx} product={product}/>
-                ))}
-                {products.map((product, idx)=>(
-                    <ProductCard key={idx} product={product}/>
-                ))}
-                {products.map((product, idx)=>(
-                    <ProductCard key={idx} product={product}/>
-                ))}
             </div>
           </div> 
         </main>
@@ -49,15 +42,28 @@ export default function Orders({products}) {
   )
 }
 
-export async function getStaticProps(context){
+export async function getServerSideProps(context){
 
-    const products = await fetchProducts()
-  
-    return{
-      props:{
-        products
+  const cookies = nookies.get(context)
+  const products = await fetchProducts()
+
+
+  console.log({cookies})
+
+  if(!cookies.accessToken) {
+    return {
+      redirect:{
+        permanent:false,
+        destination:'/signin'
       }
     }
-  
-  
   }
+
+  return{
+    props:{
+      cookies,
+      products
+    }
+  }
+}
+

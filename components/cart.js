@@ -5,11 +5,10 @@ import styles from 'styles/component/cart.module.css'
 
 export default function Cart({state, toggle, order, removeItem, addItem, blocking}) {
 
-    const cartClass = state ? [styles.cart, styles.open].join(" ") : [styles.cart, styles.closed].join(" ")  
-    useEffect(()=>{
-      
+    const cartClass = state ? [styles.cart, styles.open].join(" ") : [styles.cart, styles.closed, styles.disappear].join(" ")  
+    
+    useEffect(()=>{  
       console.log(order)
-
     },[order])
 
   return (
@@ -23,24 +22,31 @@ export default function Cart({state, toggle, order, removeItem, addItem, blockin
             {order && order.items.length != 0 ? <>
               {order.items.map((item, idx)=>(
                 <div className={styles.item} key={idx}>
-                  <p>{item.name}</p>
-                  <div className={blocking ? styles.blocking : styles.quantity}>
-                    <button onClick={()=>{
-                      if(!blocking){
-                        removeItem(item.itemId)
-                      }
-
-                    }}>-</button>
-                    <p>{item.quantity}</p>
-                    <button onClick={()=>{
-                      
-                      if(!blocking){
-                        addItem(item.itemId)
-                      }
-                    
-                    }}>+</button>
+                  <div className={styles.left}>
+                    <div className={styles.image}>
+                      <img src={item.image}/>
+                    </div>
+                    <p>{item.name}</p>
                   </div>
-                  <p>${item.price}</p>
+                  <div className={styles.right}>
+                    <div className={blocking ? styles.blocking : styles.quantity}>
+                      <button onClick={()=>{
+                        if(!blocking){
+                          removeItem(item.itemId)
+                        }
+
+                      }}>-</button>
+                      <p>{item.quantity}</p>
+                      <button onClick={()=>{
+                        
+                        if(!blocking){
+                          addItem(item.itemId)
+                        }
+                      
+                      }}>+</button>
+                    </div>
+                    <p>${item.price}</p>
+                  </div>
                 </div>
               ))}
               <div className={styles.subtotal}>

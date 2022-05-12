@@ -3,12 +3,15 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {useEffect} from 'react'
 import { fetchProducts } from '../../lib/products'
+import { useProducts } from '@/hooks/swrHooks'
 
 import ProductCard from '@/components/productCard'
 
 import styles from 'styles/base/store.module.css'
 
 export default function Product({addToCart, products}) {
+
+  const {allProducts, error, loading} = useProducts(products)
 
   return (
     <div>
@@ -23,7 +26,7 @@ export default function Product({addToCart, products}) {
           <p>Store</p>
         </div>
         <div className={styles.products}>
-        {products.map((product, idx)=>(
+        {allProducts?.map((product, idx)=>(
             <ProductCard key={idx} product={product}/>
         ))
         }
