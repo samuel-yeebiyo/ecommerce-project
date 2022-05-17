@@ -4,6 +4,7 @@ import Link from 'next/link'
 import styles from 'styles/profile/orders.module.css'
 import AuthenticatedRoute from '@/components/authenticatedRoute'
 import Order from '@/components/Order'
+import OrderWrapper from '@/components/orderWrapper'
 
 import nookies from 'nookies'
 import Cookie from 'cookie-cutter'
@@ -17,16 +18,9 @@ export default function Orders({user}) {
 
 
   const [orders, setOrders] = useState([])
+  const [orderMap, setOrderMap] = useState([])
 
-  const showElement = (item)=>{
-    setShow(true)
-    setCurrent(item)
-  }
-
-  const hideElement = () => {
-    setShow(false)
-    setCurrent({})
-  }
+  const [info, setInfo] = useState()
 
   useEffect(()=>{
 
@@ -42,7 +36,9 @@ export default function Orders({user}) {
         },
         mode:'cors'
       }).then(async res=>await res.json()).then(data =>{
-        setOrders(data)
+        console.log({data})
+        setOrders(data.all)
+        setOrderMap(data.map)
       })
     }
 
@@ -61,33 +57,14 @@ export default function Orders({user}) {
         </Head>
         <main className={!show ? styles.container : [styles.container, styles.show].join(" ")}>
           <div className={styles.list}>         
-            <p>Orders</p>
-            <span>All completed orders</span>
-            {orders.map((order)=>(
-              <div className={styles.order} onClick={()=>{
-                showElement(order)
-              }}>
-                <div className={styles.order_images}>
-                  {order.items.map((item,idx)=>(
-                    <div className={styles.img_container} style={{left:idx==0 ? 0 : (100/order.items.length)*idx+'%' }}>
-                      <img src={item.image}/>
-                    </div>
-                  ))}
-                </div>
-                <div className={styles.order_details}>
-                  {order._id}
-                  {order.subtotal}
-                </div>
-              </div>
-            ))
+            <p className={styles.title}>Orders</p>
+            <p className={styles.subtitle}>All completed orders</p>
 
-            }
+            {orderMap.length > 0 && orders.length>0 && orderMap.map((map)=>(
+              <OrderWrapper order={map} orders={orders}/>
+            ))}
           </div> 
-          <div className={styles.details}>
-            {Object.keys(current).length > 0 &&
-              <Order toggle={hideElement} order={current}/>
-            }
-          </div>
+
         </main>
       </div>
     </AuthenticatedRoute>

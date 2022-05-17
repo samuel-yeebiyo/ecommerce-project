@@ -43,6 +43,14 @@ export default function shopadmin ({children, loading}){
 
                         }
                     </Link>
+                    <Link href="/myshop/stats">
+                        {width > 900 ?
+                            <p className={router.asPath == "/myshop/stats" && styles.current}>Stats</p>
+                            :
+                            <p className={router.asPath == "/myshop/stats" && styles.current}>St</p>
+
+                        }
+                    </Link>
                     <Link href="/myshop/listings">
                         {width > 900 ?
                             <p className={router.asPath == "/myshop/listings" && styles.current}>Listings</p>

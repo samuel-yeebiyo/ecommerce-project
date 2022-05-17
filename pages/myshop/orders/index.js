@@ -3,6 +3,8 @@ import Head from 'next/head'
 import ShopAdmin from '@/layouts/shopadmin'
 import styles from 'styles/shopadmin/orders.module.css'
 import nookies from 'nookies'
+import OrderWrapper from '@/components/orderWrapper'
+
 
 export default function orders(){
 
@@ -10,7 +12,8 @@ export default function orders(){
     const [shipped, setShipped] = useState([])
     const [completed, setCompleted] = useState([])
 
-    const [grouped, setGrouped] = useState([])
+    const [orderMap, setOrderMap] = useState([])
+    const [allOrders, setAllOrders] = useState([])
 
     useEffect(()=>{
 
@@ -26,7 +29,8 @@ export default function orders(){
             .then(data =>{
                 console.log(data)
 
-                setGrouped(data)
+                setOrderMap(data.map)
+                setAllOrders(data.all)
 
                 // setPending(data.filter((item)=> item.status == 'pending'))
                 // setShipped(data.filter((item)=> item.status == 'shipped'))
@@ -49,32 +53,9 @@ export default function orders(){
                 <div className={styles.orders}>
                     <p className={styles.title}>Pending Orders</p>
                     <div className={styles.order_container}>
-                        {/* {pending.length > 0 ?
-                            pending.map((order)=>(
-                                <p>{order._id}</p>
-                            ))
-                            :
-                            <p>No pending order</p>
-                        
-                        } */}
-
-                        {grouped.length>0 ?
-                            grouped.map((group)=>(
-                                <div className={styles.group}>
-                                    {group.map((order)=>(
-                                        <div className={styles.order}>
-                                            <p>{order.productId}</p>
-                                            <p>{order.name}</p>
-                                            <p>{order.quantity}</p>
-                                            <p>{order.total} SAMO</p>
-                                        </div>
-                                    ))}
-                                    <p>Shipping Address:</p>
-                                </div>
-                            )) :
-                            <p>sdfsd</p>
-
-                        }
+                        {orderMap.length > 0 && allOrders.length>0 ? orderMap.map((map)=>(
+                                <OrderWrapper order={map} orders={allOrders}/>
+                            )) : <p>No pending orders</p>}
                     </div>
                 </div>
                 <div className={styles.orders}>

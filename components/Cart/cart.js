@@ -1,11 +1,14 @@
 import {useState, useEffect} from 'react'
 import Link from 'next/link'
+import { useContext } from 'react'
+import { userContext } from '@/context/store'
 
-import styles from 'styles/component/cart.module.css'
+import styles from './cart.module.css'
 
-export default function Cart({state, toggle, order, removeItem, addItem, blocking}) {
+export default function Cart({state, toggle, order, blocking}) {
 
-    const cartClass = state ? [styles.cart, styles.open].join(" ") : [styles.cart, styles.closed, styles.disappear].join(" ")  
+    const cartClass = state ? [styles.cart, styles.open].join(" ") : [styles.cart, styles.closed, styles.disappear].join(" ")
+    const { addToCart, removeFromCart }  = useContext(userContext)
     
     useEffect(()=>{  
       console.log(order)
@@ -24,15 +27,15 @@ export default function Cart({state, toggle, order, removeItem, addItem, blockin
                 <div className={styles.item} key={idx}>
                   <div className={styles.left}>
                     <div className={styles.image}>
-                      <img src={item.image}/>
+                      <img src={item.product.primary}/>
                     </div>
-                    <p>{item.name}</p>
+                    <p>{item.product.name}</p>
                   </div>
                   <div className={styles.right}>
                     <div className={blocking ? styles.blocking : styles.quantity}>
                       <button onClick={()=>{
                         if(!blocking){
-                          removeItem(item.itemId)
+                          removeFromCart(item.product)
                         }
 
                       }}>-</button>
@@ -40,12 +43,12 @@ export default function Cart({state, toggle, order, removeItem, addItem, blockin
                       <button onClick={()=>{
                         
                         if(!blocking){
-                          addItem(item.itemId)
+                          addToCart(item.product)
                         }
                       
                       }}>+</button>
                     </div>
-                    <p>${item.price}</p>
+                    <p>${item.product.price}</p>
                   </div>
                 </div>
               ))}

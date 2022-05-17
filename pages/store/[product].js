@@ -13,30 +13,6 @@ export default function Product({increment, addToCart, product, blocking}) {
   const [primary, setPrimary]= useState(product.primary)
   const [reviews, setReviews] = useState([])
   const {user_p, isLoading} = useUser()
-
-
-  useEffect(()=>{
-
-
-    const fetchReviews = async () =>{
-
-      await fetch(`http://localhost:8000/products/${product._id}/get-reviews`, {
-        method:"GET",
-        headers:{
-          'Content-Type':'application/json',
-          'Access-Control-Allow-Origin':'*'
-        },
-        mode:'cors'
-      }).then(async res=>await res.json()).then(data =>{
-        setReviews(data)
-      })
-
-    }
-
-    fetchReviews()
-
-  },[])
-
   
   return (
     <div>
@@ -78,21 +54,15 @@ export default function Product({increment, addToCart, product, blocking}) {
                 <a className={styles.shop_link}>{product.shopName}</a>
               </Link>
               <div className={styles.product_rating}>
-                Rating {reviews.length}/5
+                Rating {product.rating}/5
               </div>
               <p className={styles.price}>{product.price} SAMO</p>
-              {!isLoading && (!user_p || user_p.shopId !== product.shopId) &&
+              {!isLoading && (!user_p || user_p.shopId !== product.shop) &&
 
                 <button className={blocking ? styles.blocking : styles.add} onClick={()=>{
                   //adding to cart
                   if(!blocking){
-                    addToCart({
-                      productId:product._id,
-                      name:product.name,
-                      price:product.price,
-                      image:product.primary,
-                      shopId:product.shopId
-                    })
+                    addToCart(product)
                   }              
                 }}>{blocking ? "Adding.." :"Add to cart"}</button>
 
@@ -106,8 +76,8 @@ export default function Product({increment, addToCart, product, blocking}) {
           </div>
           <div className={styles.right}>
           <div className={styles.reviews}>
-              <h2>Reviews ({reviews.length})</h2>
-              {reviews.map((review)=>(
+              <h2>Reviews ({product.reviews.length})</h2>
+              {product.reviews.map((review)=>(
                   <div className={styles.review}>
                     <h3>{review.title}</h3>
                     <div className={styles.rating}>

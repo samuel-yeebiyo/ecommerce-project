@@ -1,0 +1,44 @@
+.terms{
+    height:35px;
+    z-index: 999;
+}
+.search_input{
+    height:35px;
+    width:420px;
+    border:none;
+    padding:15px;
+}
+.recommendations{
+    background:white;
+    color:black;
+    padding:6px;
+    z-index: 1000;
+    border-top: 1px solid black;
+    font-weight: normal;
+}
+.search_button{
+    height:35px;
+    width:80px;
+    background:black;
+    color:white;
+    border:none;
+    padding:0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor:pointer;
+}
+
+@media (max-width:900px){
+    .terms{
+      width:80%;
+    }
+    .search_input{
+      height:35px;
+      width:100%;
+    }
+    .search_button{
+      width:20%;
+    }
+  
+}

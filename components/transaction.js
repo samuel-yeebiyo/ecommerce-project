@@ -11,7 +11,7 @@ import { useContext } from "react"
 import { useUser } from "@/hooks/swrHooks"
 
 
-export default function Transaction({total, user, email, confirm, clear}){
+export default function Transaction({total, user, email, address, confirm, clear}){
 
     const {user_p, error, isLoading} = useUser()
     const {setLoading, clearCart} = useContext(userContext)
@@ -117,7 +117,8 @@ export default function Transaction({total, user, email, confirm, clear}){
                     },
                     mode:'cors',
                     body:JSON.stringify({
-                        confirmation:signature
+                        confirmation:signature,
+                        address:address
                     })
                 }).then(async res => await res.json()).then(reciept => {
                     //get back reciept

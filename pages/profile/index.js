@@ -173,7 +173,7 @@ export default function Profile({profile, cookies}) {
       </div>
       
       {modal &&
-        <ShippingModal toggle={toggleModal} save={saveShippingAddress} edit={edit} update={updateShippingAddress}/>
+        <ShippingModal toggle={toggleModal} save={saveShippingAddress} edit={edit} update={updateShippingAddress} profile={user_p}/>
       }
 
     </AuthenticatedRoute>

@@ -43,6 +43,26 @@ function MyApp({ Component, pageProps }) {
   const [loading,setLoading] = useState(false)
 
 
+  const fetchUserCart = async (token) =>{
+    await fetch(`http://localhost:8000/user/cart/`, {
+      method:'GET',
+      headers:{
+        'Content-Type':'application/json',
+        'authorization': `Bearer ${token}`
+      }
+    }).then(async res => await res.json()).then(data =>{
+      if(data.message != "No cart"){
+        console.log("Cart found!")
+        setOrder(data)
+      }else{
+        console.log("No cart")
+      }
+      
+    })
+  }
+
+
+
   //fetching respective carts on arrival
   useEffect(()=>{
     
@@ -61,24 +81,6 @@ function MyApp({ Component, pageProps }) {
         }else{
           console.log("No cart")
         }
-      })
-    }
-
-    const fetchUserCart = async (token) =>{
-      await fetch(`http://localhost:8000/user/cart/`, {
-        method:'GET',
-        headers:{
-          'Content-Type':'application/json',
-          'authorization': `Bearer ${token}`
-        }
-      }).then(async res => await res.json()).then(data =>{
-        if(data.message != "No cart"){
-          console.log("Cart found!")
-          setOrder(data)
-        }else{
-          console.log("No cart")
-        }
-        
       })
     }
 
@@ -114,157 +116,121 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(()=>{
 
-    const userAccess = Cookie.get('accessToken')
-    const guestAccess = Cookie.get('guestID')
+    // const userAccess = Cookie.get('accessToken')
+    // const guestAccess = Cookie.get('guestID')
 
-    //updating the cart when an item is added or removed
-    const updateOrder = async (token)=>{
-      if(!isLoading && !error){
-        console.log("Trying to update user cart")
+    // //updating the cart when an item is added or removed
+    // const updateOrder = async (token)=>{
+    //   if(!isLoading && !error){
+    //     console.log("Trying to update user cart")
 
-        await fetch(`http://localhost:8000/user/cart/update`, {
-          method:'POST',
-          headers:{
-            'Content-Type':'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'authorization':`Bearer ${token}`
-          },
-          mode:'cors',
-          body:JSON.stringify(order)
-        }).then(async res => await res.json()).then(data=>{
-          //allow other operations once done
-          setBlocking(false)
-        })
-      }else if(guest != 0){
-        console.log("Trying to update guest cart")
+    //     await fetch(`http://localhost:8000/user/cart/update`, {
+    //       method:'POST',
+    //       headers:{
+    //         'Content-Type':'application/json',
+    //         'Access-Control-Allow-Origin': '*',
+    //         'authorization':`Bearer ${token}`
+    //       },
+    //       mode:'cors',
+    //       body:JSON.stringify(order)
+    //     }).then(async res => await res.json()).then(data=>{
+    //       //allow other operations once done
+    //       setBlocking(false)
+    //     })
+    //   }else if(guest != 0){
+    //     console.log("Trying to update guest cart")
 
-        await fetch(`http://localhost:8000/guest/${guest}/cart/update`, {
-          method:'POST',
-          headers:{
-            'Content-Type':'application/json',
-            'Access-Control-Allow-Origin': '*'
-          },
-          mode:'cors',
-          body:JSON.stringify(order)
-        }).then(async res => await res.json()).then(data=>{
-          //allow other operations once done
-          setBlocking(false)
-        })
-      }
-    }
+    //     await fetch(`http://localhost:8000/guest/${guest}/cart/update`, {
+    //       method:'POST',
+    //       headers:{
+    //         'Content-Type':'application/json',
+    //         'Access-Control-Allow-Origin': '*'
+    //       },
+    //       mode:'cors',
+    //       body:JSON.stringify(order)
+    //     }).then(async res => await res.json()).then(data=>{
+    //       //allow other operations once done
+    //       setBlocking(false)
+    //     })
+    //   }
+    // }
 
 
-    if(userAccess) updateOrder(userAccess);
+    // if(userAccess) updateOrder(userAccess);
 
   }, [order])
   
 
 
   //This should be the method to put items in the cart
-  const addToCart = (product)=>{
+  const addToCart = async (product)=>{
 
     //block other operations
     setBlocking(true)
 
+    const token = Cookie.get('accessToken')
 
     //if no cookie is found, adding to cart causes an identifier to be given to the guest
-    if(user == 0 && guest == 0){
-      let gID = uuidv4() //change to random uuid
-      Cookie.set("guestID", gID)
-      setGuest(gID)
-    }
+    // if(user == 0 && guest == 0){
+    //   let gID = uuidv4() //change to random uuid
+    //   Cookie.set("guestID", gID)
+    //   setGuest(gID)
+    // }
 
-    //if it is empty
-    if(order.items.length == 0){
-
-      let tempOrder = {...order}
-      tempOrder.items.push({
-        itemId: product.productId,
-        shopId:product.shopId,
-        name: product.name,
-        quantity: 1,
-        price: product.price,
-        image:product.image
+    await fetch(`http://localhost:8000/user/cart/add`, {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'authorization':`Bearer ${token}`
+      },
+      mode:'cors',
+      body:JSON.stringify({
+        product:product
       })
-      tempOrder.subtotal += product.price
-      setOrder(tempOrder) //triggers order update and useEffect to send current cart to server
-    
-    }//if it is not empty, check if item exists
-    else{
-      
-      let index = order.items.findIndex(element => element.itemId == product.productId)
-      console.log(index)
-      
-      //if item already exists, add quantity and price
-      if(index != -1){
-        
-        console.log("Found")
-        let tempOrder = {...order}
-        tempOrder.items[index].quantity+=1
-        tempOrder.subtotal += product.price
-        setOrder(tempOrder) //triggers order update and useEffect to send current cart to server
-      
-      }else{
-        
-        //if item is new, add entry with the quantity as 1
-        let tempOrder = {...order}
-        tempOrder.items.push({
-          itemId: product.productId,
-          shopId:product.shopId,
-          name: product.name,
-          quantity: 1,
-          price: product.price,
-          image:product.image
-        })
-        tempOrder.subtotal += product.price
-        setOrder(tempOrder) //triggers order update and useEffect to send current cart to server
-      }
-    }
+    }).then(async res => await res.json()).then(data=>{
+
+      fetchUserCart(token)
+
+      //allow other operations once done
+      setBlocking(false)
+    })
   }
 
-
-  const addItem = (id) =>{
+  const removeFromCart = async (product)=>{
 
     //block other operations
     setBlocking(true)
-        
-    console.log("Adding")
-    let tempOrder = {...order}
 
-    tempOrder.items.map((item)=>{
-      if(item.itemId == id){
-        item.quantity+=1;
-        tempOrder.subtotal+=item.price
-      }
+    const token = Cookie.get('accessToken')
+
+    //if no cookie is found, adding to cart causes an identifier to be given to the guest
+    // if(user == 0 && guest == 0){
+    //   let gID = uuidv4() //change to random uuid
+    //   Cookie.set("guestID", gID)
+    //   setGuest(gID)
+    // }
+
+    await fetch(`http://localhost:8000/user/cart/remove`, {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'authorization':`Bearer ${token}`
+      },
+      mode:'cors',
+      body:JSON.stringify({
+        product:product
+      })
+    }).then(async res => await res.json()).then(data=>{
+
+      fetchUserCart(token)
+
+      //allow other operations once done
+      setBlocking(false)
     })
 
-    setOrder(tempOrder) //triggers order update and useEffect to send current cart to server
-    
-  }
 
-  const removeItem = (id) =>{
-
-    //block other operations
-    setBlocking(true)
-        
-    console.log("Removing")
-    let tempOrder = {...order}
-
-    tempOrder.items.map((item, idx)=>{
-      if(item.itemId == id){
-        item.quantity-=1;
-        tempOrder.subtotal-=item.price
-
-        if(item.quantity == 0){
-          tempOrder.items.splice(idx,1)
-        }
-
-        return
-      }
-    })
-
-    setOrder(tempOrder) //triggers order update and useEffect to send current cart to server
-    
   }
 
   const clearCart = ()=>{
@@ -288,9 +254,9 @@ function MyApp({ Component, pageProps }) {
   const MainLayout = Component.Layout || Layout
 
   return (
-      <userContext.Provider value={{ loading, setLoading, clearCart}}>
+      <userContext.Provider value={{ loading, setLoading, clearCart, addToCart, removeFromCart}}>
         {isLoading && <p>loading...</p>}
-        <MainLayout userShop={userShop} toggleNav={toggleNav} order={order} update={update} addItem={addItem} removeItem={removeItem} blocking={blocking} loading={loading}>
+        <MainLayout userShop={userShop} toggleNav={toggleNav} order={order} update={update} blocking={blocking} loading={loading}>
           <Component {...pageProps} profile={profile} toggleLoading={toggleLoading} shop={shop} toggleNav={toggleNav} addToCart={addToCart} blocking={blocking} order={order} user={user} guest={guest} clear={clearCart}/>
         </MainLayout>
       </userContext.Provider>

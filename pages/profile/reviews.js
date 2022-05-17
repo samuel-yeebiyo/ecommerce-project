@@ -52,13 +52,7 @@ export default function Reviews({user}) {
         mode:'cors'
       }).then(async res=>await res.json()).then(data =>{
         console.log({data})
-        data.map((pending)=>{
-            setPending(prev => {
-              let temp = [...prev]
-              temp.push(pending)
-              return temp
-            })
-        })
+        setPending(data)
       })
     }
 
@@ -73,13 +67,7 @@ export default function Reviews({user}) {
         mode:'cors'
       }).then(async res=>await res.json()).then(data =>{
         console.log({data})
-        data.map((pending)=>{
-            setCompleted(prev => {
-              let temp = [...prev]
-              temp.push(pending)
-              return temp
-            })
-        })
+        setCompleted(data)
       })
     }
 
@@ -112,15 +100,14 @@ export default function Reviews({user}) {
             <span>All pending reviews</span>
             {pending.length > 0 ? pending.map((item) => (
               <div onClick={()=>{
-              showElement(item)
+              showElement(item.product)
               }} className={styles.product}>
                 <div className={styles.img_container}>
-                  <img src={item.image}/>
+                  <img src={item.product.primary}/>
                 </div>
                 <div>
-                  <p>{item.productName}</p>
-                  <p>OrderId: {item.orderNum}</p>
-                  <p>{item.productId}</p>
+                  <p>Product Id: {item.product._id}</p>
+                  <p>{item.product.name}</p>
                   <p>?/5</p>
                 </div>
               </div>
@@ -147,7 +134,7 @@ export default function Reviews({user}) {
 
           </div> 
           <div className={styles.details}>
-            <Review toggle={hideElement} item={current} user={user} editing={editing}/>
+            <Review toggle={hideElement} item={current} user={user} editing={editing} show={show}/>
           </div>
         </main>
       </div>

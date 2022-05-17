@@ -2,14 +2,14 @@ import styles from '../../styles/modals/filter.module.css'
 
 import { useState, useEffect } from 'react'
 
-export default function filter({toggle, set}){
+export default function filter({toggle, set, apply}){
 
 
     const [min, setMin] = useState(0)
     const [max, setMax] = useState(0)
 
     const [category, setCategory] = useState("")
-    const [sortby, setSortby] = useState("")
+    const [sortby, setSortby] = useState("none")
 
     useEffect(()=>{
         setMax(min)
@@ -49,17 +49,20 @@ export default function filter({toggle, set}){
                     </div>
                     <p>Sort By</p>
                     <div className={styles.sort} onChange={(e)=>setSortby(e.target.value)}>
+                        <input type="radio" id="none" name="sorting" value="none"/>
+                        <label htmlFor="none">None</label><br/>
                         <input type="radio" id="lowest" name="sorting" value="lowest_price"/>
-                        <label for="lowest">Lowest Price</label><br/>
+                        <label htmlFor="lowest">Lowest Price</label><br/>
                         <input type="radio" id="highest" name="sorting" value="highest_price"/>
-                        <label for="highest">Highest Price</label><br/>
+                        <label htmlFor="highest">Highest Price</label><br/>
                         <input type="radio" id="rating" name="sorting" value="rating"/>
-                        <label for="rating">Best Rating</label><br/>
+                        <label htmlFor="rating">Best Rating</label><br/>
                         <input type="radio" id="recent" name="sorting" value="recent"/>
-                        <label for="recent">Most Recent</label><br/>
+                        <label htmlFor="recent">Most Recent</label><br/>
                     </div>
                     <button onClick={()=>{
                         //function to apply filter & sort
+                        apply(min, max, category, sortby)
                         toggle()
                     }}>Apply</button>
                 </div>

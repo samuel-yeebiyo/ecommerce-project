@@ -1,5 +1,5 @@
-import Navbar from "../components/navbar"
-import Cart from "../components/cart"
+import Navbar from "@/components/NavBar/navbar"
+import Cart from '@/components/Cart/cart'
 import Footer from "../components/footer"
 import ProfileLayout from "./ProfileLayout"
 import {useState, useEffect} from 'react'

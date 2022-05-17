@@ -3,6 +3,7 @@ import ShopAdmin from '@/layouts/shopadmin'
 import styles from 'styles/shopadmin/overview.module.css'
 import {useState, useEffect} from 'react'
 import Cookie from 'cookie-cutter'
+import OrderWrapper from '@/components/orderWrapper'
 import nookies from 'nookies'
 
 export default function myshop({cookies}){
@@ -10,6 +11,9 @@ export default function myshop({cookies}){
     const [listings, setListings] = useState(0)
     const [sales, setSales] = useState(0)
     const [revenue, setRevenue] = useState(0)
+
+    const [orderMap, setOrderMap] = useState([])
+    const [allOrders, setAllOrders] = useState([])
 
     useEffect(()=>{
         const accessToken = cookies.accessToken
@@ -31,6 +35,30 @@ export default function myshop({cookies}){
             })
         }
         
+        //fetching orders from server
+        const fetchOrders = async ()=>{
+            await fetch('http://localhost:8000/shops/orders',{
+                method:'GET',
+                headers:{
+                    'authorization':`Bearer ${accessToken}`
+                }
+            }).then(async res =>await res.json())
+            .then(data =>{
+                console.log(data)
+
+                setOrderMap(data.map)
+                setAllOrders(data.all)
+
+                // setPending(data.filter((item)=> item.status == 'pending'))
+                // setShipped(data.filter((item)=> item.status == 'shipped'))
+                // setCompleted(data.filter((item)=> item.status == 'delivered'))
+
+            })
+        }
+
+
+        fetchOrders()
+
 
         fetchShopInfo()
 
@@ -43,7 +71,7 @@ export default function myshop({cookies}){
                 <title>My Shop</title>
             </Head>
             <main >
-                <p className={styles.welcome}>Welcome Sam</p>
+                <p className={styles.welcome}>Welcome, *name*</p>
                 <div className={styles.boards}>
                     <div className={styles.board}>
                         <p className={styles.board_title}>Listings</p>
@@ -61,7 +89,9 @@ export default function myshop({cookies}){
                 <div className={styles.orders}>
                     <p className={styles.title}>Pending Orders</p>
                     <div className={styles.order_container}>
-                        <p>No pending order</p>
+                        {orderMap.length > 0 && allOrders.length>0 ? orderMap.map((map)=>(
+                            <OrderWrapper order={map} orders={allOrders}/>
+                        )) : <p>No pending orders</p>}
                     </div>
                 </div>
             </main>

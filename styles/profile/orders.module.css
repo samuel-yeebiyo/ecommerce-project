@@ -4,22 +4,28 @@
     transition:left 0.3s ease-in-out;
     left:0;
 }
-.list >p{
+.title{
     font-size:25px;
     font-weight:bold;
     margin-bottom:10px;
 }
-.list > span{
+.subtitle{
     display:block;
     margin-bottom:30px;
 }
 .list{
     min-width:100%;
 }
+.order_wrapper{
+    background:rgb(0, 0, 0);
+    border-radius:10px;
+    margin-bottom:30px;
+    padding:5px 15px
+}
 .order{
     width:90%;
     height:170px;
-    margin-bottom:40px;
+    margin-bottom:10px;
     border-radius:10px;
     background:white;
     color:black;

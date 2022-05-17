@@ -14,7 +14,7 @@ export default function postListing({toggle}) {
             </div>
             <div className={styles.choices}>
                 <button onClick={()=>router.replace('/myshop/listings')}>Go to Listings</button>
-                <button onClick={()=>toggle()}>Cancel</button>
+                <button onClick={()=>router.replace('/myshop/')}>Cancel</button>
             </div>
         </div>
       </div>

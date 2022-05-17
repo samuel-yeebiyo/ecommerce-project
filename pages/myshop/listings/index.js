@@ -86,7 +86,7 @@ export default function listings({shop, toggleLoading, cookies}){
                 </div>
                 <div className={styles.details}>
                         <button className={styles.cancel} onClick={()=>hideElement()}>Cancel</button>
-                        <CreateListing shop={getShopId} loading={toggleLoading} editing={editing} cookies={cookies}/>
+                        <CreateListing editing={editing} cookies={cookies}/>
                 </div>
             </main>
         </div>

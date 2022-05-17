@@ -2,7 +2,7 @@ import styles from '../../styles/modals/shipping.module.css'
 
 import { useState, useEffect } from 'react'
 
-export default function shipping({toggle, save, edit, update}){
+export default function shipping({toggle, save, edit, update, profile}){
 
     const [address, setAddress] = useState({
         first_name:"",
@@ -15,6 +15,7 @@ export default function shipping({toggle, save, edit, update}){
     })
 
     useEffect(()=>{
+
         if(edit && Object.keys(edit).length > 0){
             setAddress({
                 first_name:edit.first_name,
@@ -26,6 +27,12 @@ export default function shipping({toggle, save, edit, update}){
                 postal:edit.postal
             })
         }
+        else if(profile){
+            setAddress(prev =>{
+                return {...prev, first_name:profile.first_name, last_name:profile.last_name}
+            })
+        }
+
     },[])
 
     return(

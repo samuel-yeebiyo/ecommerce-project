@@ -14,14 +14,6 @@ export default function myshop(){
 
     return(
         <div>
-            {/* <Head>
-                <title>My Shop</title>
-            </Head>
-            <main>
-                <div>
-                    <p>My shop</p>
-                </div>
-            </main> */}
         </div>
     )
 }

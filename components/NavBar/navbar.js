@@ -1,4 +1,4 @@
-import styles from 'styles/component/navbar.module.css'
+import styles from './navbar.module.css'
 import { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -6,6 +6,10 @@ import { userContext } from '@/context/store';
 import Cookie from 'cookie-cutter'
 import { useUser } from '@/hooks/swrHooks';
 import {useWindowSize} from '@/hooks/useWidth'
+
+import SearchBar from '@/components/SearchBar/searchBar';
+
+import { destroyCookie } from 'nookies';
 
 export default function Navbar({toggle, order, toggleNav, update, userShop}) {
     
@@ -41,7 +45,7 @@ export default function Navbar({toggle, order, toggleNav, update, userShop}) {
     
             console.log("Searching")
     
-            await fetch(`http://localhost:8000/search/${searchTerm}`, {
+            await fetch(`http://localhost:8000/search/autocomplete/${searchTerm}`, {
                 method:'GET',
                 headers:{
                     'Content-Type': 'application/json',
@@ -85,28 +89,7 @@ export default function Navbar({toggle, order, toggleNav, update, userShop}) {
                 }
                 {/*Search area*/}
                 <li className={`${styles.search} ${(width<900 && search) ? styles.appear : ""}`}>
-                    <div className={styles.terms}>
-                        <input placeholder='Search' value={searchTerm} onChange={(e)=>{
-                            setSearchTerm(e.target.value)
-                            setShowResults(true)
-                            }}/>
-                        {searchTerm.length > 2 && showResults && <>
-                            {results.length > 0 ? results.map((item)=>(
-                                <p className={styles.recommendations}>{item.name}</p>
-                            ))
-                                :
-                                <p>No matching results</p>
-                            }
-
-                        </>
-                        }
-                    </div>
-                    <button onClick={()=>{
-                        if(searchTerm.length > 0){
-                            router.push({pathname:'/search', query:{value:searchTerm}})
-                            setShowTerms(false)
-                        }
-                        }}>Search</button>
+                    <SearchBar/>
                 </li>
                 
                 {error ? <>
@@ -174,8 +157,8 @@ export default function Navbar({toggle, order, toggleNav, update, userShop}) {
                                         </Link>
                                         <p onClick={()=>{
                                             new Promise((resolve, reject)=>{
-                                                Cookie.set('accessToken', '', {expires: new Date(0)})
-                                                Cookie.set('refreshToken', '', {expires: new Date(0)})
+                                                destroyCookie(null, 'accessToken')
+                                                destroyCookie(null, 'refreshToken')
 
                                                 resolve()
                                             }).then(()=>{

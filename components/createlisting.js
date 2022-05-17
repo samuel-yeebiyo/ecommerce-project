@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import { userContext } from '@/context/store'
 
-export default function CreateListing ({shop, loading, editing, cookies}) {
+export default function CreateListing ({editing, cookies}) {
 
     const [primary, setPrimary] = useState({
         image:"",
@@ -146,8 +146,10 @@ export default function CreateListing ({shop, loading, editing, cookies}) {
     }
 
     const handleSubmit = async()=>{
+
         setLoading(true)
-        let shopId = await shop()  //creates the shop and returns the id of the shop or just return id
+
+        //upload images
         await uploadPrimary()
         await uploadSecondary()
 
@@ -161,7 +163,6 @@ export default function CreateListing ({shop, loading, editing, cookies}) {
             },
             mode:'cors',
             body:JSON.stringify({
-                id:shopId,
                 name:name,
                 price:price,
                 desc:description,
@@ -175,7 +176,7 @@ export default function CreateListing ({shop, loading, editing, cookies}) {
             })
         }).then(res =>{
             setLoading(false)
-            router.replace('/myshop')
+            router.reload()
         })
 
 

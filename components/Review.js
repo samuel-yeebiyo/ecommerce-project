@@ -1,14 +1,18 @@
 import styles from 'styles/profile/review.module.css'
-import {useEffect, useState} from 'react'
+import {useEffect, useContext, useState} from 'react'
 import { useRouter } from 'next/router'
+import nookies from 'nookies'
+import { userContext } from '@/context/store'
 
-export default function Review ({toggle, item, user, editing}){
+
+export default function Review ({toggle, item, user, editing, show}){
 
     const [rating, setRating] = useState(0)
     const [title, setTitle] = useState('')
     const [name, setName] = useState('')
     const [details, setDetails] = useState('')
     
+    const {setLoading} = useContext(userContext)
 
     useEffect(()=>{
         console.log({item})
@@ -31,12 +35,17 @@ export default function Review ({toggle, item, user, editing}){
         setRating(0)
     }
     const handleSubmit = async() =>{
+
+        setLoading(true)
+        const {accessToken} = nookies.get()
+
         console.log("Submitting")
-        await fetch(`http://localhost:8000/products/review/${item.productId}/${user}/`, {
+        await fetch(`http://localhost:8000/products/review/${item._id}/`, {
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
-                'Access-Control-Allow-Origin':'*'
+                'Access-Control-Allow-Origin':'*',
+                'authorization': `Bearer ${accessToken}`
             },
             mode:'cors',
             body:JSON.stringify({
@@ -46,6 +55,7 @@ export default function Review ({toggle, item, user, editing}){
                 name:name
             })
         }).then(async res => await res.json()).then(data => {
+            setLoading(false)
             if(data.message == "Success"){
                 router.reload()
             }
@@ -54,12 +64,17 @@ export default function Review ({toggle, item, user, editing}){
     }
 
     const handleSave = async() =>{
+
+        setLoading(true)
+        const {accessToken} = nookies.get()
+
         console.log("Saving edit")
         await fetch(`http://localhost:8000/products/update/review/${item._id}/`, {
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
-                'Access-Control-Allow-Origin':'*'
+                'Access-Control-Allow-Origin':'*',
+                'authorization': `Bearer ${accessToken}`
             },
             mode:'cors',
             body:JSON.stringify({
@@ -69,6 +84,7 @@ export default function Review ({toggle, item, user, editing}){
                 name:name
             })
         }).then(async res=> await res.json()).then(data => {
+            setLoading(false)
             if(data.message == "Success"){
                 router.reload()
             }
@@ -78,7 +94,7 @@ export default function Review ({toggle, item, user, editing}){
 
 
     return(
-        <div>
+        <div>{show && <>
             <span onClick={()=>{
                 toggle()
             }}> Hide </span>
@@ -86,10 +102,13 @@ export default function Review ({toggle, item, user, editing}){
             <div className={styles.container}>
                 <div className={styles.product}>
                     <div className={styles.image}>
-                        <img src={item.image}/>
+                        {editing?
+                            <img src={item.image}/>:
+                            <img src={item.primary}/>
+                        }
                     </div>
                     <div className={styles.rating}>
-                        <p>{item.productName}</p>
+                        <p>{item.name}</p>
                         <div className={styles.stars}>
                             {Array.apply(null, Array(5)).map((item, idx)=>(
                                 <span 
@@ -113,7 +132,7 @@ export default function Review ({toggle, item, user, editing}){
                     }}>Save</button>
                 </div>
             </div>
-        </div>
+        </>}</div>
 
     )
 

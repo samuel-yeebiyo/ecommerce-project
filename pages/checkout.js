@@ -147,9 +147,9 @@ export default function Checkout({order, user, guest, clear}) {
                                 </div>
                                 { deliveryExpand &&
                                     <div>
-                                        <p>Select shipping address</p>
                                         {shipping.length > 0 ?
-                                            shipping.map((address)=>(
+                                            shipping.map((address)=>(<>
+                                                <p>Select shipping address</p>
                                             <div className={styles.address}>
                                                 <div className={styles.top}>
                                                 <p><strong>{address.first_name} {address.last_name}</strong></p>
@@ -164,8 +164,22 @@ export default function Checkout({order, user, guest, clear}) {
                                                 <p>{address.postal}</p>
                                                 <p>{address.phone_number}</p>
                                             </div>
-                                            )) :
-                                                <h3 className={styles.no_address}>No shipping address</h3>
+                                            </>)) : Object.keys(address).length == 0 ?
+                                                <h4 className={styles.no_address}>No shipping address</h4>
+                                                : <div className={styles.address}>
+                                                <div className={styles.top}>
+                                                <p><strong>{address.first_name} {address.last_name}</strong></p>
+                                                <div className={styles.options}>
+                                                    <p onClick={()=>{
+                                                        selectAddress(address)
+                                                    }}>Select</p>
+                                                </div>
+                                                </div>
+                                                <p>{address.street}</p>
+                                                <p>{address.city}, {address.country}</p>
+                                                <p>{address.postal}</p>
+                                                <p>{address.phone_number}</p>
+                                            </div>
                                         }
                                         <button onClick={toggleModal}>Use Another Shipping Address</button>
 
@@ -183,7 +197,7 @@ export default function Checkout({order, user, guest, clear}) {
                                 </div>
                                 <div className={styles.billing}>
                                     {(delivery || billingExpand) &&
-                                        <ConnectToPhantom confirm={confirmTransaction} user={user} email={emailF.values.email} total={order.subtotal} clear={clear}/>
+                                        <ConnectToPhantom confirm={confirmTransaction} user={user} email={emailF.values.email} address={address} total={order.subtotal} clear={clear}/>
                                     }
                                 </div>
                             </div>
@@ -198,9 +212,9 @@ export default function Checkout({order, user, guest, clear}) {
                                         <div className={styles.quantity}>
                                             <p>{item.quantity}</p>
                                             <p>x</p>
-                                            <p> {item.name}</p>
+                                            <p> {item.product.name}</p>
                                         </div>
-                                        <p>${item.price}</p>
+                                        <p>${item.product.price}</p>
                                     </div>
                                 ))}
                                 <div className={styles.subtotal}>
