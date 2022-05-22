@@ -7,6 +7,7 @@ import CreateListing from '@/components/createlisting'
 import nookies from 'nookies'
 import { useUser } from '@/hooks/swrHooks'
 
+import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
 export default function listings({shop, toggleLoading, cookies}){
 
@@ -17,6 +18,7 @@ export default function listings({shop, toggleLoading, cookies}){
     const [editing, setEditing] = useState({})
 
     const {user_p, error, isLoading} = useUser()
+    const axiosPriv = useAxiosPrivate()
 
     const showElement = ()=>{
         setShow(true)
@@ -42,23 +44,26 @@ export default function listings({shop, toggleLoading, cookies}){
 
     useEffect(()=>{
 
-        const accessToken = cookies.accessToken
-
         const fetchShopInfo = async() =>{
 
             console.log("Fetching multiple")
 
-            await fetch(`http://localhost:8000/products/get-multiple`, {
-                method:'GET',
-                headers:{
-                    'Content-Type':'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'authorization':`Bearer ${accessToken}`
-                },
-                mode:'cors',
-            }).then(async res=> await res.json()).then(data=>{
+            await axiosPriv.get('/products/get-multiple').then(res => res.data)
+            .then(data => {
                 setProducts(data.products)
             })
+
+            // await fetch(`http://localhost:8000/products/get-multiple`, {
+            //     method:'GET',
+            //     headers:{
+            //         'Content-Type':'application/json',
+            //         'Access-Control-Allow-Origin': '*',
+            //         'authorization':`Bearer ${accessToken}`
+            //     },
+            //     mode:'cors',
+            // }).then(async res=> await res.json()).then(data=>{
+            //     setProducts(data.products)
+            // })
         }
         
        fetchShopInfo()

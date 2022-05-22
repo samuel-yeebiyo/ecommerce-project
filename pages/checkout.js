@@ -74,7 +74,7 @@ export default function Checkout({order, user, guest, clear}) {
     useEffect(()=>{
         
         email && setDeliveryExpand(true)
-        if(!isLoading && user_p.id){
+        if(!isLoading && user_p && user_p.id){
             setEmail(true)
             setDeliveryExpand(true)
         }
@@ -122,11 +122,11 @@ export default function Checkout({order, user, guest, clear}) {
                                     <div className={styles.nums}>
                                         <p>1</p>
                                     </div>
-                                    {(!isLoading && user_p.id || email) ?
+                                    {(!isLoading && user_p && user_p.id || email) ?
                                         <img src="/check.png"/> : <></>
                                     }
                                 </div>
-                                {!isLoading && !user_p.id && !email && emailExpand && <>                                
+                                {!isLoading && !user_p && !email && emailExpand && <>                                
                                     <p>Sign in or continue as guest</p>
                                     <form onSubmit={emailF.handleSubmit} className={styles.continue}>
                                         <input type='email' id='email' placeholder='Email address' value={emailF.values.email} onChange={emailF.handleChange}/>

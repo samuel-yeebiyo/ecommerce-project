@@ -12,11 +12,12 @@ import { useUser } from '@/hooks/swrHooks'
 import GuestRoute from '@/components/guestRoute'
 import { userContext } from '@/context/store'
 import Cookie from 'cookie-cutter'
+import { guestToken } from '@/hooks/useCookies'
 
-import { setCookie } from 'nookies'
+import { destroyCookie, setCookie } from 'nookies'
 
 
-export default function SignIn() {
+export default function SignIn({order}) {
 
   const router = useRouter()
 
@@ -51,33 +52,39 @@ export default function SignIn() {
         body:JSON.stringify(values)
       }).then(async res => await res.json()).then(async data =>{
 
-        //check if guestid exists
-        let fromGuest = Cookie.get('guestID')
+        const guest = guestToken()
+        const hasItem = order.items.length != 0
         
-        if(fromGuest){
+        if(hasItem){
           
           //let server transfer current cart to user
-          await fetch(`http://localhost:8000/user/${data.id}/transfer/${fromGuest}`,{
+          await fetch(`http://localhost:8000/user/transfer/`,{
             method:'POST',
             headers:{
               'Content-Type':'application/json',
-              'Access-Control-Allow-Origin':'*'
+              'Access-Control-Allow-Origin':'*',
+              'authorization': `Bearer ${data.accessToken}`
             },
-            mode:'cors'
+            mode:'cors',
+            body:JSON.stringify({
+              guestToken: guest
+            })
           }).then(async res => await res.json()).then(message => {
             console.log("Transfer complete")
             console.log(message)
             
             //delete guest cookie
-            Cookie.set('guestID', '', {expires: new Date(0)} )
+            destroyCookie(null, 'guestToken', {path: '/'})
             
             //create user cookie
             setUserCookies(data.id, data.accessToken, data.refreshToken)
             mutate()
-            // setUser(data.id)
             router.replace('/')
           })
         }else{
+
+          //delete guest token
+          destroyCookie(null, 'guestToken', {path: '/'})
 
           //create user cookies
           setUserCookies(data.id, data.accessToken, data.refreshToken)

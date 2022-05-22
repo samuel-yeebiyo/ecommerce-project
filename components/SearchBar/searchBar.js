@@ -40,11 +40,9 @@ export default function SearchBar () {
                 setShowResults(true)
                 }}/>
             {searchTerm.length > 2 && showResults && <>
-                {results.length > 0 ? results.map((item)=>(
+                {results.length > 0 && results.map((item)=>(
                     <p className={styles.recommendations}>{item.name}</p>
                 ))
-                    :
-                    <p>No matching results</p>
                 }
 
             </>

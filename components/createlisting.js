@@ -1,5 +1,6 @@
 import styles from 'styles/component/listing.module.css'
 import {useState, useEffect, useContext} from 'react'
+import {v4 as uuidv4} from 'uuid'
 
 import axios from 'axios'
 import { useRouter } from 'next/router'
@@ -171,7 +172,7 @@ export default function CreateListing ({editing, cookies}) {
                 secondary:secondary.map((item)=>{
                     return item.url
                 }),
-                pathname:name.toLowerCase().replaceAll(" ","-"),
+                pathname:`${name.toLowerCase().replaceAll(" ","-")}-${v4()}`,
                 tags:tags
             })
         }).then(res =>{
@@ -204,7 +205,7 @@ export default function CreateListing ({editing, cookies}) {
                 secondary:secondary.map((item)=>{
                     return item.url
                 }),
-                pathname:name.toLowerCase().replaceAll(" ","-"),
+                pathname:`${name.toLowerCase().replaceAll(" ","-")}-${v4()}`,
                 tags:tags
             })
         }).then(res =>{

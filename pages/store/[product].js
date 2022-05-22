@@ -14,6 +14,8 @@ export default function Product({increment, addToCart, product, blocking}) {
   const [reviews, setReviews] = useState([])
   const {user_p, isLoading} = useUser()
   
+  console.log(user_p, isLoading)
+
   return (
     <div>
       <Head>
@@ -87,7 +89,7 @@ export default function Product({increment, addToCart, product, blocking}) {
                         ))}
                       </div>
                       <p>{review.name}</p>
-                      <p>{review.date}</p>
+                      <p>{new Date(review.date).toLocaleDateString()}</p>
                     </div>
                     <p>{review.description}</p>
                   </div>

@@ -8,7 +8,7 @@ import OrderWrapper from '@/components/orderWrapper'
 
 import nookies from 'nookies'
 import Cookie from 'cookie-cutter'
-
+import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 import {useState, useEffect} from 'react'
 
 export default function Orders({user}) {
@@ -16,6 +16,7 @@ export default function Orders({user}) {
   const [show, setShow] = useState(false)
   const [current, setCurrent] = useState({})
 
+  const axiosPriv = useAxiosPrivate()
 
   const [orders, setOrders] = useState([])
   const [orderMap, setOrderMap] = useState([])
@@ -24,25 +25,18 @@ export default function Orders({user}) {
 
   useEffect(()=>{
 
-    const userAccess = Cookie.get('accessToken')
-
     const fetchStats = async (token)=>{
-      await fetch(`http://localhost:8000/user/get-orders`, {
-        method:'GET',
-        headers:{
-          'Content-Type':'application/json',
-          'Access-Control-Allow-Origin':'cors',
-          'authorization': `Bearer ${token}`
-        },
-        mode:'cors'
-      }).then(async res=>await res.json()).then(data =>{
+
+      await axiosPriv.get('/user/get-orders').then(res=>res.data)
+      .then(data =>{
         console.log({data})
         setOrders(data.all)
         setOrderMap(data.map)
       })
+
     }
 
-    fetchStats(userAccess)
+    fetchStats()
 
   },[])
 

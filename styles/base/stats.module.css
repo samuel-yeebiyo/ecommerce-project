@@ -2,3 +2,28 @@
     width:80%;
     padding:20px 0;
 }
+
+.heading{
+    font-size:21px;
+    font-weight: bold;
+    margin-bottom:20px;
+}
+.graph{
+    margin-bottom:40px;
+}
+
+
+.product_table{
+    width:100%;
+}
+.product_table th{
+    color:black;
+    background:white;
+}
+.product_table td{
+    border-bottom: 1px solid white;
+    text-align: center;
+}
+.product_table tr{
+    height:50px;
+}

@@ -13,21 +13,26 @@ export default function Search(){
     const [modal, setModal] = useState()
 
     const [results, setResults] = useState([])
+    const [filtered, setFiltered] = useState([])
 
 
     const applyFilter = (min, max, category, sortby) =>{
 
-        let filtered = results
+        let filtered = [...results]
 
         //filter price
         if(min>0 || max>0){
             filtered = filtered.filter(item => item.price >= min)
             filtered = filtered.filter(item => item.price <= max)
+            console.log("Price")
+            console.log({filtered})
         }
 
         //filter category
-        if(category != "" || category != "-- Category"){
+        if(category != "" && category != "-- Category"){
             filtered = filtered.filter(item => item.category == category)
+            console.log("Cat")
+            console.log({filtered})
         }
 
         //sorting
@@ -40,15 +45,17 @@ export default function Search(){
                     filtered = filtered.sort((a,b) => b.price - a.price)
                     break
                 case "rating":
-                    filtered = filtered.sort((a,b) => a.rating - b.rating)
+                    filtered = filtered.sort((a,b) => b.rating - a.rating)
                     break
                 case "recent":
                     filtered = filtered.sort((a,b) => a.createdAt - b.createdAt)
                     break
             }
+            console.log("sort")
+            console.log({filtered})
         }
 
-        setResults(filtered)
+        setFiltered(filtered)
         
 
     }
@@ -66,6 +73,7 @@ export default function Search(){
             }).then(async res=> await res.json()).then(data =>{
                 console.log({data})
                 setResults(data)
+                setFiltered(data)
             })
         }
 
@@ -88,7 +96,7 @@ export default function Search(){
             </div>
             <div className={styles.new_products}>
                 
-                {results.length > 0 ? results.map((product, idx)=>(
+                {filtered.length > 0 ? filtered.map((product, idx)=>(
                     <ProductCard key={idx} product={product}/>
                     )) 
                     :

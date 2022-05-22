@@ -1,5 +1,6 @@
 import useSWR from "swr";
-import { userFetcher } from "@/lib/user";
+import useAxiosPrivate from "./useAxiosPrivate";
+import { accessToken } from "./useCookies";
 
 
 const fetcher =  (...args) => fetch(...args).then(res => res.json()) 
@@ -16,16 +17,21 @@ export function useProducts(init) {
 
 export function useUser() {
 
-    console.log("In user hook")
+    const axiosPriv = useAxiosPrivate()
+    const token = accessToken()
 
-    const {data, mutate, error} = useSWR(`http://localhost:8000/user/get`, userFetcher, {dedupingInterval:5000})
+    console.log("In swr trying to fetch")
 
-    console.log({data})
+    const fetching = (url) => {            
+        console.log("Requesting for user data")
+        return axiosPriv.get(url).then(response => response.data)
+    }
+    const {data, mutate, error, isValidating} = useSWR(token ? '/user/get' : null, fetching, {dedupingInterval:5000})
 
     return{
         user_p:data?.user || null,
         error:error,
-        isLoading: !error && !data,
+        isLoading: !error && !data && isValidating,
         mutate:mutate
     }
 }

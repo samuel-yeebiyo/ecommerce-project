@@ -3,6 +3,7 @@ import {useEffect, useContext, useState} from 'react'
 import { useRouter } from 'next/router'
 import nookies from 'nookies'
 import { userContext } from '@/context/store'
+import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
 
 export default function Review ({toggle, item, user, editing, show}){
@@ -12,6 +13,8 @@ export default function Review ({toggle, item, user, editing, show}){
     const [name, setName] = useState('')
     const [details, setDetails] = useState('')
     
+    const axiosPriv = useAxiosPrivate()
+
     const {setLoading} = useContext(userContext)
 
     useEffect(()=>{
@@ -37,24 +40,14 @@ export default function Review ({toggle, item, user, editing, show}){
     const handleSubmit = async() =>{
 
         setLoading(true)
-        const {accessToken} = nookies.get()
 
         console.log("Submitting")
-        await fetch(`http://localhost:8000/products/review/${item._id}/`, {
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json',
-                'Access-Control-Allow-Origin':'*',
-                'authorization': `Bearer ${accessToken}`
-            },
-            mode:'cors',
-            body:JSON.stringify({
-                rating:rating,
-                description:details,
-                title:title,
-                name:name
-            })
-        }).then(async res => await res.json()).then(data => {
+        await axiosPriv.post(`products/review/${item._id}`, {
+            rating:rating,
+            description:details,
+            title:title,
+            name:name
+        }).then( res => res.data).then(data => {
             setLoading(false)
             if(data.message == "Success"){
                 router.reload()
@@ -66,24 +59,14 @@ export default function Review ({toggle, item, user, editing, show}){
     const handleSave = async() =>{
 
         setLoading(true)
-        const {accessToken} = nookies.get()
 
         console.log("Saving edit")
-        await fetch(`http://localhost:8000/products/update/review/${item._id}/`, {
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json',
-                'Access-Control-Allow-Origin':'*',
-                'authorization': `Bearer ${accessToken}`
-            },
-            mode:'cors',
-            body:JSON.stringify({
-                rating:rating,
-                description:details,
-                title:title,
-                name:name
-            })
-        }).then(async res=> await res.json()).then(data => {
+        await axiosPriv.post(`products/update/review/${item._id}`, {
+            rating:rating,
+            description:details,
+            title:title,
+            name:name
+        }).then( res => res.data).then(data => {
             setLoading(false)
             if(data.message == "Success"){
                 router.reload()

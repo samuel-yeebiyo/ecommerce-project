@@ -4,6 +4,7 @@ import Link from 'next/link'
 import styles from 'styles/profile/reviews.module.css'
 import AuthenticatedRoute from '@/components/authenticatedRoute'
 import Review from '@/components/Review'
+import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
 import {useState, useEffect} from 'react'
 import nookies from 'nookies'
@@ -18,6 +19,8 @@ export default function Reviews({user}) {
   const [pending, setPending] = useState([])
   const [completed, setCompleted] = useState([])
   const [editing, setEditing] = useState(false)
+
+  const axiosPriv = useAxiosPrivate()
 
   const showElement = (item)=>{
     setShow(true)
@@ -42,33 +45,23 @@ export default function Reviews({user}) {
     const userAccess = Cookie.get('accessToken')
 
     const fetchPendingReviews = async (token)=>{
-      await fetch(`http://localhost:8000/user/get-pending-reviews`, {
-        method:'GET',
-        headers:{
-          'Content-Type':'application/json',
-          'Access-Control-Allow-Origin':'cors',
-          'authorization': `Bearer ${token}`
-        },
-        mode:'cors'
-      }).then(async res=>await res.json()).then(data =>{
+
+      axiosPriv.get('/user/get-pending-reviews').then(res=>res.data)
+      .then(data =>{
         console.log({data})
         setPending(data)
       })
+
     }
 
     const fetchCompletedReviews = async (token) =>{
-      await fetch(`http://localhost:8000/user/get-completed-reviews`, {
-        method:'GET',
-        headers:{
-          'Content-Type':'application/json',
-          'Access-Control-Allow-Origin':'cors',
-          'authorization': `Bearer ${token}`
-        },
-        mode:'cors'
-      }).then(async res=>await res.json()).then(data =>{
+
+      axiosPriv.get('/user/get-completed-reviews').then(res=>res.data)
+      .then(data =>{
         console.log({data})
         setCompleted(data)
       })
+
     }
 
     completed.length == 0 && fetchCompletedReviews(userAccess)

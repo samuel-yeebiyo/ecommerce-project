@@ -10,11 +10,16 @@ import { userContext } from "@/context/store"
 import { useContext } from "react"
 import { useUser } from "@/hooks/swrHooks"
 
+import useAxiosGuest from "@/hooks/useAxiosGuest"
+import useAxiosPrivate from "@/hooks/useAxiosPrivate"
 
 export default function Transaction({total, user, email, address, confirm, clear}){
 
     const {user_p, error, isLoading} = useUser()
     const {setLoading, clearCart} = useContext(userContext)
+
+    const axiosPriv = useAxiosPrivate()
+    const axiosGuest = useAxiosGuest()
 
 
     async function transfer(tokenMintAddress, wallet, to, connection, amount){
@@ -86,41 +91,26 @@ export default function Transaction({total, user, email, address, confirm, clear
         if(signature && confirmation && !confirmation.value.err){
             console.log("Transaction successful")
             
-            const guest = Cookie.get('guestID')
-            if(!user && email){
-                await fetch(`http://localhost:8000/guest/${guest}/pay`,{
-                    method:'POST',
-                    headers:{
-                    'Content-Type':'application/json',
-                    'Access-Control-Allow-Origin':'*'
-                    },
-                    mode:'cors',
-                    body:JSON.stringify({
-                        email: email,
-                        confirmation:signature
-                    })
-                }).then(async res => await res.json()).then(reciept => {
+            if(!isLoading && !user && email){
+
+                await axiosGuest.post('/guest/pay', {
+                    email: email,
+                    confirmation:signature,
+                    address: address
+                }).then(res => res.data).then(reciept => {
                     //get back reciept
                     //show receipt confirmation
+                    setLoading(false)
                     confirm(reciept)
                     clear()
                 })
+
             }else if(user_p.id){
 
-                const {accessToken} = nookies.get()
-                await fetch(`http://localhost:8000/user/pay`,{
-                    method:'POST',
-                    headers:{
-                        'Content-Type':'application/json',
-                        'Access-Control-Allow-Origin':'*',
-                        'authorization':`Bearer ${accessToken}`
-                    },
-                    mode:'cors',
-                    body:JSON.stringify({
-                        confirmation:signature,
-                        address:address
-                    })
-                }).then(async res => await res.json()).then(reciept => {
+                await axiosPriv.post('/user/pay', {
+                    confirmation:signature,
+                    address:address
+                }).then(res => res.data).then(reciept => {
                     //get back reciept
                     //show receipt confirmation
                     clearCart()
@@ -128,6 +118,7 @@ export default function Transaction({total, user, email, address, confirm, clear
                     confirm(reciept)
 
                 })
+
             }else{
                 setLoading(false)
                 console.log("Error encountered")

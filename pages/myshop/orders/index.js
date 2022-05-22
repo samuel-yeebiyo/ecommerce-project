@@ -5,6 +5,7 @@ import styles from 'styles/shopadmin/orders.module.css'
 import nookies from 'nookies'
 import OrderWrapper from '@/components/orderWrapper'
 
+import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
 export default function orders(){
 
@@ -15,28 +16,22 @@ export default function orders(){
     const [orderMap, setOrderMap] = useState([])
     const [allOrders, setAllOrders] = useState([])
 
-    useEffect(()=>{
+    const axiosPriv = useAxiosPrivate()
 
-        const {accessToken} = nookies.get()
+    useEffect(()=>{
+        
         //fetching orders from server
         const fetchOrders = async ()=>{
-            await fetch('http://localhost:8000/shops/orders',{
-                method:'GET',
-                headers:{
-                    'authorization':`Bearer ${accessToken}`
-                }
-            }).then(async res =>await res.json())
-            .then(data =>{
+
+            await axiosPriv.get('/shops/orders').then(res => res.data)
+            .then(data => {
                 console.log(data)
 
                 setOrderMap(data.map)
                 setAllOrders(data.all)
 
-                // setPending(data.filter((item)=> item.status == 'pending'))
-                // setShipped(data.filter((item)=> item.status == 'shipped'))
-                // setCompleted(data.filter((item)=> item.status == 'delivered'))
-
             })
+
         }
 
 

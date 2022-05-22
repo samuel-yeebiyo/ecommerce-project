@@ -12,6 +12,7 @@ import { fetchShopPaths, fetchShop } from '../../lib/shops'
 export default function Shop({shop_detail}) {
 
   const [listings, setListings] = useState([])
+  const [filtered, setFiltered] = useState([])
 
   const [modal, setModal] = useState(false)
   const description = useRef(null)
@@ -24,6 +25,50 @@ export default function Shop({shop_detail}) {
     setModal(prev=>!prev)
   }
 
+  const applyFilter = (min, max, category, sortby) =>{
+
+    let filtered = [...listings]
+
+    //filter price
+    if(min>0 || max>0){
+        filtered = filtered.filter(item => item.price >= min)
+        filtered = filtered.filter(item => item.price <= max)
+        console.log("Price")
+        console.log({filtered})
+    }
+
+    //filter category
+    if(category != "" && category != "-- Category"){
+        filtered = filtered.filter(item => item.category == category)
+        console.log("Cat")
+        console.log({filtered})
+    }
+
+    //sorting
+    if(sortby != "none"){
+        switch (sortby){
+            case "lowest_price":
+                filtered = filtered.sort((a,b)=> a.price - b.price)
+                break
+            case "highest_price":
+                filtered = filtered.sort((a,b) => b.price - a.price)
+                break
+            case "rating":
+                filtered = filtered.sort((a,b) => b.rating - a.rating)
+                break
+            case "recent":
+                filtered = filtered.sort((a,b) => a.createdAt - b.createdAt)
+                break
+        }
+        console.log("sort")
+        console.log({filtered})
+    }
+
+    console.log({filtered})
+    setFiltered(filtered)
+    
+  }
+
   useEffect(()=>{
 
     const fetchProducts = async () =>{
@@ -32,11 +77,12 @@ export default function Shop({shop_detail}) {
         method:'GET',
         headers:{
           'Content-Type':'application/json',
-          'Access-Control-Allow-Origin':'*',
+          'Access-Control-Allow-Origin':'*',filtered
         },
         mode:'cors',
       }).then(async res=>await res.json()).then(data=>{
         setListings(data.products)
+        setFiltered(data.products)
       })
 
     }
@@ -84,8 +130,8 @@ export default function Shop({shop_detail}) {
             </div>
           </div>
           <div className={styles.list}>
-            {listings.length > 0 ?
-              listings.map((product)=>(
+            {filtered.length > 0 ?
+              filtered.map((product)=>(
                 <ProductCard product={product}/>
               ))
               :
@@ -104,7 +150,7 @@ export default function Shop({shop_detail}) {
         </div>
       </main>
       {modal &&
-        <Filter toggle={toggleModal}/>
+        <Filter toggle={toggleModal} apply={applyFilter}/>
       }  
       
     </div>

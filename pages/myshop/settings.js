@@ -7,6 +7,8 @@ import nookies from 'nookies'
 import Cookie from 'cookie-cutter'
 import { useRouter } from 'next/router'
 
+import useAxiosPrivate from '@/hooks/useAxiosPrivate'
+
 export default function myshop({user, blocking, cookies}){
 
     const [image, setImage]= useState("")
@@ -15,27 +17,38 @@ export default function myshop({user, blocking, cookies}){
     const [pubkey, setPubkey] = useState("")
     const [description, setDescription] = useState("")
 
+    const axiosPriv = useAxiosPrivate()
+
     const router = useRouter()
 
     useEffect(()=>{
 
-        const {accessToken} = cookies
-        const fetchShopInfo = () =>{
-            fetch(`http://localhost:8000/user/get-shop-meta`, {
-                method:'GET',
-                headers:{
-                    'Content-Type':'appllication/json',
-                    'Access-Control-Allow-Origin':'*',
-                    'authorization': `Bearer ${accessToken}`
-                },
-                mode:'cors',
-            }).then(async res=> await res.json()).then(data=>{
+        const fetchShopInfo = async () =>{
+
+            await axiosPriv.get('/user/get-shop-meta').then(res=> res.data)
+            .then(data=>{
                 console.log(data)
                 setImage(data.image)
                 setName(data.name)
                 setPubkey(data.pubkey)
                 setDescription(data.description)
             })
+
+            // fetch(`http://localhost:8000/user/get-shop-meta`, {
+            //     method:'GET',
+            //     headers:{
+            //         'Content-Type':'appllication/json',
+            //         'Access-Control-Allow-Origin':'*',
+            //         'authorization': `Bearer ${accessToken}`
+            //     },
+            //     mode:'cors',
+            // }).then(async res=> await res.json()).then(data=>{
+            //     console.log(data)
+            //     setImage(data.image)
+            //     setName(data.name)
+            //     setPubkey(data.pubkey)
+            //     setDescription(data.description)
+            // })
         }
         
 
@@ -66,26 +79,36 @@ export default function myshop({user, blocking, cookies}){
 
         await uploadPrimary()
 
-        const {accessToken} = cookies
-        await fetch(`http://localhost:8000/shops/update/`, {
-            method:"POST",
-            headers:{
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin':'*',
-                'authorization':`Bearer ${accessToken}`
-            },
-            mode:'cors',
-            body:JSON.stringify({
-                name:name,
-                pubKey:pubkey,
-                description:description,
-                image:image
-            })
-        }).then(async res=>await res.json()).then(data=>{
+        await axiosPriv.post('/shops/update', {
+            name:name,
+            pubKey:pubkey,
+            description:description,
+            image:image
+        }).then( res=> res.data).then(data=>{
             if(data.message == "Success"){
                 router.replace('/myshop/overview')
             }
         })
+
+        // await fetch(`http://localhost:8000/shops/update/`, {
+        //     method:"POST",
+        //     headers:{
+        //         'Content-Type': 'application/json',
+        //         'Access-Control-Allow-Origin':'*',
+        //         'authorization':`Bearer ${accessToken}`
+        //     },
+        //     mode:'cors',
+        //     body:JSON.stringify({
+        //         name:name,
+        //         pubKey:pubkey,
+        //         description:description,
+        //         image:image
+        //     })
+        // }).then(async res=>await res.json()).then(data=>{
+        //     if(data.message == "Success"){
+        //         router.replace('/myshop/overview')
+        //     }
+        // })
     }
 
     return(
