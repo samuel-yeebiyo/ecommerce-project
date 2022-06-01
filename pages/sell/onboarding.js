@@ -16,6 +16,8 @@ import nookies from 'nookies'
 import { setCookie, destroyCookie } from 'nookies'
 import Cookie from 'cookie-cutter'
 
+import useAxiosPrivate from '@/hooks/useAxiosPrivate'
+
 export default function onboarding({cookies}){
 
     const [progress, setProgress] = useState({
@@ -28,12 +30,13 @@ export default function onboarding({cookies}){
     
     const[current, setCurrent] = useState('name')
 
-    const [name, setName] = useState('')
+    const [name, setName] = useState("")
     const [image, setImage] = useState("")
-    const [pubKey, setPubKey] = useState('')
+    const [pubKey, setPubKey] = useState("")
     const [description, setDescription] = useState('')
 
     const [modal, setModal] = useState(false)
+    const axiosPriv = useAxiosPrivate()
 
     const {setLoading} = useContext(userContext)
     
@@ -85,25 +88,14 @@ export default function onboarding({cookies}){
             })
         }
 
-        const {accessToken} = cookies
+        axiosPriv.post('/register/seller', {
+            name:name,
+            description:description,
+            pubkey:key,
+            image:imageurl,
+            pathname:name.toLowerCase().replaceAll(" ","-")
+        }).then(res => res.data).then(data => {
 
-        await fetch('http://localhost:8000/register/seller', {
-            method:'POST',
-            headers:{
-            'Content-Type':'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'authorization': `Bearer ${accessToken}`
-            },
-            mode:'cors',
-            body:JSON.stringify({
-                name:name,
-                description:description,
-                pubkey:key,
-                image:imageurl,
-                pathname:name.toLowerCase().replaceAll(" ","-")
-            })
-        }).then(async res => await res.json()).then(async data =>{
-            
             setLoading(false)
 
             shop = data.id

@@ -216,25 +216,6 @@ function MyApp({ Component, pageProps }) {
       })
 
     }
-
-    // await fetch(`http://localhost:8000/user/cart/add`, {
-    //   method:'POST',
-    //   headers:{
-    //     'Content-Type':'application/json',
-    //     'Access-Control-Allow-Origin': '*',
-    //     'authorization':`Bearer ${userToken}`
-    //   },
-    //   mode:'cors',
-    //   body:JSON.stringify({
-    //     product:product
-    //   })
-    // }).then(async res => await res.json()).then(data=>{
-
-    //   fetchUserCart(userToken)
-
-    //   //allow other operations once done
-    //   setBlocking(false)
-    // })
   }
 
   const removeFromCart = async (product)=>{
@@ -242,26 +223,35 @@ function MyApp({ Component, pageProps }) {
     //block other operations
     setBlocking(true)
 
-    const token = Cookie.get('accessToken')
+    const userAccessToken = accessToken()
+    const guestAcessToken = guestToken()
 
-    await fetch(`http://localhost:8000/user/cart/remove`, {
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'authorization':`Bearer ${token}`
-      },
-      mode:'cors',
-      body:JSON.stringify({
+    //check if guest token or a user token exists
+    if(userAccessToken){
+
+      await axiosPriv.post('/user/cart/remove', {
         product:product
+      }).then(res => res.data).then(data=>{
+
+        fetchUserCart()
+  
+        //allow other operations once done
+        setBlocking(false)
       })
-    }).then(async res => await res.json()).then(data=>{
 
-      fetchUserCart(token)
 
-      //allow other operations once done
-      setBlocking(false)
-    })
+    }else if(guestAcessToken){
+
+      await axiosGuest.post('/guest/cart/remove', {
+        product:product
+      }).then(res => res.data).then( data => {
+        
+        fetchGuestCart()
+        setBlocking(false)
+      })
+
+    }
+
 
 
   }

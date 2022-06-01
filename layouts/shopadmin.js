@@ -2,6 +2,7 @@ import styles from 'styles/shopadmin/shopadminlayout.module.css'
 import Link from 'next/link' 
 import { useRouter } from 'next/router'
 import { useWindowSize } from '@/hooks/useWidth'
+import Loading from '@/components/Loading/Loading'
 
 
 export default function shopadmin ({children, loading}){
@@ -19,11 +20,11 @@ export default function shopadmin ({children, loading}){
                         <p className={styles.brand_name}>BN</p>
                     }
                 </Link>
-                {width > 900 ?
+                {/* {width > 900 ?
                     <p className={styles.shop_name}>Shop Name</p>
                 :
                     <p className={styles.shop_name}>SN</p>
-                }
+                } */}
                 
                 <div className={styles.options}>
 
@@ -73,11 +74,7 @@ export default function shopadmin ({children, loading}){
             </div>
             <div className={styles.admin_container}>{children}</div>
             {loading &&
-                <div className={styles.loading}>
-                    <div>
-                        <p>Loading........</p>
-                    </div>
-                </div>
+                <Loading/>
             }
         </div>
     )

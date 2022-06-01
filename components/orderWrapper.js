@@ -1,15 +1,44 @@
 import {useState, useEffect} from 'react'
 import styles from 'styles/profile/orders.module.css'
+import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
-export default function OrderWrapper ({order, orders}){
+import { useRouter } from 'next/router'
+
+export default function OrderWrapper ({order, orders, shop}){
 
     const [info, setInfo] = useState(false)
     const [total, setTotal] = useState(0)
+    const axiosPriv = useAxiosPrivate()
+    const [code, setCode] = useState("")
+    const [confirmation, setConfirmation] = useState("")
+
+    const router = useRouter()
+
 
     const calcTotal = () =>{
         let total = 0
         order.values.map((index)=> {total+=orders[index].total})
         setTotal(total)
+    }
+
+    const generateCode = async (id) =>{
+        await axiosPriv.post('/shops/generate', {
+            order:id
+        }).then(res => res.data).then(data =>{
+            setCode(data.code)
+        })
+    }
+
+    const handleConfirmation = async (e) => {
+        e.preventDefault()
+
+        await axiosPriv.post('/shops/confirmation', {
+            order:order.orderId,
+            code:confirmation
+        }).then(res => res.data).then(data =>{
+            if (data.message == "Success") router.reload()
+        })
+
     }
 
     useEffect(()=>{
@@ -36,6 +65,19 @@ export default function OrderWrapper ({order, orders}){
                 </div>
             </div>
             ))}
+            
+            {shop &&  orders[order.values[0]].status == "pending" &&
+                <div>
+                    <button onClick={()=>{
+                        generateCode(order.orderId)
+                    }}>Generate shipment code</button>
+                    {code ? <p>{code}</p> : <br/>}
+                    <form onSubmit={handleConfirmation}>
+                        <input type='text' placeholder='Confirmation Code' value={confirmation} onChange={(e)=>setConfirmation(e.target.value)}/>
+                        <button type="submit">Confirm</button>
+                    </form>
+                </div>
+            }
 
             {info ?
                 <p onClick={()=>setInfo(false)}>Less info</p> :
@@ -44,7 +86,6 @@ export default function OrderWrapper ({order, orders}){
             {info &&
                 <div className={styles.detail}>
                     <p>Items Total: SAMO {total}</p>
-                    <p>Payment confirmation:</p>
                     <div>
                         <strong>Addressed To</strong>
                         <p>{orders[order.values[0]].address.first_name}</p>

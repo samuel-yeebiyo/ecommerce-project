@@ -18,6 +18,9 @@
   justify-content: space-between;
   height:90px;
 }
+.navigation li{
+  cursor: pointer;
+}
 
 .logo{
   height:30px;
@@ -129,18 +132,14 @@
   cursor: pointer;
   position:relative;
 }
-.cart svg{
-  width:30px;
-  height:30px;
-}
 .cart_status{
   background:red;
   border-radius:50%;
-  width:10px;
-  height:10px;
+  width:15px;
+  height:15px;
   position:absolute;
-  top:0;
-  right:0;
+  top:5px;
+  right:0px;
 }
 
 @media (max-width:1180px){

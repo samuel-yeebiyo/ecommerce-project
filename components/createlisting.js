@@ -5,6 +5,10 @@ import {v4 as uuidv4} from 'uuid'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { userContext } from '@/context/store'
+import useAxiosPrivate from '@/hooks/useAxiosPrivate'
+
+import { AiOutlineCloseCircle } from 'react-icons/ai' 
+
 
 export default function CreateListing ({editing, cookies}) {
 
@@ -20,6 +24,8 @@ export default function CreateListing ({editing, cookies}) {
     const [price, setPrice] = useState(0)
 
     const {setLoading} = useContext(userContext)
+
+    const axiosPriv = useAxiosPrivate()
 
 
 
@@ -154,32 +160,21 @@ export default function CreateListing ({editing, cookies}) {
         await uploadPrimary()
         await uploadSecondary()
 
-        const {accessToken} = cookies
-        await fetch('http://localhost:8000/products/add/', {
-            method:'POST',
-            headers:{
-            'Content-Type':'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'authorization': `Bearer ${accessToken}`
-            },
-            mode:'cors',
-            body:JSON.stringify({
-                name:name,
-                price:price,
-                desc:description,
-                category:category,
-                primary:primary.url,
-                secondary:secondary.map((item)=>{
-                    return item.url
-                }),
-                pathname:`${name.toLowerCase().replaceAll(" ","-")}-${v4()}`,
-                tags:tags
-            })
+        await axiosPriv.post('/products/add', {
+            name:name,
+            price:price,
+            desc:description,
+            category:category,
+            primary:primary.url,
+            secondary:secondary.map((item)=>{
+                return item.url
+            }),
+            pathname:`${name.toLowerCase().replaceAll(" ","-")}-${uuidv4()}`,
+            tags:tags
         }).then(res =>{
             setLoading(false)
             router.reload()
         })
-
 
     }
     const handleSave = async()=>{
@@ -187,27 +182,17 @@ export default function CreateListing ({editing, cookies}) {
         await uploadPrimary()
         await uploadSecondary()
 
-        const {accessToken} = cookies
-        await fetch(`http://localhost:8000/products/update/${editing._id}`, {
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json',
-                'Access-Control-Allow-Origin':'*',
-                'authorization': `Bearer ${accessToken}`
-            },
-            mode:'cors',
-            body:JSON.stringify({
-                name:name,
-                price:price,
-                desc:description,
-                category:category,
-                primary:primary.url,
-                secondary:secondary.map((item)=>{
-                    return item.url
-                }),
-                pathname:`${name.toLowerCase().replaceAll(" ","-")}-${v4()}`,
-                tags:tags
-            })
+        await axiosPriv.post(`/products/update/${editing._id}`, {
+            name:name,
+            price:price,
+            desc:description,
+            category:category,
+            primary:primary.url,
+            secondary:secondary.map((item)=>{
+                return item.url
+            }),
+            pathname:`${name.toLowerCase().replaceAll(" ","-")}-${uuidv4()}`,
+            tags:tags
         }).then(res =>{
             setLoading(false)
             router.reload()
@@ -227,7 +212,7 @@ export default function CreateListing ({editing, cookies}) {
                         setName(e.target.value)
                     }} value={name} name="name" placeholder='Name'  type="text"/>
                 </div>
-                 
+
                  {/* Add a product primary image */}
                 <p className={styles.title}>Choose Primary Image</p>
                 {(primary.image == "" && primary.url == "") &&
@@ -237,17 +222,17 @@ export default function CreateListing ({editing, cookies}) {
                 }            
                 {primary.image != "" &&
                     <div className={styles.preview_container}>
-                        <div className={styles.remove} onClick={()=>{
+                        <AiOutlineCloseCircle className={styles.remove} onClick={()=>{
                             deletePrimary()
-                        }}></div>
+                        }}/>
                         <img className={styles.preview} src={URL.createObjectURL(primary.image)}/>  
                     </div>
                 }
                 {primary.url != "" &&
                     <div className={styles.preview_container}>
-                        <div className={styles.remove} onClick={()=>{
+                        <AiOutlineCloseCircle className={styles.remove} onClick={()=>{
                             deletePrimary()
-                        }}></div>
+                        }}/>
                         <img className={styles.preview} src={primary.url}/>  
                     </div>
                 }
@@ -264,9 +249,9 @@ export default function CreateListing ({editing, cookies}) {
                         secondary.map((item, idx)=>{
                             if(item.image == ""){ 
                                 return <div className={styles.preview_container}>
-                                    <div className={styles.remove} onClick={()=>{
+                                    <AiOutlineCloseCircle className={styles.remove} onClick={()=>{
                                         deleteSecondary(idx)
-                                    }}></div>
+                                    }}/>
                                     <img className={styles.preview} src={item.url}/>
                                 </div>
                             }
@@ -277,9 +262,9 @@ export default function CreateListing ({editing, cookies}) {
                     secondary.map((item, idx)=>{
                         if(item.url == ""){ 
                             return  <div className={styles.preview_container}>
-                                <div className={styles.remove} onClick={()=>{
+                                <AiOutlineCloseCircle className={styles.remove} onClick={()=>{
                                     deleteSecondary(idx)
-                                }}></div>
+                                }}/>
                                 <img className={styles.preview} src={URL.createObjectURL(item.image)}/>
                             </div>             
                         }       

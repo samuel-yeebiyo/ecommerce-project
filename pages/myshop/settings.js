@@ -7,6 +7,7 @@ import nookies from 'nookies'
 import Cookie from 'cookie-cutter'
 import { useRouter } from 'next/router'
 
+import { AiOutlineCloseCircle } from 'react-icons/ai'
 import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
 export default function myshop({user, blocking, cookies}){
@@ -123,7 +124,7 @@ export default function myshop({user, blocking, cookies}){
                     <form className={styles.setting_form}>
                         {image ?
                             <div className={styles.image}>
-                                <div className={styles.delete} onClick={clearImage}/>
+                                <AiOutlineCloseCircle className={styles.delete} onClick={clearImage} size={25}/>
                                 <img src={image}/>
                             </div> :  
                             <label className={styles.input_button}> +

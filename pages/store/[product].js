@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from 'styles/base/product.module.css'
+import {FaHeart} from 'react-icons/fa'
 
 import {useState, useEffect} from 'react'
 import { useUser } from '@/hooks/swrHooks'
@@ -50,7 +51,9 @@ export default function Product({increment, addToCart, product, blocking}) {
             <div className={styles.inner_container}>
               <div className={styles.title}>
                 <p>{product.name}</p>
-                <div>heart</div>
+                <div>
+                  <FaHeart/>
+                </div>
               </div>
               <Link href={`/shop/${product.shopPath}`}>
                 <a className={styles.shop_link}>{product.shopName}</a>

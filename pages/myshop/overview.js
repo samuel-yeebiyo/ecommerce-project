@@ -20,7 +20,6 @@ export default function myshop({cookies}){
     const [allOrders, setAllOrders] = useState([])
 
     useEffect(()=>{
-        const accessToken = cookies.accessToken
 
         const fetchShopInfo = async () =>{
 
@@ -30,21 +29,6 @@ export default function myshop({cookies}){
                 setSales(data.sales)
                 setRevenue(data.revenue)
             })
-
-            // await fetch(`http://localhost:8000/user/get-shop`, {
-            //     method:'GET',
-            //     headers:{
-            //         'Content-Type':'appllication/json',
-            //         'Access-Control-Allow-Origin':'*',
-            //         'authorization':`Bearer ${accessToken}`
-            //     },
-            //     mode:'cors',
-            // }).then(async res=> await res.json()).then(data=>{
-            //     console.log(data)
-            //     setListings(data.listings)
-            //     setSales(data.sales)
-            //     setRevenue(data.revenue)
-            // })
         }
         
         //fetching orders from server
@@ -58,27 +42,10 @@ export default function myshop({cookies}){
                 setAllOrders(data.all)
 
             })
-
-            // await fetch('http://localhost:8000/shops/orders',{
-            //     method:'GET',
-            //     headers:{
-            //         'authorization':`Bearer ${accessToken}`
-            //     }
-            // }).then(async res =>await res.json())
-            // .then(data =>{
-            //     console.log(data)
-
-            //     setOrderMap(data.map)
-            //     setAllOrders(data.all)
-
-
-            // })
         }
 
 
         fetchOrders()
-
-
         fetchShopInfo()
 
     },[])
@@ -109,7 +76,7 @@ export default function myshop({cookies}){
                     <p className={styles.title}>Pending Orders</p>
                     <div className={styles.order_container}>
                         {orderMap.length > 0 && allOrders.length>0 ? orderMap.map((map)=>(
-                            <OrderWrapper order={map} orders={allOrders}/>
+                            map.status == 'pending' && <OrderWrapper order={map} orders={allOrders} shop={true}/>
                         )) : <p>No pending orders</p>}
                     </div>
                 </div>

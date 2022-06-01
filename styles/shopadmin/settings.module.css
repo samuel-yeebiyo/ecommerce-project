@@ -43,9 +43,6 @@
     display: block;
     position:absolute;
     border-radius: 50%;
-    background:red;
-    width:20px;
-    height:20px;
     top:10px;
     right:10px;
     cursor:pointer;

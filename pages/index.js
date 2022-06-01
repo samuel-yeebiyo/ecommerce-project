@@ -4,13 +4,16 @@ import Link from 'next/link'
 import styles from 'styles/base/Home.module.css'
 import { fetchProducts } from '@/lib/products'
 import ProductCard from '@/components/productCard'
+import { useRouter } from 'next/router'
 
 import {useProducts} from '@/hooks/swrHooks'
 
 export default function Home({increment, addToCart, products}) {
 
   const { allProducts, error, isLoading} = useProducts(products)
-  
+  const router = useRouter()
+
+
   return (
     <div>
       <Head>
@@ -22,7 +25,11 @@ export default function Home({increment, addToCart, products}) {
       <main className={styles.home_container}>
         <div className={styles.main1}>
           <div className={styles.search_container}>
-            
+            <img src="./home.jpg"/>
+          </div>
+          <div className={styles.home_text}>
+            <p>SAMO SHOP</p>
+            <div className={styles.logo}/>
           </div>
         </div>
         
@@ -46,19 +53,19 @@ export default function Home({increment, addToCart, products}) {
               <div className={styles.info_img}>
                 <img src="quality.png"/>
               </div>
-              <p>This is a short description of something a customer should know about the watches being sold here</p>
+              <p>This is a short description of something a customer should know about the products being sold here</p>
             </div>
             <div className={styles.info}>
               <div className={styles.info_img}>
                 <img src="trust.png"/>
               </div>
-              <p>This is a short description of something a customer should know about the watches being sold here</p>
+              <p>This is a short description of something a customer should know about the products being sold here</p>
             </div>
             <div className={styles.info}>
               <div className={styles.info_img}>
                 <img src="durable.png"/>
               </div>
-              <p>This is a short description of something a customer should know about the watches being sold here</p>
+              <p>This is a short description of something a customer should know about the products being sold here</p>
             </div>
           </div>
         </div>

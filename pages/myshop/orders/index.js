@@ -48,15 +48,17 @@ export default function orders(){
                 <div className={styles.orders}>
                     <p className={styles.title}>Pending Orders</p>
                     <div className={styles.order_container}>
-                        {orderMap.length > 0 && allOrders.length>0 ? orderMap.map((map)=>(
-                                <OrderWrapper order={map} orders={allOrders}/>
-                            )) : <p>No pending orders</p>}
+                        {orderMap.length > 0 && allOrders.length > 0 ? orderMap.map((map)=>(
+                            map.status == 'pending' && <OrderWrapper order={map} orders={allOrders} shop={true}/>
+                        )) : <p>No pending orders</p>}
                     </div>
                 </div>
                 <div className={styles.orders}>
                     <p className={styles.title}>Completed Orders</p>
                     <div className={styles.order_container}>
-                        <p>No pending order</p>
+                        {orderMap.length > 0 && allOrders.length > 0 ? orderMap.map((map)=>(
+                            map.status == 'shipped' && <OrderWrapper order={map} orders={allOrders} shop={true}/>
+                        )) : <p>No completed orders</p>}
                     </div>
                 </div>
 

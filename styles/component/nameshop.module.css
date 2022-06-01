@@ -16,9 +16,10 @@
     max-width:200px;
     margin-bottom:50px;
     height:auto;
-     display: flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
+    font-size:40px;
 }
 .input_img{
     min-height:150px;
@@ -40,11 +41,13 @@
 }
 .cancel{
     position:absolute;
-    width:10px;
-    height:10px;
-    background:red;
-    top:0;
-    right:0;
+    width:30px;
+    height:30px;
+    /* background:red; */
+    top:5px;
+    right:5px;
+    box-shadow: 1px 1px 1px 1px #0000;
+    cursor: pointer;
 }
 .preview img{
     max-width:350px;
@@ -54,6 +57,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin:30px 0px;
 }
 .title{
     margin-bottom:10px;
@@ -67,7 +71,7 @@
     height:40px;
     width:min(300px, 100%);
     padding:5px;
-    margin:30px 0px;
+    margin-top:30px;
 }
 .button{
     border:none;

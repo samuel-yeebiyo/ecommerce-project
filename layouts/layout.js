@@ -6,6 +6,8 @@ import {useState, useEffect} from 'react'
 import { useRouter } from "next/router"
 import { useWindowSize } from "@/hooks/useWidth"
 
+import Loading from "@/components/Loading/Loading"
+
 import styles from "styles/layouts/layout.module.css"
 
 export default function Layout({children, toggleNav, order, update, addItem, loading, removeItem, blocking, userShop}) {
@@ -52,11 +54,7 @@ export default function Layout({children, toggleNav, order, update, addItem, loa
       <Footer/>
 
       {loading &&
-          <div className={styles.loading}>
-              <div>
-                  <p>Loading........</p>
-              </div>
-          </div>
+          <Loading />
       }
     </div>
   )
