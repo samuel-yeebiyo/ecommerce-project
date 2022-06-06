@@ -12,6 +12,7 @@ import { useFormik } from 'formik'
 
 import ConnectToPhantom from '@/components/connectPhantom'
 import Reciept from '@/components/reciept'
+import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
 export default function Checkout({order, user, guest, clear}) {
 
@@ -31,6 +32,7 @@ export default function Checkout({order, user, guest, clear}) {
     const[confirmed, setConfirmed] = useState(false)
     const[reciept, setReciept] = useState({})
 
+    const axiosPriv = useAxiosPrivate()
 
     const [modal, setModal] = useState(false)
 
@@ -56,15 +58,7 @@ export default function Checkout({order, user, guest, clear}) {
     const fetchAddress = async ()=>{
         const cookies = nookies.get()
         
-        await fetch('http://localhost:8000/user/get/address', {
-            method:'GET',
-            headers:{
-            'Content-Type':'application/json',
-            'Access-Control-Allow-Origin':'cors',
-            'authorization': `Bearer ${cookies.accessToken}`
-            },
-            mode:'cors'
-        }).then(async res=>await res.json()).then(address =>{
+        await axiosPriv.get('/user/get/address').then(res=> res.data).then(address =>{
             console.log({address})
             setShipping(address)
         })

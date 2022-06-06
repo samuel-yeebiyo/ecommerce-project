@@ -4,25 +4,19 @@ import ProductCard from './productCard'
 import styles from 'styles/component/editcard.module.css'
 import { userContext } from '@/context/store'
 import { useContext } from 'react'
+import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
 export default function EditCard({product, edit, cookies}) {
 
   const router = useRouter()
   const {setLoading} = useContext(userContext)
 
+  const axiosPriv = useAxiosPrivate()
+
   const remove = async(id)=>{
     setLoading(true)
 
-    const {accessToken} = cookies
-
-    await fetch(`http://localhost:8000/shops/delete/${id}`,{
-      method:'DELETE',
-      headers:{
-        'Content-Type':'application/json',
-        'Access-Control-Allow-Origin':'*',
-        'authorization': `Bearer ${accessToken}`
-      }
-    }).then(async res=> await res.json()).then(data=>{
+    await axiosPriv.delete(`/shops/delete/${id}`).then(res=> res.data).then(data=>{
       console.log(data)
       setLoading(false)
       router.reload()

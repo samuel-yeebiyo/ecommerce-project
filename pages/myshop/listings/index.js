@@ -53,17 +53,6 @@ export default function listings({shop, toggleLoading, cookies}){
                 setProducts(data.products)
             })
 
-            // await fetch(`http://localhost:8000/products/get-multiple`, {
-            //     method:'GET',
-            //     headers:{
-            //         'Content-Type':'application/json',
-            //         'Access-Control-Allow-Origin': '*',
-            //         'authorization':`Bearer ${accessToken}`
-            //     },
-            //     mode:'cors',
-            // }).then(async res=> await res.json()).then(data=>{
-            //     setProducts(data.products)
-            // })
         }
         
        fetchShopInfo()
@@ -85,7 +74,7 @@ export default function listings({shop, toggleLoading, cookies}){
                             ))
                         }
                     </div>
-                    <div>
+                    <div className={styles.add}>
                         <button onClick={()=>showElement()}>Add Listing</button>
                     </div>
                 </div>

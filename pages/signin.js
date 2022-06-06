@@ -13,9 +13,9 @@ import GuestRoute from '@/components/guestRoute'
 import { userContext } from '@/context/store'
 import Cookie from 'cookie-cutter'
 import { guestToken } from '@/hooks/useCookies'
-
 import { destroyCookie, setCookie } from 'nookies'
 
+import axiosInstance from '@/lib/api/baseAxios'
 
 export default function SignIn({order}) {
 
@@ -42,15 +42,7 @@ export default function SignIn({order}) {
 
       console.log("trying to login")
 
-      fetch('http://localhost:8000/login', {
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
-        mode:'cors',
-        body:JSON.stringify(values)
-      }).then(async res => await res.json()).then(async data =>{
+      axiosInstance.post('/login', {...values}).then(res => res.data).then(async data =>{
 
         const guest = guestToken()
         const hasItem = order.items.length != 0
@@ -58,7 +50,7 @@ export default function SignIn({order}) {
         if(hasItem){
           
           //let server transfer current cart to user
-          await fetch(`http://localhost:8000/user/transfer/`,{
+          await fetch(`${process.env.NEXT_PUBLIC_PROD_URL}/user/transfer/`,{
             method:'POST',
             headers:{
               'Content-Type':'application/json',
@@ -79,7 +71,7 @@ export default function SignIn({order}) {
             //create user cookie
             setUserCookies(data.id, data.accessToken, data.refreshToken)
             mutate()
-            router.replace('/')
+            window.location.replace("/")
           })
         }else{
 
@@ -90,7 +82,7 @@ export default function SignIn({order}) {
           setUserCookies(data.id, data.accessToken, data.refreshToken)
           mutate()
           // setUser(data.id)
-          router.replace('/')
+          window.location.replace("/")
         }
       })
     }

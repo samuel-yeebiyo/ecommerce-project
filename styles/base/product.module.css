@@ -127,6 +127,14 @@
 .review>h3{
     margin-bottom:5px;
 }
+.no_reviews{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+    height:100px;
+}
 .review{
     margin-top:30px;
 }

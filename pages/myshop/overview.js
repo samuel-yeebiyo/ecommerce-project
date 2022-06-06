@@ -7,6 +7,7 @@ import OrderWrapper from '@/components/orderWrapper'
 import nookies from 'nookies'
 import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
+import {BsClipboardX} from 'react-icons/bs'
 
 export default function myshop({cookies}){
 
@@ -77,7 +78,11 @@ export default function myshop({cookies}){
                     <div className={styles.order_container}>
                         {orderMap.length > 0 && allOrders.length>0 ? orderMap.map((map)=>(
                             map.status == 'pending' && <OrderWrapper order={map} orders={allOrders} shop={true}/>
-                        )) : <p>No pending orders</p>}
+                        )) : 
+                        <div className={styles.empty}>
+                            <BsClipboardX size={80}/>
+                            <p>No pending orders</p>
+                        </div>}
                     </div>
                 </div>
             </main>

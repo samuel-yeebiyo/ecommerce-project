@@ -35,21 +35,6 @@ export default function myshop({user, blocking, cookies}){
                 setDescription(data.description)
             })
 
-            // fetch(`http://localhost:8000/user/get-shop-meta`, {
-            //     method:'GET',
-            //     headers:{
-            //         'Content-Type':'appllication/json',
-            //         'Access-Control-Allow-Origin':'*',
-            //         'authorization': `Bearer ${accessToken}`
-            //     },
-            //     mode:'cors',
-            // }).then(async res=> await res.json()).then(data=>{
-            //     console.log(data)
-            //     setImage(data.image)
-            //     setName(data.name)
-            //     setPubkey(data.pubkey)
-            //     setDescription(data.description)
-            // })
         }
         
 
@@ -91,25 +76,6 @@ export default function myshop({user, blocking, cookies}){
             }
         })
 
-        // await fetch(`http://localhost:8000/shops/update/`, {
-        //     method:"POST",
-        //     headers:{
-        //         'Content-Type': 'application/json',
-        //         'Access-Control-Allow-Origin':'*',
-        //         'authorization':`Bearer ${accessToken}`
-        //     },
-        //     mode:'cors',
-        //     body:JSON.stringify({
-        //         name:name,
-        //         pubKey:pubkey,
-        //         description:description,
-        //         image:image
-        //     })
-        // }).then(async res=>await res.json()).then(data=>{
-        //     if(data.message == "Success"){
-        //         router.replace('/myshop/overview')
-        //     }
-        // })
     }
 
     return(

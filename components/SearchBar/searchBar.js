@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import styles from './searchBar.module.css'
+import axiosInstance from '@/lib/api/baseAxios'
 
 export default function SearchBar () {
 
@@ -16,14 +17,7 @@ export default function SearchBar () {
     
             console.log("Searching")
     
-            await fetch(`http://localhost:8000/search/autocomplete/${searchTerm}`, {
-                method:'GET',
-                headers:{
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin':'*'
-                },
-                mode:'cors',
-            }).then(async res => await res.json()).then(suggestions=>{
+            await axiosInstance.get(`http://localhost:8000/search/autocomplete/${searchTerm}`).then(res => res.data).then(suggestions=>{
                 console.log({suggestions})
                 setResults(suggestions)
             })

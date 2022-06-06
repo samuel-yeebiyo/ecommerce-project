@@ -9,12 +9,18 @@ import {useState, useContext} from 'react'
 import Cookie from 'cookie-cutter'
 import GuestRoute from '@/components/guestRoute'
 import { useUser } from '@/hooks/swrHooks'
+import { guestToken } from '@/hooks/useCookies'
+import { destroyCookie, setCookie } from 'nookies'
 
-export default function SignUp({toggleNav}) {
+import useAxiosPrivate from '@/hooks/useAxiosPrivate'
+import axiosInstance from '@/lib/api/baseAxios'
+
+export default function SignUp({order}) {
 
   const router = useRouter()
   const {mutate} = useUser()
 
+  const axiosPriv = useAxiosPrivate()
 
   const formik = useFormik({
     initialValues:{
@@ -49,59 +55,62 @@ export default function SignUp({toggleNav}) {
 
       console.log(values)
       
-      fetch('http://localhost:8000/register', {
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'Access-Control-Allow-Origin': '*'
-        },
-        mode:'cors',
-        body:JSON.stringify(values)
-      }).then(async res => await res.json()).then(async data =>{
+      axiosInstance.post('/register/', {...values}).then(res => res.data).then(async data =>{
 
-        //check if guestid exists
-        let fromGuest = Cookie.get('guestID')
-        if(fromGuest){
-
+        const guest = guestToken()
+        const hasItem = order.items.length != 0
+        
+        if(hasItem){
+          
           //let server transfer current cart to user
-          await fetch(`http://localhost:8000/user/${data.id}/transfer/${fromGuest}`,{
+          await fetch(`${process.env.NEXT_PUBLIC_PROD_URL}/user/transfer/`,{
             method:'POST',
             headers:{
               'Content-Type':'application/json',
-              'Access-Control-Allow-Origin':'*'
+              'Access-Control-Allow-Origin':'*',
+              'authorization': `Bearer ${data.accessToken}`
             },
-            mode:'cors'
+            mode:'cors',
+            body:JSON.stringify({
+              guestToken: guest
+            })
           }).then(async res => await res.json()).then(message => {
             console.log("Transfer complete")
             console.log(message)
-            Cookie.set('guestID', '', {expires: new Date(0)} )
-
-            //creating user token
+            
+            //delete guest cookie
+            destroyCookie(null, 'guestToken', {path: '/'})
+            
+            //create user cookie
             setUserCookies(data.id, data.accessToken, data.refreshToken)
-
-            console.log("created cookie")
             mutate()
-
-            // setUser(data.id)
-            router.replace('/')
+            window.location.replace("/")
           })
         }else{
 
-          //creating user token
-          setUserCookies(data.id, data.accessToken, data.refreshToken)
-          console.log("created cookie")
+          //delete guest token
+          destroyCookie(null, 'guestToken', {path: '/'})
 
+          //create user cookies
+          setUserCookies(data.id, data.accessToken, data.refreshToken)
           mutate()
           // setUser(data.id)
-          router.replace("/")
+          window.location.replace("/")
         }
       })
     }
   }) 
 
   const setUserCookies = (id, access, refresh)=>{
-    Cookie.set('accessToken', access)
-    Cookie.set('refreshToken', refresh)
+
+    setCookie(null, 'accessToken', access, {
+      path:'/'
+    })
+    setCookie(null, 'refreshToken', refresh, {
+      path:'/'
+    })
+
+    console.log("created cookies")
   }
 
   return (

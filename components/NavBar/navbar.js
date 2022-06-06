@@ -11,6 +11,10 @@ import {AiOutlineSearch, AiOutlineUserAdd, AiOutlineShoppingCart, AiOutlineUser,
 
 import SearchBar from '@/components/SearchBar/searchBar';
 
+import useAxiosPrivate from '@/hooks/useAxiosPrivate';
+import axiosInstance from '@/lib/api/baseAxios';
+
+import { accessToken } from '@/hooks/useCookies';
 import { destroyCookie } from 'nookies';
 
 export default function Navbar({toggle, order, toggleNav, update, userShop}) {
@@ -22,6 +26,7 @@ export default function Navbar({toggle, order, toggleNav, update, userShop}) {
     const [search, setSearch] = useState(false)
     const [menu, setMenu] = useState(false)
 
+    const axiosPriv = useAxiosPrivate()
 
     const [searchTerm, setSearchTerm] = useState("")
     const [results, setResults] = useState([])
@@ -45,14 +50,7 @@ export default function Navbar({toggle, order, toggleNav, update, userShop}) {
     
             console.log("Searching")
     
-            await fetch(`http://localhost:8000/search/autocomplete/${searchTerm}`, {
-                method:'GET',
-                headers:{
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin':'*'
-                },
-                mode:'cors',
-            }).then(async res => await res.json()).then(suggestions=>{
+            await axiosInstance.get(`http://search/autocomplete/${searchTerm}`).then(res => res.data).then(suggestions=>{
                 console.log({suggestions})
                 setResults(suggestions)
             })
@@ -159,7 +157,8 @@ export default function Navbar({toggle, order, toggleNav, update, userShop}) {
                                         <Link href="/profile/saved">
                                             <p>Saved</p>
                                         </Link>
-                                        <p onClick={()=>{
+                                        <p onClick={async ()=>{
+                                            await axiosPriv.get('/logout')
                                             new Promise((resolve, reject)=>{
                                                 destroyCookie(null, 'accessToken', {path: '/'})
                                                 destroyCookie(null, 'refreshToken', {path: '/'})
@@ -192,7 +191,8 @@ export default function Navbar({toggle, order, toggleNav, update, userShop}) {
                     </li>
                 }
                 {!error && user_p && width > 900 && <>
-                    <li className={styles.signout} onClick={()=>{
+                    <li className={styles.signout} onClick={async ()=>{
+                        await axiosPriv.get('/logout')
                         new Promise((resolve, reject)=>{
                             destroyCookie(null, 'accessToken', {path: '/'})
                             destroyCookie(null, 'refreshToken', {path: '/'})

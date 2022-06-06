@@ -35,3 +35,23 @@
     border-radius: 10px;
     height:300px;
 }
+
+.searching{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.searching > p{
+    font-size:21px;
+}
+
+.error{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap:20px;
+}

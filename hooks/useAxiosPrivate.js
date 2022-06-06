@@ -1,4 +1,4 @@
-import axios from "@/lib/api/baseAxios";
+import axios from "@/lib/api/axiosUser";
 
 import { useEffect } from "react";
 import { accessToken } from "./useCookies";

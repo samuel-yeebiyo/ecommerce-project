@@ -70,21 +70,20 @@ export default function Transaction({total, user, email, address, confirm, clear
             )
         )
     
-        // const transaction = new web3.Transaction().add(...instructions)
-        // transaction.feePayer = wallet.publicKey;
-        // transaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash
+        const transaction = new web3.Transaction().add(...instructions)
+        transaction.feePayer = wallet.publicKey;
+        transaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash
 
-        // const {signature} = await wallet.request({
-        //     method: "signAndSendTransaction",
-        //     params: {
-        //         message:bs58.encode(transaction.serializeMessage())
-        //     }
-        // })
+        const {signature} = await wallet.request({
+            method: "signAndSendTransaction",
+            params: {
+                message:bs58.encode(transaction.serializeMessage())
+            }
+        })
     
         //confirms the transaction and sends back the transaction id (hash/signature)
-        // const confirmation = await connection.confirmTransaction(signature)
-        const signature = 'sample'
-        const confirmation = {value:{error: false}}
+        const confirmation = await connection.confirmTransaction(signature)
+        // const confirmation = {value:{error: false}}
         console.log(confirmation)
 
         //the signature variable holds the transaction

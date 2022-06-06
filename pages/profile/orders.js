@@ -10,6 +10,7 @@ import nookies from 'nookies'
 import Cookie from 'cookie-cutter'
 import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 import {useState, useEffect} from 'react'
+import {BsClipboardX} from 'react-icons/bs'
 
 export default function Orders({user}) {
 
@@ -54,9 +55,13 @@ export default function Orders({user}) {
             <p className={styles.title}>Orders</p>
             <p className={styles.subtitle}>All completed orders</p>
 
-            {orderMap.length > 0 && orders.length>0 && orderMap.map((map)=>(
+            {(orderMap.length > 0 && orders.length > 0) ? orderMap.map((map)=>(
               <OrderWrapper order={map} orders={orders}/>
-            ))}
+            )): 
+            <div className={styles.empty}> 
+              <BsClipboardX size={90}/>
+              <p>No orders currently</p>
+            </div>}
           </div> 
 
         </main>

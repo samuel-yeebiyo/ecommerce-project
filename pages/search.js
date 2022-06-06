@@ -4,6 +4,9 @@ import styles from '../styles/base/search.module.css'
 import ProductCard from '@/components/productCard'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import axiosInstance from '@/lib/api/baseAxios'
+
+import {MdYoutubeSearchedFor} from 'react-icons/md'
 
 export default function Search(){
 
@@ -14,6 +17,8 @@ export default function Search(){
 
     const [results, setResults] = useState([])
     const [filtered, setFiltered] = useState([])
+
+    const [searching, setSearching] = useState(false)
 
 
     const applyFilter = (min, max, category, sortby) =>{
@@ -63,17 +68,14 @@ export default function Search(){
 
     useEffect(()=>{
         const search = async () =>{
-            await fetch(`http://localhost:8000/search/${value}`, {
-                method:'GET',
-                headers:{
-                    'Content-Type':'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                mode:'cors'
-            }).then(async res=> await res.json()).then(data =>{
+            setFiltered([])
+            setSearching(true)
+
+            await axiosInstance.get(`/search/${value}`).then(res => res.data).then(data =>{
                 console.log({data})
                 setResults(data)
                 setFiltered(data)
+                setSearching(false)
             })
         }
 
@@ -90,26 +92,30 @@ export default function Search(){
         <title>Search: {value}</title>
     </Head>
         <div className={styles.container}>
-            <p className={styles.title}>Search result for {value}</p>
+            <p className={styles.title}>Search result for "{value}"</p>
             <div className={styles.filtering} onClick={toggleModal}>
                 <p>Filter and sort</p>
             </div>
             <div className={styles.new_products}>
                 
-                {filtered.length > 0 ? filtered.map((product, idx)=>(
+                {filtered.length > 0 && filtered.map((product, idx)=>(
                     <ProductCard key={idx} product={product}/>
                     )) 
-                    :
-                    <p>No results</p>
+                    
                 }
-
-                <div className={styles.product}></div>
-                <div className={styles.product}></div>
-                <div className={styles.product}></div>
-                <div className={styles.product}></div>
-                <div className={styles.product}></div>
                 
           </div>
+          {searching && 
+            <div className={styles.searching}>
+                <p>Searching...</p>
+            </div>
+          }
+          {!searching && !filtered.length > 0 &&
+            <div className={styles.error}>
+                <MdYoutubeSearchedFor size={90}/>    
+                <p>No matching results found</p>
+            </div>
+          }
         </div>
         {modal &&
             <Filter toggle={toggleModal} apply={applyFilter}/>

@@ -59,21 +59,6 @@ function MyApp({ Component, pageProps }) {
       }
     })
 
-    // await fetch(`http://localhost:8000/user/cart/`, {
-    //   method:'GET',
-    //   headers:{
-    //     'Content-Type':'application/json',
-    //     'authorization': `Bearer ${token}`
-    //   }
-    // }).then(async res => await res.json()).then(data =>{
-    //   if(data.message != "No cart"){
-    //     console.log("Cart found!")
-    //     setOrder(data)
-    //   }else{
-    //     console.log("No cart")
-    //   }
-      
-    // })
   }
 
   const fetchGuestCart = async(id) =>{
@@ -89,15 +74,6 @@ function MyApp({ Component, pageProps }) {
       }
     })
 
-    // await fetch(`http://localhost:8000/guest/${id}/cart/`)
-    // .then(async res => await res.json()).then(data =>{
-    //   if(data.message != "No cart"){
-    //     console.log("Cart found!")
-    //     setOrder(data)
-    //   }else{
-    //     console.log("No cart")
-    //   }
-    // })
   }
 
 
@@ -131,55 +107,6 @@ function MyApp({ Component, pageProps }) {
     }
 
   },[])
-  
-
-
-  useEffect(()=>{
-
-    // const userAccess = Cookie.get('accessToken')
-    // const guestAccess = Cookie.get('guestID')
-
-    // //updating the cart when an item is added or removed
-    // const updateOrder = async (token)=>{
-    //   if(!isLoading && !error){
-    //     console.log("Trying to update user cart")
-
-    //     await fetch(`http://localhost:8000/user/cart/update`, {
-    //       method:'POST',
-    //       headers:{
-    //         'Content-Type':'application/json',
-    //         'Access-Control-Allow-Origin': '*',
-    //         'authorization':`Bearer ${token}`
-    //       },
-    //       mode:'cors',
-    //       body:JSON.stringify(order)
-    //     }).then(async res => await res.json()).then(data=>{
-    //       //allow other operations once done
-    //       setBlocking(false)
-    //     })
-    //   }else if(guest != 0){
-    //     console.log("Trying to update guest cart")
-
-    //     await fetch(`http://localhost:8000/guest/${guest}/cart/update`, {
-    //       method:'POST',
-    //       headers:{
-    //         'Content-Type':'application/json',
-    //         'Access-Control-Allow-Origin': '*'
-    //       },
-    //       mode:'cors',
-    //       body:JSON.stringify(order)
-    //     }).then(async res => await res.json()).then(data=>{
-    //       //allow other operations once done
-    //       setBlocking(false)
-    //     })
-    //   }
-    // }
-
-
-    // if(userAccess) updateOrder(userAccess);
-
-  }, [order])
-  
 
 
   //This should be the method to put items in the cart

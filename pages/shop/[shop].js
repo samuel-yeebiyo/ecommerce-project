@@ -6,6 +6,7 @@ import {useState, useEffect, useRef} from 'react'
 import styles from 'styles/base/shop.module.css'
 import nookies from 'nookies'
 import Filter from '@/components/modals/filter'
+import axiosInstance from '@/lib/api/baseAxios'
 
 import { fetchShopPaths, fetchShop } from '../../lib/shops'
 
@@ -73,14 +74,7 @@ export default function Shop({shop_detail}) {
 
     const fetchProducts = async () =>{
      
-      await fetch(`http://localhost:8000/shops/${shop_detail._id}/get-products`, {
-        method:'GET',
-        headers:{
-          'Content-Type':'application/json',
-          'Access-Control-Allow-Origin':'*',filtered
-        },
-        mode:'cors',
-      }).then(async res=>await res.json()).then(data=>{
+      await axiosInstance.get(`/shops/${shop_detail._id}/get-products`).then(res=> res.data).then(data=>{
         setListings(data.products)
         setFiltered(data.products)
       })

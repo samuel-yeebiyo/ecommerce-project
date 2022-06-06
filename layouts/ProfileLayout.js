@@ -16,9 +16,6 @@ export default function profile({children}){
                 <Link href="/profile/reviews"><a>
                   <li>Reviews</li>
                 </a></Link>
-                <Link href="/profile/saved"><a>
-                  <li>Saved</li>
-                </a></Link>
               </ul>
             </div>
             <div className={styles.content_container}>

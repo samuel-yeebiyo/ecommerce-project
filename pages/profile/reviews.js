@@ -8,7 +8,7 @@ import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
 import {useState, useEffect} from 'react'
 import nookies from 'nookies'
-
+import {MdOutlineReviews} from 'react-icons/md'
 
 import Cookie from 'cookie-cutter'
 
@@ -104,7 +104,11 @@ export default function Reviews({user}) {
                   <p>?/5</p>
                 </div>
               </div>
-            )) : <div className={styles.empty}>No pending review</div>}
+            )) :
+            <div className={styles.empty}>
+              <MdOutlineReviews size={80}/>
+              <div>No pending review</div>
+            </div>}
 
             <p>Completed Reviews</p>
             <span>All completed reviews</span>
@@ -122,7 +126,11 @@ export default function Reviews({user}) {
                   <p>{item.rating}/5</p>
                 </div>
               </div>
-            )) : <div className={styles.empty}>No completed review</div>}
+            )) : 
+            <div className={styles.empty}>
+              <MdOutlineReviews size={80}/>
+              <div>No completed review</div>
+            </div>}
 
 
           </div> 

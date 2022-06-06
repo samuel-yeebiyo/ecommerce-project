@@ -86,7 +86,6 @@ export default function stats(){
                            <th>Rating</th>
                            <th>Revenue</th>
                            <th>Sold</th>
-                           <th>Views</th>
                            <th>Created</th>
                        </tr>
                        {tableData.map((product)=>(
@@ -96,7 +95,6 @@ export default function stats(){
                                <td>{product.rating}</td>
                                <td>{product.revenue}</td>
                                <td>{product.revenue/product.price}</td>
-                               <td>{product.views}</td>
                                <td>{new Date(product.createdAt).toDateString()}</td>
                            </tr>
                        ))
