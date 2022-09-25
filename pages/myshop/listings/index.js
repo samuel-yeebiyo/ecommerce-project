@@ -9,7 +9,7 @@ import { useUser } from '@/hooks/swrHooks'
 
 import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
-export default function listings({shop, toggleLoading, cookies}){
+export default function Listings({shop, toggleLoading, cookies}){
 
     const [products, setProducts] = useState([])
     const [current, setCurrent] = useState({})

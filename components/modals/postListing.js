@@ -1,7 +1,7 @@
 import styles from '../../styles/modals/postlisting.module.css'
 import { useRouter } from 'next/router'
 
-export default function postListing({toggle}) {
+export default function PostListing({toggle}) {
 
     const router = useRouter()
 

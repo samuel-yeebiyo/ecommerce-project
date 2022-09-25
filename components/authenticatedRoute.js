@@ -5,7 +5,7 @@ import { useUser } from '@/hooks/swrHooks';
 
 import Cookie from 'cookie-cutter'
 
-export default function authenticatedRoute({children}) {
+export default function AuthenticatedRoute({children}) {
 
 
     const {user_p, error, isLoading} = useUser()

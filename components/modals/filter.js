@@ -2,7 +2,7 @@ import styles from '../../styles/modals/filter.module.css'
 
 import { useState, useEffect } from 'react'
 
-export default function filter({toggle, set, apply}){
+export default function Filter({toggle, set, apply}){
 
 
     const [min, setMin] = useState(0)

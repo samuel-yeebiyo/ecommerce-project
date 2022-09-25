@@ -4,7 +4,7 @@ import ShopAdmin from '@/layouts/shopadmin'
 import { useRouter } from 'next/router'
 import nookies from 'nookies'
 
-export default function myshop(){
+export default function Myshop(){
 
     const router = useRouter()
 

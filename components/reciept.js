@@ -9,7 +9,7 @@ const Reciept = ({reciept, clear})=>{
             </div>
             <div className={styles.reciept_details}>
                 <p><span>Tx Signature:</span> {reciept.confirmation}</p>
-                <p><span>Link:</span> <a target="_blank" href={`https://solscan.io/tx/${reciept.confirmation}`}>{`https://solscan.io/tx/${reciept.confirmation}`}</a></p>
+                <p><span>Link:</span> <a target="_blank" rel="noreferrer" href={`https://solscan.io/tx/${reciept.confirmation}`}>{`https://solscan.io/tx/${reciept.confirmation}`}</a></p>
                 <p><span>Date:</span> {reciept.date}</p>
             </div>
             <button onClick={()=>{

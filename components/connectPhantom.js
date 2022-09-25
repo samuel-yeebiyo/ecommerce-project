@@ -45,7 +45,7 @@ const ConnectToPhantom = ({total, user, email, confirm, clear, address}) => {
                     </> :
                     <button className={styles.connect} onClick={connectHandler}>Connect Phantom</button>
                 :
-                <a href="https://phantom.app/" target="_blank" className={styles.connect}>Get Phantom</a>
+                <a href="https://phantom.app/" target="_blank" rel="noreferrer" className={styles.connect}>Get Phantom</a>
             }
         </>
     )

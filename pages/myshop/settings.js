@@ -10,7 +10,7 @@ import { useRouter } from 'next/router'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
-export default function myshop({user, blocking, cookies}){
+export default function Myshop({user, blocking, cookies}){
 
     const [image, setImage]= useState("")
     const [uploadable, setUploadable] = useState("")

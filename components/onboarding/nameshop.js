@@ -5,7 +5,7 @@ import { AiOutlineCloseCircle } from 'react-icons/ai'
 
 import axios from '@/lib/api/baseAxios'
 
-export default function nameshop({confirm, confirmedName, confirmedImage}) {
+export default function Nameshop({confirm, confirmedName, confirmedImage}) {
 
     const [name, setName] = useState('')
     const [image, setImage] = useState("")

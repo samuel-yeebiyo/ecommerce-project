@@ -8,7 +8,7 @@ import LineChart from '@/components/Chart/LineChart'
 
 import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
-export default function stats(){
+export default function Stats(){
 
     const router = useRouter()
 

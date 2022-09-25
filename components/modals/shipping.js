@@ -2,7 +2,7 @@ import styles from '../../styles/modals/shipping.module.css'
 
 import { useState, useEffect } from 'react'
 
-export default function shipping({toggle, save, edit, update, profile}){
+export default function Shipping({toggle, save, edit, update, profile}){
 
     const [address, setAddress] = useState({
         first_name:"",

@@ -9,7 +9,7 @@ import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
 import {BsClipboardX} from 'react-icons/bs'
 
-export default function orders(){
+export default function Orders(){
 
     const [pending, setPending] = useState([])
     const [shipped, setShipped] = useState([])

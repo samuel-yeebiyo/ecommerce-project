@@ -18,7 +18,7 @@ import Cookie from 'cookie-cutter'
 
 import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
-export default function onboarding({cookies}){
+export default function Onboarding({cookies}){
 
     const [progress, setProgress] = useState({
         name:false,

@@ -3,7 +3,7 @@ import {useRouter} from "next/router";
 
 import Cookie from 'cookie-cutter'
 
-export default function guestRoute({children}) {
+export default function GuestRoute({children}) {
 
 
     const [loading, setLoading] = useState(true)

@@ -9,7 +9,7 @@ import useAxiosPrivate from '@/hooks/useAxiosPrivate'
 
 import {BsClipboardX} from 'react-icons/bs'
 
-export default function myshop({cookies}){
+export default function Myshop({cookies}){
 
     const axiosPriv = useAxiosPrivate()
 
