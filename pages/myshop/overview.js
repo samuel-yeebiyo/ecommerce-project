@@ -90,7 +90,7 @@ export default function Myshop({cookies}){
     )
 }
 
-myshop.Layout = ShopAdmin
+Myshop.Layout = ShopAdmin
 
 export async function getServerSideProps(context){
 

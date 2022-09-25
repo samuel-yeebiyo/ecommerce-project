@@ -117,7 +117,7 @@ export default function Myshop({user, blocking, cookies}){
     )
 }
 
-myshop.Layout = ShopAdmin
+Myshop.Layout = ShopAdmin
 
 export async function getServerSideProps(context){
 
