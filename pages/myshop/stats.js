@@ -107,4 +107,4 @@ export default function Stats(){
     )
 }
 
-stats.Layout = ShopAdmin
+Stats.Layout = ShopAdmin

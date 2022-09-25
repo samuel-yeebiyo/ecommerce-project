@@ -78,7 +78,7 @@ export default function Orders(){
     )
 }
 
-orders.Layout = ShopAdmin
+Orders.Layout = ShopAdmin
 
 export async function getServerSideProps(context){
 

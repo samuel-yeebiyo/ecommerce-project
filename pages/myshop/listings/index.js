@@ -87,7 +87,7 @@ export default function Listings({shop, toggleLoading, cookies}){
     )
 }
 
-listings.Layout = ShopAdmin
+Listings.Layout = ShopAdmin
 
 export async function getServerSideProps(context){
 
